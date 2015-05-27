@@ -123,8 +123,8 @@ while ntp < nsteps + 1
 
  if nedrelax==1
    [Vu,Au,Hu,mJ_0u,mJ_1u,mJ_2u,mJ_1uu,mJ_2uu,Efield_uu,dtVu,dtHu,Js]=tdupdatenm(V,A,H,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt,ntp);
-% elseif nedrelax==2
-%  [Vu,nu,pu,Au,Hu,mJ_0u,dtVu,dtHu,Js] = tdupdatenmc(V,A,H,mJ_0,dtVp,dtHp,dt,ntp);
+ elseif nedrelax==2
+   [Vu,Au,Hu,mJ_0u,mJ_1u,mJ_2u,mJ_1uu,mJ_2uu,Efield_uu,dtVu,dtHu,Js]=tdupdatenmc(V,A,H,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt,ntp);
  end
 
  dtVp  = dtVu;

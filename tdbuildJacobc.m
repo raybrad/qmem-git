@@ -10,7 +10,7 @@ global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2;
 global scl;
 global links;
 global Nnode Nlink;
-global nodeLinks linkSurfs linkVolS nodeVolV;
+global nodeLinks linkSurfs linkVolmes nodeVolumes;
 global nodeV linkL linkS dlinkL volumeM;
 global bndNodes dirNodes;
 global isBndNodes;
@@ -23,9 +23,7 @@ global isSQMlinks;
 global QMlinks;
 global isqmnodes;
 
-global currdlink;
 
-global ehcrf;
 
 global light_speed XZsurfLinks XYsurfLinks YZsurfLinks;
 global EsurfLinks BsurfLinks;
@@ -80,8 +78,8 @@ tic;
         n1 = eqnNodes(k);
         ajlk_n1 = nodeLinks{n1}(1,:);
         ajnd_n1 = nodeLinks{n1}(2,:);
-        ajvol_n1 = find(nodeVolV(n1,:));
-        ajvolV_n1 = nodeVolV(n1,ajvol_n1);
+        ajvol_n1 = nodeVolumes{n1}(1,:);
+        ajvolV_n1 = nodeVolumes{n1}(2,:);
         ajvolM_n1 = volumeM(ajvol_n1);
         sign_n1 = sign(ajnd_n1-n1);
 
@@ -113,8 +111,8 @@ tic;
 %                   dtE1 = -(dtV(n2)-dtV(n1))/linkL(lk)-sign_n1(i)*dtH(lk);
                     if isSQMlinks(lk) == 0	
 	            %along(impossible here) or connected to the outside QM boundary,or pure EM links 
-                      ajvol_lk = find(linkVolS(lk,:));
-                      ajvolS_lk = linkVolS(lk,ajvol_lk);
+                      ajvol_lk = linkVolumes{lk}(1,:);
+                      ajvolS_lk = linkVolumes{lk}(2,:);
                       ajvolM_lk = volumeM(ajvol_lk);
  
                         dV2 = 0;
@@ -250,8 +248,8 @@ tic;
         l1 = eqnLinks(k);
         n1 = links(l1,1);
         n2 = links(l1,2);
-        ajvol_l1 = find(linkVolS(l1,:)); %volume id
-        ajvolS_l1 = linkVolS(l1,ajvol_l1);%associate surf area,not dual area, but only its own 1/4
+        ajvol_l1 = linkVolumes{l1}(1,:);%volumeid
+        ajvolS_l1 = linkVolumes{l1}(2,:);%associate surf area,not dual area, but only its own 1/4
         ajvolM_l1 = volumeM(ajvol_l1);
         n3 = links(l1,3);
         CC = zeros(1,Nlink);
@@ -327,13 +325,13 @@ tic;
 	    end
         %%%%%%%% gradient divergence of A and gradient of V %%%%%%%%
         if ~isBndNodes(n1) 
-            ajlk_n1 = nodeLinks{n1}(1,:);
-            ajnd_n1 = nodeLinks{n1}(2,:);
+            ajlk_n1 = nodeLinks{n1}(1,:); % sta node connected to at most 6 links
+            ajnd_n1 = nodeLinks{n1}(2,:); % sta node connected to at most 6 nodes
             sign_n1 = sign(ajnd_n1-n1);
             coef_n1 = linkS(ajlk_n1)./nodeV(n1)*linkS(l1)/linkL(l1);
             GD(ajlk_n1) = GD(ajlk_n1)-sign_n1.*coef_n1';
-            ajvol_n1 = find(nodeVolV(n1,:));
-            ajvolV_n1 = nodeVolV(n1,ajvol_n1);
+            ajvol_n1 = nodeVolumes{n1}(1,:);
+            ajvolV_n1 = nodeVolumes{n1}(2,:);
             ajvolM_n1 = volumeM(ajvol_n1);
             coefV_n1 = scl.K*(sum(Eps(ajvolM_n1).*ajvolV_n1)/nodeV(n1))*linkS(l1)/linkL(l1);
 
@@ -347,13 +345,13 @@ tic;
         end
 
         if ~isBndNodes(n2) 
-            ajlk_n2 = nodeLinks{n2}(1,:);
-            ajnd_n2 = nodeLinks{n2}(2,:);
+            ajlk_n2 = nodeLinks{n2}(1,:);%6 neighbor links around node n2
+            ajnd_n2 = nodeLinks{n2}(2,:);%6 neighboring nodes around node n2 
             sign_n2 = sign(ajnd_n2-n2);
             coef_n2 = linkS(ajlk_n2)./nodeV(n2)*linkS(l1)/linkL(l1);
             GD(ajlk_n2) = GD(ajlk_n2)+sign_n2.*coef_n2';
-            ajvol_n2 = find(nodeVolV(n2,:));
-            ajvolV_n2 = nodeVolV(n2,ajvol_n2);
+            ajvol_n2 = nodeVolumes{n2}(1,:);	%volumeid
+            ajvolV_n2 = nodeVolumes{n2}(2,:);	%associate 1/8 volume
             ajvolM_n2 = volumeM(ajvol_n2);
             coefV_n2 = scl.K*(sum(Eps(ajvolM_n2).*ajvolV_n2)/nodeV(n2))*linkS(l1)/linkL(l1);
 
@@ -393,28 +391,28 @@ tic;
 	    		   epsilon_mt/(0.5*dt));
                 case 2
                     %J = epsilon_in*dtE1+Js(l1);
-                    dJ_v = epsilon_in/(0.5*dt*linkL(l1));
-                    dJ_H = -epsilon_in/(0.5*dt);
+                    dJv = epsilon_in/(0.5*dt*linkL(l1));
+                    dJH = -epsilon_in/(0.5*dt);
                 case 3	%all QM nodes(include the outside/inside boundary)
                     %J = epsilon_qm*dtE1;
-                    dJ_v = epsilon_qm/(0.5*dt*linkL(l1));
-                    dJ_H = -dJ_v*linkL(l1);
+                    dJv = epsilon_qm/(0.5*dt*linkL(l1));
+                    dJH = -dJv*linkL(l1);
                 otherwise
                     error('undefined material');
             end
             ntripletsJGv=ntripletsJGv+1;
             rowJGv(ntripletsJGv)=l1;
 	    colJGv(ntripletsJGv)=n1;
-	    valJGv(ntripletsJGv)=valJGv(ntripletsJGv)-scl.K*ajvolS_l1(i)*dJ_v;
+	    valJGv(ntripletsJGv)=valJGv(ntripletsJGv)-scl.K*ajvolS_l1(i)*dJv;
 	    ntripletsJGv=ntripletsJGv+1;
 	    rowJGv(ntripletsJGv)=l1;
 	    colJGv(ntripletsJGv)=n2;
-	    valJGv(ntripletsJGv)=valJGv(ntripletsJGv)+scl.K*ajvolS_l1(i)*dJ_v;
+	    valJGv(ntripletsJGv)=valJGv(ntripletsJGv)+scl.K*ajvolS_l1(i)*dJv;
 
             ntripletsJGH=ntripletsJGH+1;
 	    rowJGH(ntripletsJGH)=l1;
 	    colJGH(ntripletsJGH)=l1;
-	    valJGH(ntripletsJGH)=valJGH(ntripletsJGH)-scl.K*ajvolS_l1(i)*dJ_H;
+	    valJGH(ntripletsJGH)=valJGH(ntripletsJGH)-scl.K*ajvolS_l1(i)*dJH;
             rhs_G(l1) = rhs_G(l1)-scl.K*ajvolS_l1(i)*J;
 	  end
         else %mix  outside/inside QM links interface, inside QM links

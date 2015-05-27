@@ -40,11 +40,9 @@ global nedrelax;
 isBndNodes = false(Nnode,1);
 isBndNodes(bndNodes) = true;
 edgeNodes = zeros(Nnode,1);
-%allNodeIdx=1:Nnode;
 tmpcounter=0;
 for i = bndNodes'
-%    ajnd = allNodeIdx(nodeLinks(i,:)~=0); %connecting nodes to bndNodes
-     ajnd = find(nodeLinks(i,:)); %connecting nodes to bndNodes
+    ajnd = nodeLinks{i}(2,:); %connecting nodes to bndNodes
     if all(isBndNodes(ajnd))
 	tmpcounter=tmpcounter+1;
         edgeNodes(tmpcounter) = i; %edge nodes on the 12 edge lines
@@ -169,7 +167,7 @@ tic;
 
 for ilk =1:Nlink
 
-    n1  = links(ilk,1); n2 = links(ilk,2); n3 = find(nodes(n1,:)-nodes(n2,:));
+    n1  = links(ilk,1); n2 = links(ilk,2); n3 = links(ilk,3);
     [nx,ny,nz]=id2co(n1); [nx1,ny1,nz1]=id2co(n2);
 
     currdlink(ilk,1)=(nx+nx1)/2;

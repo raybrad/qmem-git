@@ -1,4 +1,4 @@
-function [Vn,nn,pn,An,Hn,mJn,dtVu,dtnu,dtpu,dtHu,Js] = tdupdatenm(V,n,p,A,H,mJ,Vpp,npp,ppp,App,Hpp,dtVp,dtnp,dtpp,dtHp,dtVp2,dtnp2,dtpp2,dtHp2,dt,ntp)
+function [Vn,An,Hn,mJ_0n,mJ_1n,mJ_2n,mJ_1nn,mJ_2nn,Efield_nn,dtVu,dtHu,Js] = tdupdatenmc(V,A,H,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt,ntp)
 
 global epdf epdf2;
 global extfelc;
@@ -42,8 +42,6 @@ fclose(fp);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
  dtV = dtVp;
- dtn = dtnp;
- dtp = dtpp;
  dtH = dtHp;
 switch extfelc
    case 1
@@ -83,7 +81,7 @@ Vn = V + dt * dtVt;
 dtV(dirNodes)  = dtVp(dirNodes);
 V= Vn - dt * dtV;
 
-%%%@
+%%@
 switch lightsource
  case 1
  Js(JLinks)=J_amp*sin(2*pi*timee/epdf2);
@@ -93,18 +91,6 @@ switch lightsource
  error('undefined light source');
 end
 %%%
-switch irkod
-   case 1  
-     [Vn,nn,pn,An,Hn] = tdrelaxpstepsc(V,n,p,A,H,dtV,dtn,dtp,dtH,dt);
-   case 2  %
-     [Vn,nn,pn,An,Hn,mJn,dtVu,dtnu,dtpu,dtHu] = tdrelaxpsteps2c(V,n,p,A,H,Js,mJ,dtV,dtn,dtp,dtH,dt);
-   case 4
-     [Vn,nn,pn,An,Hn] = tdrelaxpsteps4c(V,n,p,A,H,Vpp,npp,ppp,App,Hpp,dtV,dtn,dtp,dtH,dtVp2,dtnp2,dtpp2,dtHp2,dt);
-     dtVp  = 3 * (Vn - V)/dt - 4*dtV - dtVp2;
-     dtHp  = 3 * (Hn - H)/dt - 4*dtH - dtHp2;
-     dtVp(dirNodes)  = dtV(dirNodes);
-   otherwise
-     error('undefined irkod');
-end
+[Vn,An,Hn,mJ_0n,mJ_1n,mJ_2n,mJ_1nn,mJ_2nn,Efield_nn,dtVu,dtHu] =  tdsolverhs_vectorc(V,A,H,Js,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtV,dtH,dt);
 
-%[dtVu,dtnu,dtpu,dtHu,itNr] = tdcalupdatecc(Vn,nn,pn,An,Hn,dtVp,dtHp);
+%%%[dtVu,dtnu,dtpu,dtHu,itNr] = tdcalupdatecc(Vn,nn,pn,An,Hn,dtVp,dtHp);

@@ -290,15 +290,15 @@ while itNr < maxNewtonIt && normUpdate > updateTol
 		     ntripletsJFv=ntripletsJFv+1;
 		     rowJFv(ntripletsJFv)=n1;
 		     colJFv(ntripletsJFv)=n1;
-		     valJFv(ntripletsJFv)=valJFv(ntripletsJFv)+epsilon_qm * linkS(lk)/linkL(lk);
+		     valJFv(ntripletsJFv)=valJFv(ntripletsJFv)+ epsilon_qm * linkS(lk)/linkL(lk);
 		     ntripletsJFv=ntripletsJFv+1;
 		     rowJFv(ntripletsJFv)=n1;
 		     colJFv(ntripletsJFv)=n2;
-		     valJFv(ntripletsJFv)=valJFv(ntripletsJFv)-epsilon_qm * linkS(lk)/linkL(lk);
+		     valJFv(ntripletsJFv)=- epsilon_qm * linkS(lk)/linkL(lk);
 		     ntripletsJFH=ntripletsJFH+1;
 		     rowJFH(ntripletsJFH)=n1;
 		     colJFH(ntripletsJFH)=lk;
-		     valJFH(ntripletsJFH)=  -sign_n1(i) * epsilon_qm *linkS(lk); 
+		     valJFH(ntripletsJFH)=-sign_n1(i) * epsilon_qm *linkS(lk); 
                     end
                 end
                 semiV = sum(ajvolV_n1(ajvolM_n1 == 1)) + sum(ajvolV_n1(ajvolM_n1 == 4));

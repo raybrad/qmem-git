@@ -10,7 +10,7 @@ global epsilon_in epsilon_mt;
 global scl;
 global nodes links;
 global Nnode;
-global nodeLinks linkVolS nodeVolV;
+global nodeLinks linkVolumes nodeVolumes;
 global linkL volumeM;
 global dirNodes;
 global dcVolDirNodes;
@@ -51,10 +51,10 @@ while itNr < maxNewtonIt && normUpdate > updateTol
    % Gauss's law  %integral(epsilon*laplace V-rho)=0
    % current-continuity div*J=0
     for n1 = eqnNodes.'
-        ajnd_n1 = find(nodeLinks(n1,:));
-        ajlk_n1 = nodeLinks(n1,ajnd_n1);
-        ajvol_n1 = find(nodeVolV(n1,:));
-        ajvolV_n1 = nodeVolV(n1,ajvol_n1);
+        ajlk_n1 = nodeLinks{n1}(1,:);
+        ajnd_n1 = nodeLinks{n1}(2,:);
+        ajvol_n1 = nodeVolumes{n1}(1,:);
+        ajvolV_n1 = nodeVolumes{n1}(2,:);
         ajvolM_n1 = volumeM(ajvol_n1);
             for i = 1:length(ajlk_n1)
                 n2 = ajnd_n1(i);
@@ -62,8 +62,8 @@ while itNr < maxNewtonIt && normUpdate > updateTol
 
                     dV2 = 0;
 
-        	ajvol_lk = find(linkVolS(lk,:)); %volume id
-        	ajvolS_lk = linkVolS(lk,ajvol_lk);%associate surf area,not dual area, but only its own 1/4
+                ajvol_lk = linkVolumes{lk}(1,:);
+                ajvolS_lk = linkVolumes{lk}(2,:);
                 ajvolM_lk = volumeM(ajvol_lk);
 
                 if any(ajvolM_n1 == 1)

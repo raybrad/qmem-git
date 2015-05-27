@@ -9,7 +9,7 @@ global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2;
 global scl;
 global links;
 global Nnode Nlink;
-global nodeLinks linkSurfs linkVolS nodeVolV;
+global nodeLinks linkSurfs linkVolumes nodeVolumes;
 global nodeV linkL linkS dlinkL volumeM;
 global bndNodes dirNodes;
 global isBndNodes;
@@ -17,16 +17,17 @@ global metalLinks;
 global light_speed XZsurfLinks XYsurfLinks YZsurfLinks;
 global EsurfLinks BsurfLinks;
 
-global Fc11 Fc12 Fc21 Fc22 Fc30 Fn1matrix Fn2matrix Flkmatrix;
-global Gc11 Gajlkmatrix11 Gc12 Gc20 Gn1matrix Gc31 Gajlk_n1matrix Gc32;
-global Gn2matrix Gc41 Gajlk_n2matrix Gc42 Gc51 Gc52 Gc53 Gc54;
+%global Fc11 Fc12 Fc21 Fc22 Fc30 Fn1matrix Fn2matrix Flkmatrix;
+%global Gc11 Gajlkmatrix11 Gc12 Gc20 Gn1matrix Gc31 Gajlk_n1matrix Gc32;
+%global Gn2matrix Gc41 Gajlk_n2matrix Gc42 Gc51 Gc52 Gc53 Gc54;
+global Fn1matrix Fn2matrix Flkmatrix Fc;
+global Gajlkmatrix11 Gajlk_n1matrix Gajlk_n2matrix Gn1matrix Gn2matrix Gc;
 %Method 2
 %Solving Gauss' law.
 %Solving Current-continuity equations.
 %Solving Maxwell-Ampere equations(already insert Lorentz gauge)
 %Respecting the gauge condition is a side product of solving above set.
 
-%%%%%%% initial guess  %%%%%%%%%%%%%
 eqnNodes = setdiff((1:Nnode)',dirNodes);%eqnNodes (nodes except from contact ,different from tdcalupdatec.m)   
 					%dirNodes (contact part update by dtVp)
 
@@ -34,9 +35,7 @@ eqnLinks=setdiff((1:Nlink)',EsurfLinks);	%for E boundary condition
 isBsurfLinks=false(Nlink,1);
 isBsurfLinks(BsurfLinks)=true;		        %for B boundary condition
 
-%%%%%%%% start Newton's iteration %%%%%%%%
 Eps = [epsilon_mt,epsilon_in];
-Sgm = [sigma,0];
 prefac=[1,0];
 
 NeqnNodes = length(eqnNodes);
@@ -45,7 +44,9 @@ Nl = length(eqnLinks);
 tStart=tic;
 
 tic;
- % construct the sparse matrix by (Row,Column,Value) 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%rhsF
+% construct the sparse matrix by (Row,Column,Value) 
  rhs_F = zeros(Nnode,1);
  Fc11=zeros(Nnode,6);
  Fc12=zeros(Nnode,6);
@@ -56,28 +57,27 @@ tic;
  Fn2matrix =zeros(Nnode,6);
  Flkmatrix =zeros(Nnode,6);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    for k=1:NeqnNodes
         n1 = eqnNodes(k);
-        ajnd_n1 = find(nodeLinks(n1,:));
-        ajlk_n1 = nodeLinks(n1,ajnd_n1);
-        ajvol_n1 = find(nodeVolV(n1,:));
-        ajvolV_n1 = nodeVolV(n1,ajvol_n1);
+        ajlk_n1 = nodeLinks{n1}(1,:);
+        ajnd_n1 = nodeLinks{n1}(2,:);
+        ajvol_n1 = nodeVolumes{n1}(1,:);
+        ajvolV_n1 = nodeVolumes{n1}(2,:);
         ajvolM_n1 = volumeM(ajvol_n1);
         sign_n1 = sign(ajnd_n1-n1);
 
           for i = 1:length(ajlk_n1)
                     n2 = ajnd_n1(i);
                     lk = ajlk_n1(i);
-                    ajvol_lk = find(linkVolS(lk,:));
-                    ajvolS_lk = linkVolS(lk,ajvol_lk);
+                    ajvol_lk = linkVolumes{lk}(1,:);
+                    ajvolS_lk = linkVolumes{lk}(2,:);
                     ajvolM_lk = volumeM(ajvol_lk);
 		    
 		    Fc11(n1,i)=sum(Eps(ajvolM_lk).*ajvolS_lk*(-1/linkL(lk))*(any(ajvolM_n1==1)));
 		    Fc12(n1,i)=sum(Eps(ajvolM_lk).*ajvolS_lk*(-sign_n1(i))*(any(ajvolM_n1==1)));
 		    Fc21(n1,i)=sum(Eps(ajvolM_lk).*ajvolS_lk*(-1/linkL(lk))*(all(ajvolM_n1~=1)));
 		    Fc22(n1,i)=sum(Eps(ajvolM_lk).*ajvolS_lk*(-sign_n1(i))*(all(ajvolM_n1~=1)));
-		    Fc30(n1,i)=sum(prefac(ajvolM_lk).*ajvolS_lk*sign_n1(i));
+		    Fc30(n1,i)=sum(prefac(ajvolM_lk).*ajvolS_lk*sign_n1(i));			%mJ
 		    Fn1matrix(n1,i)=n1;
 		    Fn2matrix(n1,i)=n2;
 		    Flkmatrix(n1,i)=lk;
@@ -89,6 +89,8 @@ display(['time for rhs_F coefficient matrix collection:']);
 toc;
 tic;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%rhsG
 rhs_G = zeros(Nlink,1);
 Gc11=zeros(Nlink,12);
 Gajlkmatrix11=zeros(Nlink,12);
@@ -118,8 +120,8 @@ Gc54=zeros(Nlink,1);
         l1 = eqnLinks(k);
         n1 = links(l1,1);	%sta node
         n2 = links(l1,2);	%end node
-        ajvol_l1 = find(linkVolS(l1,:)); %volume id
-        ajvolS_l1 = linkVolS(l1,ajvol_l1);%associate surf area,not dual area, but only its own 1/4
+        ajvol_l1 = linkVolumes{l1}(1,:);%volumeid
+        ajvolS_l1 = linkVolumes{l1}(2,:);%associate surf area,not dual area, but only its own 1/4
         ajvolM_l1 = volumeM(ajvol_l1);
         CC = zeros(1,Nlink);
 	
@@ -157,12 +159,12 @@ Gc54=zeros(Nlink,1);
 	%links connect to bndNodes,only has half
 	%if both nodes are on surface,no Lorentz
         if ~isBndNodes(n1)
-            ajnd_n1 = find(nodeLinks(n1,:));% sta node connected to at most 6 links
-            ajlk_n1 = nodeLinks(n1,ajnd_n1); % sta node connected to at most 6 nodes
+            ajlk_n1 = nodeLinks{n1}(1,:); % sta node connected to at most 6 links
+            ajnd_n1 = nodeLinks{n1}(2,:); % sta node connected to at most 6 nodes
             sign_n1 = sign(ajnd_n1-n1);
             coef_n1 = linkS(ajlk_n1)./nodeV(n1)*linkS(l1)/linkL(l1); %linkS(Nlink,1)~ dual surface area,nodeV(Nnode,1)
-            ajvol_n1 = find(nodeVolV(n1,:));
-            ajvolV_n1 = nodeVolV(n1,ajvol_n1);
+            ajvol_n1 = nodeVolumes{n1}(1,:);
+            ajvolV_n1 = nodeVolumes{n1}(2,:);
             ajvolM_n1 = volumeM(ajvol_n1);
             coefV_n1 = scl.K*(sum(Eps(ajvolM_n1).*ajvolV_n1)/nodeV(n1))*linkS(l1)/linkL(l1);
 	
@@ -172,12 +174,12 @@ Gc54=zeros(Nlink,1);
         end
 
         if ~isBndNodes(n2)
-            ajnd_n2 = find(nodeLinks(n2,:));	%6 neighboring nodes around node n2 
-            ajlk_n2 = nodeLinks(n2,ajnd_n2);    %6 neighbor links around node n2
+            ajlk_n2 = nodeLinks{n2}(1,:);%6 neighbor links around node n2
+            ajnd_n2 = nodeLinks{n2}(2,:);%6 neighboring nodes around node n2 
             sign_n2 = sign(ajnd_n2-n2);
             coef_n2 = linkS(ajlk_n2)./nodeV(n2)*linkS(l1)/linkL(l1);
-            ajvol_n2 = find(nodeVolV(n2,:));
-            ajvolV_n2 = nodeVolV(n2,ajvol_n2);
+            ajvol_n2 = nodeVolumes{n2}(1,:);	%volumeid
+            ajvolV_n2 = nodeVolumes{n2}(2,:);	%associate 1/8 volume
             ajvolM_n2 = volumeM(ajvol_n2);
             coefV_n2 = scl.K*(sum(Eps(ajvolM_n2).*ajvolV_n2)/nodeV(n2))*linkS(l1)/linkL(l1);
 
@@ -190,17 +192,19 @@ Gc54=zeros(Nlink,1);
         %%%%%% source current %%%%%%%%%%%
        	Gc51(l1)=-scl.K*sum(Eps(ajvolM_l1).*ajvolS_l1*(-1/linkL(l1)));
        	Gc52(l1)=-scl.K*sum(Eps(ajvolM_l1).*ajvolS_l1*(-1));
-	Gc53(l1)=-scl.K*sum(prefac(ajvolM_l1).*ajvolS_l1);
-	Gc54(l1)=-scl.K*sum(ajvolS_l1);
+	Gc53(l1)=-scl.K*sum(prefac(ajvolM_l1).*ajvolS_l1);	%mJ
+	Gc54(l1)=-scl.K*sum(ajvolS_l1);				%Js
      end
 
 display(['time for rhs_G coefficient matrix collection:']);
 toc;
 tic;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Fc=[Fc11,Fc12,Fc21,Fc22,Fc30];
 %filename='rhsFCoefMatrix.mat';
 %save(filename,'Fc11','Fc12','Fc21','Fc22','Fc30','Fn1matrix','Fn2matrix','Flkmatrix','-v7.3');
 
+Gc=[Gc11,Gc12,Gc20,Gc31,Gc32,Gc41,Gc42,Gc51,Gc52,Gc53,Gc54];
 %filename='rhsGCoefMatrix.mat';
 %save(filename,'Gc11','Gajlkmatrix11','Gc12','Gc20','Gn1matrix','Gc31','Gajlk_n1matrix','Gc32',...
 %    	      'Gn2matrix','Gc41','Gajlk_n2matrix','Gc42','Gc51','Gc52','Gc53','Gc54','-v7.3');

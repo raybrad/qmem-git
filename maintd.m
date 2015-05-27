@@ -16,7 +16,8 @@
 %7 in initGeometry nodeLinks construction is changed to sparse matrix creation to save time
 %7 redundant global variables are removed(link(:,3) change also in initSolvertd
 %7 unused subroutines is removed for clearance and there is no use to calculate main.m first,we could use V A H =0 as starting point.
-%8
+%8 actually the linkVolumes nodeVolumes nodeLinks construction should be reserved as cells, since the use of find for sparse matrix in
+%   later Jacob rhs construction is very time consuming. So now only reformulate the build up of linkvolumes and nodevolumes.
 
 clear global; clear;
 
@@ -93,7 +94,7 @@ savefile = 'dump/variables_';
 global kx ky kz;
 global nodes links contacts;
 global nodeLinks linkSurfs  surfLinks volumeNodes volumeLinks...
-    volumeSurfs linkVolS nodeVolV;
+    volumeSurfs linkVolumes nodeVolumes;
 global Nnode Nlink Nsurf Nvolume;
 global nodeV linkL linkS dlinkL nodeM linkM volumeM;
 global bndNodes edgeNodes;

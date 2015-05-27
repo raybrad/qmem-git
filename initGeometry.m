@@ -7,7 +7,7 @@ tic;
 
 global kx ky kz;
 global nodes links;
-global nodeLinks linkSurfs surfLinks volumeNodes volumeLinks volumeSurfs linkVolS nodeVolV;
+global nodeLinks linkSurfs surfLinks volumeNodes volumeLinks volumeSurfs linkVolumes nodeVolumes;
 global Nnode Nlink Nsurf Nvolume;
 global nodeV linkL linkS dlinkL;
 %%%new global variables for light source and bnd
@@ -114,22 +114,13 @@ display('light source links');
 toc;
 tic;
 % adjacent links and nodes of nodes               connectlinks   connectnodes                    
-ntripletsnl=2*Nlink;
-rownl=zeros(ntripletsnl,1);
-colnl=zeros(ntripletsnl,1);
-valnl=zeros(ntripletsnl,1);
-ntripletsnl=0;
-for i = 1:Nlink		%(node,node) =link
-    ntripletsnl=ntripletsnl+1;
-    rownl(ntripletsnl)=links(i,1);
-    colnl(ntripletsnl)=links(i,2);
-    valnl(ntripletsnl)=i;
-    ntripletsnl=ntripletsnl+1;
-    rownl(ntripletsnl)=links(i,2);
-    colnl(ntripletsnl)=links(i,1);
-    valnl(ntripletsnl)=i;
+nodeLinks = cell(Nnode,1); %format:{target node} [link1,link2...;node1,node2...],how each node connects to other nodes
+for i = 1:Nlink
+    n1 = links(i,1); n2 = links(i,2);
+    nodeLinks{n1} = [nodeLinks{n1},[i;n2]];
+    nodeLinks{n2} = [nodeLinks{n2},[i;n1]];
+    links(i,3) = find(nodes(n1,:)-nodes(n2,:));
 end
-nodeLinks=sparse(rownl(1:ntripletsnl),colnl(1:ntripletsnl),valnl(1:ntripletsnl),Nnode,Nnode);
 
 display('End nodeLinks');
 display(['time for nodeLinks:']);
@@ -179,7 +170,7 @@ for i = 1:size(volumeLinks,1)
    linkS(volumeLinks(i,2)) = linkS(volumeLinks(i,2))+volumeLinks(i,3); 
    ntripletslVS=ntripletslVS+1;
    rowlVS(ntripletslVS)=volumeLinks(i,2);	%link
-   collVS(ntripletslVS)=volumeLinks(i,1);	%
+   collVS(ntripletslVS)=volumeLinks(i,1);	%volumeid
    vallVS(ntripletslVS)=volumeLinks(i,3);
 end
 linkVolS=sparse(rowlVS(1:ntripletslVS),collVS(1:ntripletslVS),vallVS(1:ntripletslVS),Nlink,Nvolume);
@@ -228,6 +219,19 @@ for i = 1:Nsurf
     end
 end
 display('End linkSurfs');
+toc;
+tic;
+%%%%%
+linkVolumes = cell(Nlink,1);
+nodeVolumes = cell(Nnode,1);
+for i = 1:Nvolume*8
+        nodeVolumes{rowNV(i)} = [nodeVolumes{rowNV(i)},[colNV(i);valNV(i)]]; % 1   1   1  1 1 1 1 1
+end                                                                             % V/8 V/8 '''''''''
+for i=1:Nvolume*12
+        linkVolumes{rowlVS(i)}= [linkVolumes{rowlVS(i)},[collVS(i);vallVS(i)]];
+						% volumeid;surface area
+end
+display('End linkVolumes nodeVolmes');
 toc;
 tic;
 %%% scale down to nm range %%%%%%

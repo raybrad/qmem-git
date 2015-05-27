@@ -10,7 +10,7 @@ global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2;
 global scl;
 global links;
 global Nnode Nlink;
-global nodeLinks linkSurfs linkVolS nodeVolV;
+global nodeLinks linkSurfs linkVolumes nodeVolumes;
 global nodeV linkL linkS dlinkL volumeM;
 global bndNodes dirNodes;
 global isBndNodes;
@@ -50,6 +50,7 @@ normUpdate = 1;
 itNr = 0;
 tStart=tic;
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %JF
 % construct the sparse matrix by (Row,Column,Value) 
 tic;
@@ -65,13 +66,12 @@ tic;
      valJFH=zeros(ntripletsJFH,1);
      ntripletsJFH=0;
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    for k=1:NeqnNodes
         n1 = eqnNodes(k);
-        ajnd_n1 = find(nodeLinks(n1,:));
-        ajlk_n1 = nodeLinks(n1,ajnd_n1);
-        ajvol_n1 = find(nodeVolV(n1,:));
-        ajvolV_n1 = nodeVolV(n1,ajvol_n1);
+        ajlk_n1 = nodeLinks{n1}(1,:);
+        ajnd_n1 = nodeLinks{n1}(2,:);
+        ajvol_n1 = nodeVolumes{n1}(1,:);
+        ajvolV_n1 = nodeVolumes{n1}(2,:);
         ajvolM_n1 = volumeM(ajvol_n1);
         sign_n1 = sign(ajnd_n1-n1);
 
@@ -79,8 +79,8 @@ tic;
             for i = 1:length(ajlk_n1)
                     n2 = ajnd_n1(i);
                     lk = ajlk_n1(i);
-                    ajvol_lk = find(linkVolS(lk,:));
-                    ajvolS_lk = linkVolS(lk,ajvol_lk);
+                    ajvol_lk = linkVolumes{lk}(1,:);
+                    ajvolS_lk = linkVolumes{lk}(2,:);
                     ajvolM_lk = volumeM(ajvol_lk);
 				
                     for j = 1:length(ajvol_lk)
@@ -121,8 +121,8 @@ tic;
 
                     n2 = ajnd_n1(i);
                     lk = ajlk_n1(i);
-                    ajvol_lk = find(linkVolS(lk,:));
-                    ajvolS_lk = linkVolS(lk,ajvol_lk);
+                    ajvol_lk = linkVolumes{lk}(1,:);
+                    ajvolS_lk = linkVolumes{lk}(2,:);
                     ajvolM_lk = volumeM(ajvol_lk);
                     coefV = sum(Eps(ajvolM_lk).*ajvolS_lk)/linkL(lk);
 
@@ -155,8 +155,8 @@ clear JF_v JF_H;
 display(['time for matrix collection,JF matrix:']);
 toc;
 tic;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%JG
     %%%%%%%%%%%%% Build Jacobian and rhs of G (Ampere's law) %%%%%%%%%%%%%
     % G = cur curl A - {grad div A+grad V}+{-J+par E/par t} =0 (for link A,PI)
     %  already contains lorentz gauge
@@ -176,8 +176,8 @@ tic;
         l1 = eqnLinks(k);
         n1 = links(l1,1);	%sta node
         n2 = links(l1,2);	%end node
-        ajvol_l1 = find(linkVolS(l1,:)); %volume id
-        ajvolS_l1 = linkVolS(l1,ajvol_l1);%associate surf area,not dual area, but only its own 1/4
+        ajvol_l1 = linkVolumes{l1}(1,:);%volumeid
+        ajvolS_l1 = linkVolumes{l1}(2,:);%associate surf area,not dual area, but only its own 1/4
         ajvolM_l1 = volumeM(ajvol_l1);
         CC = zeros(1,Nlink);
         GD = zeros(1,Nlink);
@@ -252,13 +252,13 @@ tic;
 	%links connect to bndNodes,only has half
 	%if both nodes are on surface,no Lorentz
         if ~isBndNodes(n1)
-            ajnd_n1 = find(nodeLinks(n1,:));% sta node connected to at most 6 links
-            ajlk_n1 = nodeLinks(n1,ajnd_n1); % sta node connected to at most 6 nodes
+            ajlk_n1 = nodeLinks{n1}(1,:); % sta node connected to at most 6 links
+            ajnd_n1 = nodeLinks{n1}(2,:); % sta node connected to at most 6 nodes
             sign_n1 = sign(ajnd_n1-n1);
             coef_n1 = linkS(ajlk_n1)./nodeV(n1)*linkS(l1)/linkL(l1); %linkS(Nlink,1)~ dual surface area,nodeV(Nnode,1)
             GD(ajlk_n1) = GD(ajlk_n1)-sign_n1.*coef_n1';
-            ajvol_n1 = find(nodeVolV(n1,:));
-            ajvolV_n1 = nodeVolV(n1,ajvol_n1);
+            ajvol_n1 = nodeVolumes{n1}(1,:);
+            ajvolV_n1 = nodeVolumes{n1}(2,:);
             ajvolM_n1 = volumeM(ajvol_n1);
             coefV_n1 = scl.K*(sum(Eps(ajvolM_n1).*ajvolV_n1)/nodeV(n1))*linkS(l1)/linkL(l1);
 	
@@ -269,13 +269,13 @@ tic;
         end
 
         if ~isBndNodes(n2)
-            ajnd_n2 = find(nodeLinks(n2,:));	%6 neighboring nodes around node n2 
-            ajlk_n2 = nodeLinks(n2,ajnd_n2);    %6 neighbor links around node n2
+            ajlk_n2 = nodeLinks{n2}(1,:);%6 neighbor links around node n2
+            ajnd_n2 = nodeLinks{n2}(2,:);%6 neighboring nodes around node n2 
             sign_n2 = sign(ajnd_n2-n2);
             coef_n2 = linkS(ajlk_n2)./nodeV(n2)*linkS(l1)/linkL(l1);
             GD(ajlk_n2) = GD(ajlk_n2)+sign_n2.*coef_n2';
-            ajvol_n2 = find(nodeVolV(n2,:));
-            ajvolV_n2 = nodeVolV(n2,ajvol_n2);
+            ajvol_n2 = nodeVolumes{n2}(1,:);	%volumeid
+            ajvolV_n2 = nodeVolumes{n2}(2,:);	%associate 1/8 volume
             ajvolM_n2 = volumeM(ajvol_n2);
             coefV_n2 = scl.K*(sum(Eps(ajvolM_n2).*ajvolV_n2)/nodeV(n2))*linkS(l1)/linkL(l1);
 
@@ -298,17 +298,17 @@ tic;
         for i = 1:length(ajvol_l1)
             switch ajvolM_l1(i)
                 case 1
-                    dJ_v = (dt*omega_p*omega_p/(dt*gamma_p+2)/linkL(l1)+...
+                    dJv = (dt*omega_p*omega_p/(dt*gamma_p+2)/linkL(l1)+...
 	    		  (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt)/linkL(l1) +...
 	    		  (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt)/linkL(l1)) +...
 	    		  epsilon_mt/(0.5*dt*linkL(l1));
-                    dJ_H = -(dt*omega_p*omega_p/(dt*gamma_p+2) +...
+                    dJH = -(dt*omega_p*omega_p/(dt*gamma_p+2) +...
 	    		   (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt) +...
 	    		   (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt) +...
 	    		   epsilon_mt/(0.5*dt));
                 case 2
-                    dJ_v = epsilon_in/(0.5*dt*linkL(l1));
-                    dJ_H = -epsilon_in/(0.5*dt);
+                    dJv = epsilon_in/(0.5*dt*linkL(l1));
+                    dJH = -epsilon_in/(0.5*dt);
                 otherwise
                     error('undefined material');
               end
@@ -316,16 +316,16 @@ tic;
             ntripletsJGv=ntripletsJGv+1;
             rowJGv(ntripletsJGv)=l1;
 	    colJGv(ntripletsJGv)=n1;
-	    valJGv(ntripletsJGv)=valJGv(ntripletsJGv)-scl.K*ajvolS_l1(i)*dJ_v;
+	    valJGv(ntripletsJGv)=valJGv(ntripletsJGv)-scl.K*ajvolS_l1(i)*dJv;
 	    ntripletsJGv=ntripletsJGv+1;
 	    rowJGv(ntripletsJGv)=l1;
 	    colJGv(ntripletsJGv)=n2;
-	    valJGv(ntripletsJGv)=valJGv(ntripletsJGv)+scl.K*ajvolS_l1(i)*dJ_v;
+	    valJGv(ntripletsJGv)=valJGv(ntripletsJGv)+scl.K*ajvolS_l1(i)*dJv;
 
             ntripletsJGH=ntripletsJGH+1;
 	    rowJGH(ntripletsJGH)=l1;
 	    colJGH(ntripletsJGH)=l1;
-	    valJGH(ntripletsJGH)=valJGH(ntripletsJGH)-scl.K*ajvolS_l1(i)*dJ_H;
+	    valJGH(ntripletsJGH)=valJGH(ntripletsJGH)-scl.K*ajvolS_l1(i)*dJH;
         end
      end
 
@@ -341,7 +341,7 @@ clear JG_v JG_H;
 display(['time for matrix collection,JG matrix:']);
 toc;
 tic;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Jacob =sparse([JF;JG]);
 
