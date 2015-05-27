@@ -87,7 +87,7 @@ while itNr < maxNewtonIt && normUpdate > updateTol
             end
         end
 
-JF_v=sparse(rowJFv(1:ntripletsJFv),colJFv(1:ntripletsJFv),valJFv(1:ntripletsJFv),Nnode,Nnode);
+JF_v=sparse2(rowJFv(1:ntripletsJFv),colJFv(1:ntripletsJFv),valJFv(1:ntripletsJFv),Nnode,Nnode);
 JF_v = JF_v(eqnNodes,eqnNodes);
 display(['time for matrix collection,F matrix:']);
 toc;

@@ -5,6 +5,7 @@ global qmx1 qmx2 qmy1 qmy2 qmz1 qmz2;
 %
 global qkx qky qkz;
 global ingvl ingvr ingvt;
+global nLead;
 
 ix = qmx2-qmx1+1; iy = qmy2-qmy1+1; iz = qmz2-qmz1+1;
 
@@ -54,8 +55,21 @@ qmx = qmx2-qmx1; qmy = qmy2-qmy1; qmz = qmz2-qmz1;
   fp = fopen('embound-v','w');
   fprintf(fp,'%f\n',currtime);
   fprintf(fp,'%f\n',dt);
-  fprintf(fp,'%13.5e %13.5e %13.5e \n',ltv,rtv,ttv);
-  fprintf(fp,'%13.5e %13.5e %13.5e \n',ingvl,ingvr,ingvt);
+  if (nLead==0)
+  display('nLead=0,nothing is written is embound-v');
+  elseif (nLead==1)
+  fprintf(fp,'%20.8e \n',ltv);
+  fprintf(fp,'%20.8e \n',ingvl);
+  elseif (nLead==2)
+  fprintf(fp,'%20.8e %20.8e \n',ltv,rtv);
+  fprintf(fp,'%20.8e %20.8e \n',ingvl,ingvr);
+  elseif (nLead==3)
+  fprintf(fp,'%20.8e %20.8e %20.8e \n',ltv,rtv,ttv);
+  fprintf(fp,'%20.8e %20.8e %20.8e \n',ingvl,ingvr,ingvt);
+  else
+  display('nLead>3 is not ready now');
+  end
+
   fclose(fp);
 
   fp = fopen('embound1','w');
@@ -66,6 +80,6 @@ qmx = qmx2-qmx1; qmy = qmy2-qmy1; qmz = qmz2-qmz1;
   ! rm embound1 embound2;
 
   fp=fopen('voltage.dat','a+');
-  fprintf(fp,'%f %13.5e %13.5e %13.5e \n',currtime,ltv,rtv,ttv);
+  fprintf(fp,'%f %20.8e %20.8e %20.8e \n',currtime,ltv,rtv,ttv);
   fclose(fp);
 

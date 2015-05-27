@@ -6,7 +6,7 @@ global dirNodes dcVolDirNodes acVolDirNodes;
 global nsteps;
 global irkod;
 global lightsource tlas tzero;
-
+global scl;
 global Nlink JLinks J_amp;
 %%
 Js=zeros(Nlink,1);
@@ -14,8 +14,13 @@ timec = (ntp-1)*dt;
 timeh = timec + 0.5*dt;
 timee = timec + dt;
 
- dtV = dtVp;
- dtH = dtHp;
+dtV = dtVp;
+dtH = dtHp;
+
+emv  = V*scl.Vt;
+emdt = dt*scl.tao*1e15;
+currtime = timec*scl.tao*1e15;
+printVoltage(emv,currtime,emdt);
 switch extfelc
    case 1
      dtVp(dirNodes) = acVolDirNodes*exp(- timeh/epdf)/epdf;
@@ -60,6 +65,12 @@ switch lightsource
  Js(JLinks)=J_amp*sin(2*pi*timee/epdf2);
  case 2
  Js(JLinks)=J_amp*sin(2*pi*timee/epdf2)*exp(-((timee-tzero)/tlas)^2.0);   %omega= 2*pi/1 ,E = hbar *omega =0.6582*2*3.14/1=4.1356eV ~ 300nm
+ case 3
+ if (timee<=7*tlas) 
+ Js(JLinks)=J_amp*exp(-((timee-tzero)/tlas)^2.0);   %omega= 2*pi/1 ,E = hbar *omega =0.6582*2*3.14/1=4.1356eV ~ 300nm
+ else
+ Js(JLinks)=0.0;
+ end
  otherwise
  error('undefined light source');
 end

@@ -5,6 +5,7 @@ tStart=tic;
 tic;
 
 global kx ky kz scl;
+global dt;
 global nodes links contacts;
 global Nnode Nlink Nvolume; 
 global volumeM;
@@ -33,6 +34,9 @@ global dirxLinks diryLinks dirzLinks;
 global JLinks J_amp;
 global lightdirection Posz;
 global nedrelax;
+global omega_p gamma_p;
+global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2;
+global CJ01 CJ02 CJ11 CJ12 CJ13 CJ21 CJ22 CJ23;
 %%%
 
 %%%%%%%%% define boundary and edge nodes %%%%%%%%%%%
@@ -76,10 +80,10 @@ Origin=[20.0,20.0,20.0];
 %display([' MX21 :',num2str(MX21),' MY21: ',num2str(MY21),' MZ21: ',num2str(MZ21)]);
 %display([' MX22 :',num2str(MX22),' MY22: ',num2str(MY22),' MZ22: ',num2str(MZ22)]);
 % x2-x1 = dev2ce x, y2-y1 = device y
-[qmx1,qmy1,qmz1]=RealToNodes([10.0,10.0,10.0],x_coor,y_coor,z_coor);
-[qmx2,qmy2,qmz2]=RealToNodes([30.0,30.0,30.0],x_coor,y_coor,z_coor);
+[qmx1,qmy1,qmz1]=RealToNodes([30.0,18.0,18.0],x_coor,y_coor,z_coor);
+[qmx2,qmy2,qmz2]=RealToNodes([34.0,22.0,22.0],x_coor,y_coor,z_coor);
 %QM grid from lodestar
-qkx =129 ; qky = 33; qkz = 33;
+qkx =17 ; qky = 17; qkz = 5;
 %qmx1 = 18; qmx2 = 25; qmy1 = 8; qmy2 = 22; qmz1 = 8; qmz2 = 22;
 %R: set the boundary voltage to 0 now, for light
 avoltage   = 0.0;
@@ -140,6 +144,19 @@ metalNodes=defSphereNodes([20.0,20.0,20.0],scl.lambda,Radius,nodes);
 savefilename='metalNodes.mat';
 save(savefilename, 'metalNodes','Nnode','kx','ky','kz','x_coor','y_coor','z_coor');
 
+%constant coefficient for plasmonic metal
+CJ01=(2-gamma_p*dt)/(2+gamma_p*dt);
+CJ02=dt*omega_p*omega_p/(2+gamma_p*dt);
+
+CJ11=(2-lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt);
+CJ12=(lgamma_1*dt-1)/(1+lgamma_1*dt);
+CJ13=(lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt);
+
+CJ21=(2-lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt);
+CJ22=(lgamma_2*dt-1)/(1+lgamma_2*dt);
+CJ23=(lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt);
+%%%%%
+
 if(nedrelax==1)
 QMnodes = [];
 sQMnodes = [];
@@ -149,10 +166,11 @@ sQMnodes =defBrickNodes([qmx1+1,qmy1+1,qmz1+1],[qmx2-1,qmy2-1,qmz2-1]);
 end
 
 istqmnodes            = false(Nnode,1);
-istqmnodes(QMnodes)   = true;
+istqmnodes(sQMnodes)   = true;
 
 isSqmnodes            = false(Nnode,1);
 isSqmnodes(sQMnodes)  = true;
+
 isqmnodes             = false(Nnode,1);
 isqmnodes(sQMnodes)   = true;
 isSQMlinks            = zeros(Nlink,1);
@@ -167,48 +185,48 @@ tic;
 
 for ilk =1:Nlink
 
-    n1  = links(ilk,1); n2 = links(ilk,2); n3 = links(ilk,3);
-    [nx,ny,nz]=id2co(n1); [nx1,ny1,nz1]=id2co(n2);
+   n1  = links(ilk,1); n2 = links(ilk,2); n3 = links(ilk,3);
+   [nx,ny,nz]=id2co(n1); [nx1,ny1,nz1]=id2co(n2);
 
-    currdlink(ilk,1)=(nx+nx1)/2;
-    currdlink(ilk,2)=(ny+ny1)/2;
-    currdlink(ilk,3)=(nz+nz1)/2; 
+   currdlink(ilk,1)=(nx+nx1)/2;
+   currdlink(ilk,2)=(ny+ny1)/2;
+   currdlink(ilk,3)=(nz+nz1)/2; 
 
-    if (isSqmnodes(n1)+isSqmnodes(n2))==1
-      sQMlinks = [sQMlinks;ilk];
-       QMlinks = [QMlinks;ilk];
-      if n3==1
-         if nx < ( X1 + X2 ) /2
-          isSQMlinks(ilk)  = 1;
-         else
-          isSQMlinks(ilk)  = 2;
-         end
-      elseif n3==2 
-         if ny < ( Y1 + Y2 ) /2
-          isSQMlinks(ilk)  = 3;        
-         else
-          isSQMlinks(ilk)  = 4;
-         end
-      elseif n3==3 
-         if nz < ( Z1 + Z2 ) /2
-          isSQMlinks(ilk)  = 5;         
-         else 
-          isSQMlinks(ilk)  = 6;
-         end
-      end 
-    end
-
-    if (isqmnodes(n1)+isqmnodes(n2))==2
+   if (isSqmnodes(n1)+isSqmnodes(n2))==1
+     sQMlinks = [sQMlinks;ilk];
       QMlinks = [QMlinks;ilk];
-      if n3==1
-          isSQMlinks(ilk)  = 7;
-      elseif n3==2
-          isSQMlinks(ilk)  = 8;
-      elseif n3==3
-          isSQMlinks(ilk)  = 9;
-      end
-    end
-    
+     if n3==1
+        if nx < ( X1 + X2 ) /2
+         isSQMlinks(ilk)  = 1;
+        else
+         isSQMlinks(ilk)  = 2;
+        end
+     elseif n3==2 
+        if ny < ( Y1 + Y2 )/2
+         isSQMlinks(ilk)  = 3;        
+        else
+         isSQMlinks(ilk)  = 4;
+        end
+     elseif n3==3 
+        if nz < ( Z1 + Z2 ) /2
+         isSQMlinks(ilk)  = 5;         
+        else 
+         isSQMlinks(ilk)  = 6;
+        end
+     end 
+   end
+
+   if (isqmnodes(n1)+isqmnodes(n2))==2
+     QMlinks = [QMlinks;ilk];
+     if n3==1
+         isSQMlinks(ilk)  = 7;
+     elseif n3==2
+         isSQMlinks(ilk)  = 8;
+     elseif n3==3
+         isSQMlinks(ilk)  = 9;
+     end
+   end
+   
 end
 
 display('time for qm Links');
@@ -260,6 +278,13 @@ for i = 1:Nvolume
    end
 end
 
+isqmvolm = false(Nvolume,1);
+for i = 1:Nvolume
+   vNodes = volumeNodes(i,:);
+   if all(istqmnodes(vNodes))
+      isqmvolm(i) = true;
+   end
+end
 display('time for volumeM');
 toc;
 

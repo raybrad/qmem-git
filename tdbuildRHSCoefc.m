@@ -12,25 +12,21 @@ global links;
 global Nnode Nlink;
 global nodeLinks linkSurfs linkVolumes nodeVolumes;
 global nodeV linkL linkS dlinkL volumeM;
-global bndNodes dirNodes;
+global dirNodes;
 global isBndNodes;
 global metalLinks;
 
-global QMnodes;
-global sQMnodes;
 global isSQMlinks;
-global QMlinks;
-global isqmnodes;
 
 
 
-global light_speed XZsurfLinks XYsurfLinks YZsurfLinks;
+global light_speed;
 global EsurfLinks BsurfLinks;
 
 %global Fc11 Fc12 Fc21 Fc22 Fc30 Fn1matrix Fn2matrix Flkmatrix;
 %global Gc11 Gajlkmatrix11 Gc12 Gc20 Gn1matrix Gc31 Gajlk_n1matrix Gc32;
 %global Gn2matrix Gc41 Gajlk_n2matrix Gc42 Gc51 Gc52 Gc53 Gc54;
-global Fn1matrix Fn2matrix Fn3matrix Flkmatrix Fc
+global Fn1matrix Fn2matrix Fn3matrix Flkmatrix Fc;
 global Gajlkmatrix11 Gajlk_n1matrix Gajlk_n2matrix Gn1matrix Gn2matrix Gn3matrix Gc;
 %Method 2
 %Solving Gauss' law.
@@ -57,7 +53,7 @@ tStart=tic;
 tic;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %rhsF
-% construct the sparse matrix by (Row,Column,Value) 
+% construct the sparse2 matrix by (Row,Column,Value) 
  rhs_F = zeros(Nnode,1);
  Fc11=zeros(Nnode,6);
  Fc12=zeros(Nnode,6);
@@ -70,7 +66,7 @@ tic;
  Fn3matrix =zeros(Nnode,6);
  Flkmatrix =zeros(Nnode,6);
 
-   for k=1:NeqnNodes
+for k=1:NeqnNodes
         n1 = eqnNodes(k);
         ajlk_n1 = nodeLinks{n1}(1,:);
         ajnd_n1 = nodeLinks{n1}(2,:);
@@ -79,95 +75,38 @@ tic;
         ajvolM_n1 = volumeM(ajvol_n1);
         sign_n1 = sign(ajnd_n1-n1);
 
-%      %  if all(ajvolM_n1 == 3)	%all nodes in QM region (include the links along the boundary)
             for i = 1:length(ajlk_n1)
                     n2 = ajnd_n1(i);
                     lk = ajlk_n1(i);
                     n3 = links(lk,3);
-               %    dtE1 = -(dtV(n2)-dtV(n1))/linkL(lk)-sign_n1(i)*dtH(lk);
-               %    rhs_F(n1)   = rhs_F(n1) + sign_n1(i)*linkS(lk)*currdlink(lk,n3+3) + linkS(lk)* epsilon_qm *dtE1;
+                    ajvol_lk = linkVolumes{lk}(1,:);
+                    ajvolS_lk = linkVolumes{lk}(2,:);
+                    ajvolM_lk = volumeM(ajvol_lk);
 
-		    Fc11(n1,i)=epsilon_qm*linkS(lk)*(-1/linkL(lk))*(all(ajvolM_n1==3))+ ...
-		               sum(((isSQMlinks(lk)==0)*Eps(ajvolM_lk).*ajvolS_lk*(-1/linkL(lk))+...
-		                    (isSQMlinks(lk)~=0)*epsilon_qm*linkS(lk)*(-1/linkL(lk)))*(any(ajvolM_n1==1)));
-		    Fc12(n1,i)=epsilon_qm*linkS(lk)*( -sign_n1(i))*(all(ajvolM_n1==3))+...
-		               sum(((isSQMlinks(lk)==0)*Eps(ajvolM_lk).*ajvolS_lk*(-sign_n1(i)) +...
-		                    (isSQMlinks(lk)~=0)*epsilon_qm*linkS(lk)*(-sign_n1(i)))*(any(ajvolM_n1==1)));
+		    Fc11(n1,i)=(all(ajvolM_n1==3))*epsilon_qm*linkS(lk)*(-1/linkL(lk))+ ...
+		               (any(ajvolM_n1==1))*(sum((isSQMlinks(lk)==0)*Eps(ajvolM_lk).*ajvolS_lk*(-1/linkL(lk)))+...
+		                                        (isSQMlinks(lk)>=1 && isSQMlinks(lk)<=6)*epsilon_qm*linkS(lk)*(-1/linkL(lk)));
 
-		    Fc21(n1,i)=sum(((isSQMlinks(lk)==0)*Eps(ajvolM_lk).*ajvolS_lk*(-1/linkL(lk))+...
-		                    (isSQMlinks(lk)~=0)*epsilon_qm*linkS(lk)*(-1/linkL(lk)))*(~(all(ajvolM_n1==3)||any(ajvolM_n1==1))));
+		    Fc12(n1,i)=(all(ajvolM_n1==3))*epsilon_qm*linkS(lk)*(-sign_n1(i))+...
+		               (any(ajvolM_n1==1))*(sum((isSQMlinks(lk)==0)*Eps(ajvolM_lk).*ajvolS_lk*(-sign_n1(i))) +...
+		                                        (isSQMlinks(lk)>=1 && isSQMlinks(lk)<=6)*epsilon_qm*linkS(lk)*(-sign_n1(i)));
 
-		    Fc22(n1,i)=sum(((isSQMlinks(lk)==0)*Eps(ajvolM_lk).*ajvolS_lk*(-sign_n1(i)) +... 	
-		                    (isSQMlinks(lk)~=0)*epsilon_qm*linkS(lk)*(-sign_n1(i)))*(~(all(ajvolM_n1==3)||any(ajvolM_n1==1))));
+		    Fc21(n1,i)=(any(ajvolM_n1~=3) && all(ajvolM_n1~=1))*(sum((isSQMlinks(lk)==0)*Eps(ajvolM_lk).*ajvolS_lk*(-1/linkL(lk)))+...
+		                   					     (isSQMlinks(lk)~=0)*epsilon_qm*linkS(lk)*(-1/linkL(lk)));
 
-		    Fc30(n1,i)=sum(prefac(ajvolM_lk).*ajvolS_lk*sign_n1(i));	%mJ
+		    Fc22(n1,i)=(any(ajvolM_n1~=3) && all(ajvolM_n1~=1))*(sum((isSQMlinks(lk)==0)*Eps(ajvolM_lk).*ajvolS_lk*(-sign_n1(i))) +... 	
+		                    				             (isSQMlinks(lk)~=0)*epsilon_qm*linkS(lk)*(-sign_n1(i)));
 
-	            Fc40(n1,i)=sign_n1(i)*linkS(lk)*(all(ajvolM_n1 == 3)||((any(ajvolM_n1==1) && isSQMlinks(lk)<=6))); %currdlink
+		    Fc30(n1,i)=(any(ajvolM_n1==1) && isSQMlinks(lk)==0)*sum(prefac(ajvolM_lk).*ajvolS_lk*sign_n1(i));	%mJ
+
+	            Fc40(n1,n3+3)=(all(ajvolM_n1==3)+((any(ajvolM_n1==1) && isSQMlinks(lk)>=1 && isSQMlinks(lk)<=6)))*sign_n1(i)*linkS(lk); %currdlink
 
 		    Fn1matrix(n1,i)=n1;
 		    Fn2matrix(n1,i)=n2;
 		    Fn3matrix(n1,i)=n3;
 		    Flkmatrix(n1,i)=lk;
             end
-%       % elseif any(ajvolM_n1 == 1) % metal/semi interfaces or triple points
-%       %     for i = 1:length(ajlk_n1)
-%                    n2 = ajnd_n1(i);
-%                    lk = ajlk_n1(i);
-%                    n3 = links(lk,3);
-%                   dtE1 = -(dtV(n2)-dtV(n1))/linkL(lk)-sign_n1(i)*dtH(lk);
-%                   if isSQMlinks(lk) == 0	
-%                   %along(impossible here) or connected to the outside QM boundary,or pure EM links 
-%                     ajvol_lk = linkVolumes{lk}(1,:);
-%                     ajvolS_lk = linkVolumes{lk}(2,:);
-%                     ajvolM_lk = volumeM(ajvol_lk);
-%
-%
-%                     for j = 1:length(ajvol_lk)
-%                        switch ajvolM_lk(j)
-%                           case 1
-%                 		%J=sign_n1(i)*mJ(lk)+epsilon_mt*dtE1;
-%       			dJv = sign_n1(i)*(dt*omega_p*omega_p/(dt*gamma_p+2)/linkL(lk)+...
-%       			    (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt)/linkL(lk) +...
-%       			    (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt)/linkL(lk)) +...
-%       			     epsilon_mt/(0.5*dt*linkL(lk));
-%                               dJH = -sign_n1(i)*(dt*omega_p*omega_p/(dt*gamma_p+2) +...
-%       			                  (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt) +...
-%       			                  (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt) +...
-%       					  epsilon_mt/(0.5*dt));
-%                           case 2
-%                                J   = epsilon_in*dtE1;
-%                               dJv = epsilon_in/(0.5*dt*linkL(lk));
-%                               dJH = -sign_n1(i)*epsilon_in/(0.5*dt);
-%                           otherwise
-%                               error('undefined material');
-%                         end
-%
-%                        rhs_F(n1) = rhs_F(n1)+ajvolS_lk(j)*J;
-%                      end
-%                    elseif isSQMlinks(lk) <= 6	%inside/outside interface
-%%                      rhs_F(n1)   = rhs_F(n1) + sign_n1(i)*linkS(lk)*currdlink(lk,n3+3) + linkS(lk)* epsilon_qm *dtE1;
-%                    elseif isSQMlinks(lk) > 6 %inside QM, very rare in ajvolM_n1 == 2 not ajvolM_n1==4 ,it's 0 anyway
-%%                       rhs_F(n1)   = rhs_F(n1) + 0;
-%                    end
-%            end
-%        else   %other ajvolM_n1 except QMnodes and metal 
-%                for i = 1:length(ajlk_n1)
-%                    n2 = ajnd_n1(i);
-%                    lk = ajlk_n1(i);
-%                    if isSQMlinks(lk) == 0  %along(impossible here)or connected to the outside QM boundary,or pure EM links 
-%
-%                      ajvol_lk = linkVolumes{lk}(1,:);
-%                      ajvolS_lk = linkVolumes{lk}(2,:);
-%                      ajvolM_lk = volumeM(ajvol_lk);
-%                      coefV = sum(Eps(ajvolM_lk).*ajvolS_lk)/linkL(lk);
-%                      coefH = -coefV*linkL(lk);
-%%rhs_F(n1) = rhs_F(n1)+sum(Eps(ajvolM_lk).*(-(V(n2)-V(n1))/linkL(lk)-sign_n1(i)* H(lk)).*ajvolS_lk);
-%                    else	%interface
-%                     rhs_F(n1)   = rhs_F(n1) + epsilon_qm *(-(V(n2)-V(n1))/linkL(lk)-sign_n1(i)* H(lk))*linkS(lk);
-%                    end
-%                end
-%        end
-%     end
+end
 display(['time for rhs_F coefficient matrix collection:']);
 toc;
 tic;
@@ -194,6 +133,8 @@ Gc51=zeros(Nlink,1);
 Gc52=zeros(Nlink,1);
 Gc53=zeros(Nlink,1);
 Gc54=zeros(Nlink,1);
+Gn3matrix=zeros(Nlink,1);
+Gc60=zeros(Nlink,6);
 
 
 %%%%%%%%%%%%% Build Jacobian and rhs of G (Ampere's law) %%%%%%%%%%%%%
@@ -226,7 +167,6 @@ Gc54=zeros(Nlink,1);
             
 	    ajlkSign = (n2==links(ajlk(1),1))*[1,-1,-1]+(n2==links(ajlk(1),2))*[-1,-1,1];
 
-
             CC(ajlk) = dL/S*(ajlkSign.*ajlkL);
             CC(l1) = CC(l1)+dL/S*linkL(l1);
 	    
@@ -239,6 +179,7 @@ Gc54=zeros(Nlink,1);
 	    Gc12(l1)=CC(l1);
 		
 	    Gc20(l1)=(size(ajsf_l1,2)==3)*(1-isBsurfLinks(l1))*dL*(1/light_speed)+...
+	    	     (size(ajsf_l1,2)==2)*(2-isBsurfLinks(l1))*dL*(1/light_speed);
 
 
         %%%%%%%% gradient divergence of A and gradient of V %%%%%%%%
@@ -276,47 +217,13 @@ Gc54=zeros(Nlink,1);
             %rhs_G(l1) = rhs_G(l1)-coefV_n2*dtV(n2);
         end
 
-
-        %%%%%% source current %%%%%%%%%%%
-       % E1 = -(V(n2)-V(n1))/linkL(l1)-H(l1); %(div V+ PI)
-       % dtE1 = -(dtV(n2)-dtV(n1))/linkL(l1) - dtH(l1);
-%       if isSQMlinks(l1) == 0		 %along or connected to the outside QM boundary,or pure EM links
-%      % E1 = -(V(n2)-V(n1))/linkL(l1)-H(l1);
-%         for i = 1:length(ajvol_l1)	%volumetype of the link belong to
-%           switch ajvolM_l1(i)
-%               case 1
-%                   %J=mJ(l1)+epsilon_mt*dtE1;
-%                   dJv = (dt*omega_p*omega_p/(dt*gamma_p+2)/linkL(l1)+...
-%           		  (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt)/linkL(l1) +...
-%           		  (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt)/linkL(l1)) +...
-%           		  epsilon_mt/(0.5*dt*linkL(l1));
-%                   dJH = -(dt*omega_p*omega_p/(dt*gamma_p+2) +...
-%           		   (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt) +...
-%           		   (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt) +...
-%           		   epsilon_mt/(0.5*dt));
-%               case 2
-%                   %J = epsilon_in*dtE1+Js(l1);
-%                   dJ_v = epsilon_in/(0.5*dt*linkL(l1));
-%                   dJ_H = -epsilon_in/(0.5*dt);
-%               case 3	%all QM nodes(include the outside/inside boundary)
-%                   %J = epsilon_qm*dtE1;
-%                   dJ_v = epsilon_qm/(0.5*dt*linkL(l1));
-%                   dJ_H = -dJ_v*linkL(l1);
-%               otherwise
-%                   error('undefined material');
-%           end
-%           rhs_G(l1) = rhs_G(l1)-scl.K*ajvolS_l1(i)*J;
-%         end
-%       else %mix  outside/inside QM links interface, inside QM links
-%         %  rhs_G(l1) = rhs_G(l1) - scl.K * linkS(l1)*(currdlink(l1,n3+3)+epsilon_qm*dtE1);
-%       end
-       	Gc51(l1)=-scl.K*sum((isSQMlinks(l1)==0)*Eps(ajvolM_l1).*ajvolS_l1*(-1/linkL(l1))+...
-	                    (isSQMlinks(l1)~=0)*epsilon_qm*linkS(l1)*(-1/linkL(l1)));
-       	Gc52(l1)=-scl.K*sum((isSQMlinks(l1)==0)*Eps(ajvolM_l1).*ajvolS_l1*(-1);
-	                    (isSQMlinks(l1)~=0)*epsilon_qm*linkS(l1)*(-1));
-	Gc53(l1)=-scl.K*sum((isSQMlinks(l1)==0)*prefac(ajvolM_l1).*ajvolS_l1);		%mJ
-	Gc54(l1)=-scl.K*sum(ajvolS_l1);		%Js
-	Gc60(l1)=-scl.K*linkS(l1)*(isSQMlinks(l1)~=0);		%currdlink
+       	Gc51(l1)=(isSQMlinks(l1)==0)*(-scl.K)*sum(Eps(ajvolM_l1).*ajvolS_l1*(-1/linkL(l1)))+...
+	         (isSQMlinks(l1)~=0)*(-scl.K)*epsilon_qm*linkS(l1)*(-1/linkL(l1));
+       	Gc52(l1)=(isSQMlinks(l1)==0)*(-scl.K)*sum(Eps(ajvolM_l1).*ajvolS_l1*(-1))+...
+	         (isSQMlinks(l1)~=0)*(-scl.K)*epsilon_qm*linkS(l1)*(-1);
+	Gc53(l1)=(isSQMlinks(l1)==0)*(-scl.K)*sum(prefac(ajvolM_l1).*ajvolS_l1);		%mJ
+	Gc54(l1)=(isSQMlinks(l1)==0)*(-scl.K)*sum(ajvolS_l1);							%Js
+	Gc60(l1,n3+3)=(isSQMlinks(l1)~=0)*(-scl.K)*linkS(l1);				%currdlink
      end
     
 display(['time for rhs_G coefficient matrix collection:']);

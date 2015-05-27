@@ -8,7 +8,7 @@ global epsilon_qm;
 global omega_p gamma_p;
 global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2;
 global scl;
-global links;
+global nodes links;
 global Nnode Nlink;
 global nodeLinks linkSurfs linkVolumes nodeVolumes;
 global nodeV linkL linkS dlinkL volumeM;
@@ -18,6 +18,8 @@ global metalLinks;
 
 global isSQMlinks;
 global currdlink;
+
+global ehcrf;
 global isqmvolm;
 
 global light_speed;
@@ -56,6 +58,7 @@ Nl = length(eqnLinks);
 
 normRes = 1;
 normUpdate = 1;
+normRes_pre = 1e10;
 itNr = 0;
 tStart=tic;
 while itNr < maxNewtonIt && normUpdate > updateTol
@@ -103,11 +106,11 @@ tic;
         ajvol_n1 = nodeVolumes{n1}(1,:);
         ajvolV_n1 = nodeVolumes{n1}(2,:);
         ajvolM_n1 = volumeM(ajvol_n1);
-%        for qmi = 1:length(ajvol_n1)
-%          if isqmvolm(ajvol_n1(qmi))
-%           ajvolM_n1(qmi)=3;	%
-%          end 
-%        end
+        for qmi = 1:length(ajvol_n1)
+          if isqmvolm(ajvol_n1(qmi))
+           ajvolM_n1(qmi)=3;	%
+          end 
+        end
         sign_n1 = sign(ajnd_n1-n1);
 
         if all(ajvolM_n1 == 3)	%all nodes in QM region (include the links along the boundary)
@@ -145,7 +148,7 @@ tic;
                          switch ajvolM_lk(j)
                             case 1
                   		J=sign_n1(i)*(mJ_0(lk)+mJ_1(lk)+mJ_2(lk))+epsilon_mt*dtE1;
-                                dJv =(dt*omega_p*omega_p/(dt*gamma_p+2)/linkL(lk)+...
+                                dJv = sign_n1(i)*(dt*omega_p*omega_p/(dt*gamma_p+2)/linkL(lk)+...
 				    (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt)/linkL(lk) +...
 				    (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt)/linkL(lk)) +...
 				     epsilon_mt/(0.5*dt*linkL(lk));
@@ -200,14 +203,15 @@ tic;
                     n2 = ajnd_n1(i);
                     lk = ajlk_n1(i);
                     if isSQMlinks(lk) == 0  %along(impossible here)or connected to the outside QM boundary,or pure EM links 
+                      dV2=0; 
 		      ajvol_lk = linkVolumes{lk}(1,:);
                       ajvolS_lk = linkVolumes{lk}(2,:);
                       ajvolM_lk = volumeM(ajvol_lk);
-                     %for qmi = 1:length(ajvol_lk)
-                     %   if isqmvolm(ajvol_lk(qmi))
-                     %    ajvolM_lk(qmi)=3;
-                     %   end
-                     %end
+                      for qmi = 1:length(ajvol_lk)
+                         if isqmvolm(ajvol_lk(qmi))
+                          ajvolM_lk(qmi)=3;
+                         end
+                      end
                       coefV = sum(Eps(ajvolM_lk).*ajvolS_lk)/linkL(lk);
 		      ntripletsJFv=ntripletsJFv+1;
 		      rowJFv(ntripletsJFv)=n1;
@@ -217,12 +221,13 @@ tic;
 		      rowJFv(ntripletsJFv)=n1;
 		      colJFv(ntripletsJFv)=n2;
 		      valJFv(ntripletsJFv)=-coefV;
+                      dV2_vec = [0,1,1/2,0];
                       coefH = -coefV*linkL(lk);
 		      ntripletsJFH=ntripletsJFH+1;
 		      rowJFH(ntripletsJFH)=n1;
 		      colJFH(ntripletsJFH)=lk;
 		      valJFH(ntripletsJFH)=sign_n1(i)*coefH;
-                      rhs_F(n1) = rhs_F(n1)+sum(Eps(ajvolM_lk).*(-(V(n2)-V(n1))/linkL(lk)-sign_n1(i)* H(lk)).*ajvolS_lk);
+                      rhs_F(n1) = rhs_F(n1)+sum(Eps(ajvolM_lk).*(-(V(n2)-V(n1)+dV2_vec(ajvolM_lk).*dV2)/linkL(lk)-sign_n1(i)* H(lk)).*ajvolS_lk);
                     else	%interface
                      rhs_F(n1)   = rhs_F(n1) + epsilon_qm *(-(V(n2)-V(n1))/linkL(lk)-sign_n1(i)* H(lk))*linkS(lk);
 		     ntripletsJFv=ntripletsJFv+1;
@@ -272,11 +277,11 @@ tic;
         ajvol_l1 = linkVolumes{l1}(1,:);
         ajvolS_l1 = linkVolumes{l1}(2,:);
         ajvolM_l1 = volumeM(ajvol_l1);
-       %for qmi = 1:length(ajvol_l1)
-       %  if isqmvolm(ajvol_l1(qmi))
-       %   ajvolM_l1(qmi)=3;
-       %  end
-       %end
+        for qmi = 1:length(ajvol_l1)
+          if isqmvolm(ajvol_l1(qmi))
+           ajvolM_l1(qmi)=3;
+          end
+        end
         n3 = links(l1,3);
         CC = zeros(1,Nlink);
         GD = zeros(1,Nlink);
@@ -357,11 +362,11 @@ tic;
             ajvol_n1 = nodeVolumes{n1}(1,:);
             ajvolV_n1 = nodeVolumes{n1}(2,:);
             ajvolM_n1 = volumeM(ajvol_n1);
-           %for qmi = 1:length(ajvol_n1)
-           %  if isqmvolm(ajvol_n1(qmi))
-           %    ajvolM_n1(qmi)=3;
-           %  end 
-           %end
+            for qmi = 1:length(ajvol_n1)
+              if isqmvolm(ajvol_n1(qmi))
+                ajvolM_n1(qmi)=3;
+              end 
+            end
             coefV_n1 = scl.K*(sum(Eps(ajvolM_n1).*ajvolV_n1)/nodeV(n1))*linkS(l1)/linkL(l1);
 
             ntripletsJGv=ntripletsJGv+1;
@@ -382,11 +387,11 @@ tic;
             ajvol_n2 = nodeVolumes{n2}(1,:);
             ajvolV_n2 = nodeVolumes{n2}(2,:);
             ajvolM_n2 = volumeM(ajvol_n2);
-           %for qmi = 1:length(ajvol_n2)
-           %  if isqmvolm(ajvol_n2(qmi))
-           %    ajvolM_n2(qmi)=3;
-           %  end
-           %end
+            for qmi = 1:length(ajvol_n2)
+              if isqmvolm(ajvol_n2(qmi))
+                ajvolM_n2(qmi)=3;
+              end
+            end
             coefV_n2 = scl.K*(sum(Eps(ajvolM_n2).*ajvolV_n2)/nodeV(n2))*linkS(l1)/linkL(l1);
 
             ntripletsJGv=ntripletsJGv+1;
@@ -414,11 +419,11 @@ tic;
             switch ajvolM_l1(i)
                 case 1
                     J   = (mJ_0(l1)+mJ_1(l1)+mJ_2(l1))+epsilon_mt*dtE1;
-                    dJ_v = (dt*omega_p*omega_p/(dt*gamma_p+2)/linkL(l1)+...
+                    dJv = (dt*omega_p*omega_p/(dt*gamma_p+2)/linkL(l1)+...
 			  (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt)/linkL(l1) +...
 			  (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt)/linkL(l1)) +...
 			  epsilon_mt/(0.5*dt*linkL(l1));
-                    dJ_H = -(dt*omega_p*omega_p/(dt*gamma_p+2) +...
+                    dJH = -(dt*omega_p*omega_p/(dt*gamma_p+2) +...
 			   (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt) +...
 			   (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt) +...
 			   epsilon_mt/(0.5*dt));
@@ -501,6 +506,7 @@ tic;
     dH = dX(NeqnNodes+1:NeqnNodes+Nl);
     
     normRes = norm(rhs);
+    normRes_pre = normRes;
 
     itNr = itNr+1;
     

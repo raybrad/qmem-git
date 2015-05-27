@@ -8,7 +8,7 @@ global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2;
 global scl;
 global nodes links;
 global Nnode Nlink;
-global nodeLinks linkSurfs linkVolS nodeVolV;
+global nodeLinks linkSurfs linkVolumes nodeVolumes;
 global nodeV linkL linkS dlinkL volumeM;
 global bndNodes dirNodes;
 global isBndNodes;
@@ -61,8 +61,8 @@ tStart=tic;
 for n1 = eqnNodes1.'
     ajlk_n1 = nodeLinks{n1}(1,:);
     ajnd_n1 = nodeLinks{n1}(2,:);
-    ajvol_n1 = find(nodeVolV(n1,:));
-    ajvolV_n1 = nodeVolV(n1,ajvol_n1);
+    ajvol_n1 = nodeVolumes{n1}(1,:);
+    ajvolV_n1 = nodeVolumes{n1}(2,:);
     ajvolM_n1 = volumeM(ajvol_n1);
     sign_n1 = sign(ajnd_n1-n1);
     coef_n1 = linkS(ajlk_n1)./nodeV(n1);
@@ -110,16 +110,16 @@ while itNr < maxNewtonIt && normUpdate > updateTol
         n1 = eqnNodes(k);
         ajlk_n1 = nodeLinks{n1}(1,:);
         ajnd_n1 = nodeLinks{n1}(2,:);
-        ajvol_n1 = find(nodeVolV(n1,:));
-        ajvolV_n1 = nodeVolV(n1,ajvol_n1);
+        ajvol_n1 = nodeVolumes{n1}(1,:);
+        ajvolV_n1 = nodeVolumes{n1}(2,:);
         ajvolM_n1 = volumeM(ajvol_n1);
         sign_n1 = sign(ajnd_n1-n1);
         
 	for i = 1:length(ajlk_n1)
             n2 = ajnd_n1(i);
             lk = ajlk_n1(i);
-            ajvol_lk = find(linkVolS(lk,:)); %volume id
-            ajvolS_lk = linkVolS(lk,ajvol_lk);%associate surf area,not dual area, but only its own 1/4
+            ajvol_lk = linkVolumes{lk}(1,:);
+            ajvolS_lk = linkVolumes{lk}(2,:);
             ajvolM_lk = volumeM(ajvol_lk);
 
             dtE1 = -(Y(n2)-Y(n1))/linkL(lk)-sign_n1(i)*Z(lk);		%? how about W
@@ -178,8 +178,8 @@ while itNr < maxNewtonIt && normUpdate > updateTol
         l1 = eqnLinks(k);
         n1 = links(l1,1);
         n2 = links(l1,2);
-        ajvol_l1 = find(linkVolS(l1,:)); %volume id
-        ajvolS_l1 = linkVolS(l1,ajvol_l1);%associate surf area,not dual area, but only its own 1/4
+        ajvol_l1 = linkVolumes{l1}(1,:);%volumeid
+        ajvolS_l1 = linkVolumes{l1}(2,:);%associate surf area,not dual area, but only its own 1/4
         ajvolM_l1 = volumeM(ajvol_l1);
         CC = zeros(1,Nlink);
 
@@ -317,14 +317,14 @@ display(['time for matrix collection,G matrix:']);
 toc;
 tic;
     
-    JF_v=sparse(rowJFv(1:ntripletsJFv),colJFv(1:ntripletsJFv),valJFv(1:ntripletsJFv),Nnode,Nnode);
-    JF_H=sparse(rowJFH(1:ntripletsJFH),colJFH(1:ntripletsJFH),valJFH(1:ntripletsJFH),Nnode,Nlink);
+    JF_v=sparse2(rowJFv(1:ntripletsJFv),colJFv(1:ntripletsJFv),valJFv(1:ntripletsJFv),Nnode,Nnode);
+    JF_H=sparse2(rowJFH(1:ntripletsJFH),colJFH(1:ntripletsJFH),valJFH(1:ntripletsJFH),Nnode,Nlink);
     clear rowJFv colJFv valJFv rowJFH colJFH valJFH;
     JF_v = JF_v(eqnNodes,eqnNodes);
     JF_H  = JF_H(eqnNodes,eqnLinks);
     
-    JG_v=sparse(rowJGv(1:ntripletsJGv),colJGv(1:ntripletsJGv),valJGv(1:ntripletsJGv),Nlink,Nnode);
-    JG_H=sparse(rowJGH(1:ntripletsJGH),colJGH(1:ntripletsJGH),valJGH(1:ntripletsJGH),Nlink,Nlink);
+    JG_v=sparse2(rowJGv(1:ntripletsJGv),colJGv(1:ntripletsJGv),valJGv(1:ntripletsJGv),Nlink,Nnode);
+    JG_H=sparse2(rowJGH(1:ntripletsJGH),colJGH(1:ntripletsJGH),valJGH(1:ntripletsJGH),Nlink,Nlink);
     clear rowJGv colJGv valJGv rowJGH colJGH valJGH;
     JG_v = JG_v(eqnLinks,eqnNodes);
     JG_H  = JG_H(eqnLinks,eqnLinks);
@@ -373,4 +373,4 @@ dtV = Y;
 dtH = Z;
 
 toc(tStart);
-display(['  End tdcalupdatecc .']);
+display(['End tdcalupdatecc']);

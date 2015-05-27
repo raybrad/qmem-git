@@ -15,7 +15,7 @@ global currdlink;
 %global Fc11 Fc12 Fc21 Fc22 Fc30 Fn1matrix Fn2matrix Flkmatrix;
 %global Gc11 Gajlkmatrix11 Gc12 Gc20 Gn1matrix Gc31 Gajlk_n1matrix Gc32;
 %global Gn2matrix Gc41 Gajlk_n2matrix Gc42 Gc51 Gc52 Gc53 Gc54;
-global Fn1matrix Fn2matrix Fn3matrix Flkmatrix Fc
+global Fn1matrix Fn2matrix Fn3matrix Flkmatrix Fc;
 global Gajlkmatrix11 Gajlk_n1matrix Gajlk_n2matrix Gn1matrix Gn2matrix Gn3matrix Gc;
 global JacobLU;
 %Method 2
@@ -108,7 +108,12 @@ FdtHmatrix(eqnNodes,:)= dtH(Flkmatrix(eqnNodes,:));
 FVmatrix(eqnNodes,:)  = V(Fn2matrix(eqnNodes,:))-V(Fn1matrix(eqnNodes,:));
 FHmatrix(eqnNodes,:)  = H(Flkmatrix(eqnNodes,:));
 FJmatrix(eqnNodes,:)  = (mJ_0(Flkmatrix(eqnNodes,:))+mJ_1(Flkmatrix(eqnNodes,:))+mJ_2(Flkmatrix(eqnNodes,:)));
-Fqmcurrdlink(eqnNodes,:)= currdlink(Flkmatrix(eqnNodes,:),Fn3matrix(eqnNodes,:)+3);
+%currdlink(lk,n3+3)
+for i=1:eqnNodes
+	for j=1:6
+	  Fqmcurrdlink(i,Fn3matrix(i,j)+3)= (Flkmatrix(i,j)~=0)*currdlink(Flkmatrix(i,j)+(Flkmatrix(i,j)==0),Fn3matrix(i,j)+3);	%
+	end
+end
 Fmatrix=[FdtVmatrix,FdtHmatrix,FVmatrix,FHmatrix,FJmatrix,Fqmcurrdlink];
 rhs_F=sum((Fc.*Fmatrix),2);
 %rhs_F=sum((Fc11.*FdtVmatrix+Fc12.*FdtHmatrix+Fc21.*FVmatrix+Fc22.*FHmatrix+Fc30.*FJmatrix),2);
@@ -127,7 +132,7 @@ GdtVmatrix32=zeros(Nlink,1);
 GAmatrix41=zeros(Nlink,6);
 GdtVmatrix42=zeros(Nlink,1);
 GdtVmatrix51=zeros(Nlink,1);
-Gqmcurrdlink=zeros(Nlink,1);
+Gqmcurrdlink=zeros(Nlink,6);
 
 GAmatrix11(eqnLinks,:)=(Gajlkmatrix11(eqnLinks,:)~=0).*A(Gajlkmatrix11(eqnLinks,:)+(Gajlkmatrix11(eqnLinks,:)==0));
 
@@ -137,9 +142,11 @@ GdtVmatrix32(eqnLinks)=dtV(Gn1matrix(eqnLinks));
 GAmatrix41(eqnLinks,:)=(Gajlk_n2matrix(eqnLinks,:)~=0).*A(Gajlk_n2matrix(eqnLinks,:)+(Gajlk_n2matrix(eqnLinks,:)==0));
 GdtVmatrix42(eqnLinks)=dtV(Gn2matrix(eqnLinks));
 GdtVmatrix51(eqnLinks)=dtV(Gn2matrix(eqnLinks))-dtV(Gn1matrix(eqnLinks));
-Gqmcurrdlink(eqnLinks)=currdlink(eqnLinks,Gn3matrix(eqnLinks)+3);
+for i=1:eqnLinks
+	Gqmcurrdlink(i,Gn3matrix(i)+3)= currdlink(i,Gn3matrix(i)+3);	%
+end
 
-Gmatrix=[GAmatrix11,A,H,GAmatrix31,GdtVmatrix32,GAmatrix41,GdtVmatrix42,GdtVmatrix51,dtH,(mJ_0+mJ_1+mJ_2),Js];
+Gmatrix=[GAmatrix11,A,H,GAmatrix31,GdtVmatrix32,GAmatrix41,GdtVmatrix42,GdtVmatrix51,dtH,(mJ_0+mJ_1+mJ_2),Js,Gqmcurrdlink];
 rhs_G=sum((Gc.*Gmatrix),2);
 
 %rhs_G = sum(Gc11.*GAmatrix11,2)+Gc12.*A+Gc20.*H+sum(Gc31.*GAmatrix31,2)+Gc32.*GdtVmatrix32+...
@@ -152,15 +159,13 @@ tic;
     rhs_F = rhs_F(eqnNodes);
     rhs_G = rhs_G(eqnLinks);
       
-    rhs = -sparse([rhs_F;rhs_G]);
+    rhs = -([rhs_F;rhs_G]);
 
     display(['time for matrix reconstruction:']);
     toc;
     tic;
 
     clear rhs_F rhs_G;
-%     Jacob1 = sparse(Jacob);
-%     rhs1 = sparse(rhs);
 %     [L,U] = luinc(Jacob1,droptol);
 %     [dX,flag,relres,iter] = gmres(Jacob1,rhs1,[],linSolveTol,maxLinIt,L,U);
 %     if flag ~= 0, error('No convergence for linear solver'); end

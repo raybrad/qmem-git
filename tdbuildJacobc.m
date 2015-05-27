@@ -10,22 +10,17 @@ global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2;
 global scl;
 global links;
 global Nnode Nlink;
-global nodeLinks linkSurfs linkVolmes nodeVolumes;
+global nodeLinks linkSurfs linkVolumes nodeVolumes;
 global nodeV linkL linkS dlinkL volumeM;
-global bndNodes dirNodes;
+global dirNodes;
 global isBndNodes;
-global bndLinks;
 global metalLinks;
 
-global QMnodes;
-global sQMnodes;
 global isSQMlinks;
-global QMlinks;
-global isqmnodes;
 
 
 
-global light_speed XZsurfLinks XYsurfLinks YZsurfLinks;
+global light_speed;
 global EsurfLinks BsurfLinks;
 %global Jacob colind Lmatrix Umatrix;
 global JacobLU;
@@ -43,7 +38,7 @@ isBsurfLinks=false(Nlink,1);
 isBsurfLinks(BsurfLinks)=true;		        %for B boundary condition
 
 %%%%%%%% start Newton's iteration %%%%%%%%
-updateTol = 1e-8;
+updateTol = 1e-4;
 droptol = 1e-6;
 linSolveTol = 1e-6;
 maxNewtonIt = 50;
@@ -59,7 +54,7 @@ itNr = 0;
 tStart=tic;
 
 %JF
-% construct the sparse matrix by (Row,Column,Value) 
+% construct the sparse2 matrix by (Row,Column,Value) 
 tic;
      ntripletsJFv=48*Nnode;
      rowJFv=zeros(ntripletsJFv,1);
@@ -115,14 +110,11 @@ tic;
                       ajvolS_lk = linkVolumes{lk}(2,:);
                       ajvolM_lk = volumeM(ajvol_lk);
  
-                        dV2 = 0;
-                        ttt = 1; 
-
                       for j = 1:length(ajvol_lk)
                          switch ajvolM_lk(j)
                             case 1
-                  		%J=sign_n1(i)*mJ(lk)+epsilon_mt*dtE1;
-				dJv = sign_n1(i)*(dt*omega_p*omega_p/(dt*gamma_p+2)/linkL(lk)+...
+                  		%J=sign_n1(i)*(mJ_0(lk)+mJ_1(lk)+mJ_2(lk))+epsilon_mt*dtE1;
+				dJv =(dt*omega_p*omega_p/(dt*gamma_p+2)/linkL(lk)+...
 				    (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt)/linkL(lk) +...
 				    (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt)/linkL(lk)) +...
 				     epsilon_mt/(0.5*dt*linkL(lk));
@@ -136,7 +128,7 @@ tic;
                                 dJH = -sign_n1(i)*epsilon_in/(0.5*dt);
                             otherwise
                                 error('undefined material');
-                        end
+                         end
 			ntripletsJFv=ntripletsJFv+1;
 			rowJFv(ntripletsJFv)=n1;
 			colJFv(ntripletsJFv)=n1;
@@ -168,7 +160,7 @@ tic;
 		       rowJFH(ntripletsJFH)=n1;
 		       colJFH(ntripletsJFH)=lk;
 		       valJFH(ntripletsJFH)=valJFH(ntripletsJFH)- epsilon_qm *linkS(lk)*sign_n1(i)/(0.5*dt);
-                    elseif isSQMlinks(lk) > 6 %inside QM, very rare in ajvolM_n1 == 2 not ajvolM_n1==4 ,it's 0 anyway
+%                    elseif isSQMlinks(lk) > 6 %inside QM, very rare in ajvolM_n1 == 2 not ajvolM_n1==4 ,it's 0 anyway
 %                       rhs_F(n1)   = rhs_F(n1) + 0;
                     end
             end
@@ -177,9 +169,7 @@ tic;
                     n2 = ajnd_n1(i);
                     lk = ajlk_n1(i);
                     if isSQMlinks(lk) == 0  %along(impossible here)or connected to the outside QM boundary,or pure EM links 
-                      dV2 = 0;
-
-                      ajvol_lk = linkVolumes{lk}(1,:);
+		      ajvol_lk = linkVolumes{lk}(1,:);
                       ajvolS_lk = linkVolumes{lk}(2,:);
                       ajvolM_lk = volumeM(ajvol_lk);
                       coefV = sum(Eps(ajvolM_lk).*ajvolS_lk)/linkL(lk);
@@ -191,33 +181,32 @@ tic;
 		      rowJFv(ntripletsJFv)=n1;
 		      colJFv(ntripletsJFv)=n2;
 		      valJFv(ntripletsJFv)=-coefV;
-                      dV2_vec = [1,1/2,0];
                       coefH = -coefV*linkL(lk);
 		      ntripletsJFH=ntripletsJFH+1;
 		      rowJFH(ntripletsJFH)=n1;
 		      colJFH(ntripletsJFH)=lk;
 		      valJFH(ntripletsJFH)=sign_n1(i)*coefH;
-%rhs_F(n1) = rhs_F(n1)+sum(Eps(ajvolM_lk).*(-(V(n2)-V(n1)+dV2_vec(ajvolM_lk).*dV2)/linkL(lk)-sign_n1(i)* H(lk)).*ajvolS_lk);
+%rhs_F(n1) = rhs_F(n1)+sum(Eps(ajvolM_lk).*(-(V(n2)-V(n1))/linkL(lk)-sign_n1(i)* H(lk)).*ajvolS_lk);
                     else	%interface
 %                     rhs_F(n1)   = rhs_F(n1) + epsilon_qm *(-(V(n2)-V(n1))/linkL(lk)-sign_n1(i)* H(lk))*linkS(lk);
 		     ntripletsJFv=ntripletsJFv+1;
 		     rowJFv(ntripletsJFv)=n1;
 		     colJFv(ntripletsJFv)=n1;
-		     valJFv(ntripletsJFv)=valJFv(ntripletsJFv)+ epsilon_qm * linkS(lk)/linkL(lk);
+		     valJFv(ntripletsJFv)=valJFv(ntripletsJFv)+epsilon_qm * linkS(lk)/linkL(lk);
 		     ntripletsJFv=ntripletsJFv+1;
 		     rowJFv(ntripletsJFv)=n1;
 		     colJFv(ntripletsJFv)=n2;
-		     valJFv(ntripletsJFv)=- epsilon_qm * linkS(lk)/linkL(lk);
+		     valJFv(ntripletsJFv)=valJFv(ntripletsJFv)-epsilon_qm * linkS(lk)/linkL(lk);
 		     ntripletsJFH=ntripletsJFH+1;
 		     rowJFH(ntripletsJFH)=n1;
 		     colJFH(ntripletsJFH)=lk;
-		     valJFH(ntripletsJFH)=-sign_n1(i) * epsilon_qm *linkS(lk); 
+		     valJFH(ntripletsJFH)=  -sign_n1(i) * epsilon_qm *linkS(lk); 
                     end
-                end
+              end
         end
      end
-JF_v=sparse(rowJFv(1:ntripletsJFv),colJFv(1:ntripletsJFv),valJFv(1:ntripletsJFv),Nnode,Nnode);
-JF_H=sparse(rowJFH(1:ntripletsJFH),colJFH(1:ntripletsJFH),valJFH(1:ntripletsJFH),Nnode,Nlink);
+JF_v=sparse2(rowJFv(1:ntripletsJFv),colJFv(1:ntripletsJFv),valJFv(1:ntripletsJFv),Nnode,Nnode);
+JF_H=sparse2(rowJFH(1:ntripletsJFH),colJFH(1:ntripletsJFH),valJFH(1:ntripletsJFH),Nnode,Nlink);
 clear rowJFv colJFv valJFv rowJFH colJFH valJFH;
 JF_v = JF_v(eqnNodes,eqnNodes);
 JF_H = JF_H(eqnNodes,eqnLinks);
@@ -292,14 +281,14 @@ tic;
 
 	    if (size(ajsf_l1,2)==3) %xy plane : Ay(lk)~Bx~par Ay(lk)/par z =1/c par Ay(lk)/par t no matter top or bottom
 	        if(isBsurfLinks(l1))
-		rhs_G(l1)=rhs_G(l1)+0.0;
+%		rhs_G(l1)=rhs_G(l1)+0.0;
 		bndJG_H(l1)=0.0;
 	        ntripletsJGH=ntripletsJGH+1;
 		rowJGH(ntripletsJGH)=l1;
 		colJGH(ntripletsJGH)=l1;
 		valJGH(ntripletsJGH)=valJGH(ntripletsJGH)+bndJG_H(l1);
        	    else
-       		rhs_G(l1)=rhs_G(l1)+dL*(1/light_speed*H(l1));
+%       		rhs_G(l1)=rhs_G(l1)+dL*(1/light_speed*H(l1));
        		bndJG_H(l1)=dL/light_speed;
 	        ntripletsJGH=ntripletsJGH+1;
 		rowJGH(ntripletsJGH)=l1;
@@ -308,14 +297,14 @@ tic;
 	    end
 	    elseif (size(ajsf_l1,2)==2) 
 	        if(isBsurfLinks(l1))
-		rhs_G(l1)=rhs_G(l1)+dL*(1/light_speed*H(l1));
+%		rhs_G(l1)=rhs_G(l1)+dL*(1/light_speed*H(l1));
 		bndJG_H(l1)=dL/light_speed;
 	        ntripletsJGH=ntripletsJGH+1;
 		rowJGH(ntripletsJGH)=l1;
 		colJGH(ntripletsJGH)=l1;
 		valJGH(ntripletsJGH)=valJGH(ntripletsJGH)+bndJG_H(l1);
 		else
-		rhs_G(l1)=rhs_G(l1)+2*dL*(1/light_speed*H(l1));
+%		rhs_G(l1)=rhs_G(l1)+2*dL*(1/light_speed*H(l1));
 		bndJG_H(l1)=2*dL/light_speed;
 	        ntripletsJGH=ntripletsJGH+1;
 		rowJGH(ntripletsJGH)=l1;
@@ -380,15 +369,15 @@ tic;
           for i = 1:length(ajvol_l1)	%volumetype of the link belong to
             switch ajvolM_l1(i)
                 case 1
-                    %J=mJ(l1)+epsilon_mt*dtE1;
+                    %J   = (mJ_0(l1)+mJ_1(l1)+mJ_2(l1))+epsilon_mt*dtE1;
                     dJv = (dt*omega_p*omega_p/(dt*gamma_p+2)/linkL(l1)+...
-	    		  (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt)/linkL(l1) +...
-	    		  (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt)/linkL(l1)) +...
-	    		  epsilon_mt/(0.5*dt*linkL(l1));
+			  (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt)/linkL(l1) +...
+			  (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt)/linkL(l1)) +...
+			  epsilon_mt/(0.5*dt*linkL(l1));
                     dJH = -(dt*omega_p*omega_p/(dt*gamma_p+2) +...
-	    		   (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt) +...
-	    		   (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt) +...
-	    		   epsilon_mt/(0.5*dt));
+			   (lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt) +...
+			   (lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt) +...
+			   epsilon_mt/(0.5*dt));
                 case 2
                     %J = epsilon_in*dtE1+Js(l1);
                     dJv = epsilon_in/(0.5*dt*linkL(l1));
@@ -413,7 +402,7 @@ tic;
 	    rowJGH(ntripletsJGH)=l1;
 	    colJGH(ntripletsJGH)=l1;
 	    valJGH(ntripletsJGH)=valJGH(ntripletsJGH)-scl.K*ajvolS_l1(i)*dJH;
-            rhs_G(l1) = rhs_G(l1)-scl.K*ajvolS_l1(i)*J;
+%            rhs_G(l1) = rhs_G(l1)-scl.K*ajvolS_l1(i)*J;
 	  end
         else %mix  outside/inside QM links interface, inside QM links
           %  rhs_G(l1) = rhs_G(l1) - scl.K * linkS(l1)*(currdlink(l1,n3+3)+epsilon_qm*dtE1);
@@ -433,8 +422,8 @@ tic;
         end
      end
     
-JG_v=sparse(rowJGv(1:ntripletsJGv),colJGv(1:ntripletsJGv),valJGv(1:ntripletsJGv),Nlink,Nnode);
-JG_H=sparse(rowJGH(1:ntripletsJGH),colJGH(1:ntripletsJGH),valJGH(1:ntripletsJGH),Nlink,Nlink);
+JG_v=sparse2(rowJGv(1:ntripletsJGv),colJGv(1:ntripletsJGv),valJGv(1:ntripletsJGv),Nlink,Nnode);
+JG_H=sparse2(rowJGH(1:ntripletsJGH),colJGH(1:ntripletsJGH),valJGH(1:ntripletsJGH),Nlink,Nlink);
 clear rowJGv colJGv valJGv rowJGH colJGH valJGH;
 JG_v = JG_v(eqnLinks,eqnNodes);
 JG_H  = JG_H(eqnLinks,eqnLinks);
@@ -446,12 +435,12 @@ toc;
 tic;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Jacob =sparse([JF;JG]);
+Jacob =sparse2([JF;JG]);
 
 clear JF JG;
 
 %colind=colamd(Jacob);
-%aspas = sparse(Jacob(:,colind));
+%aspas = sparse2(Jacob(:,colind));
 %[Lmatrix,Umatrix] = ilu(aspas,struct('type','ilutp','droptol',1e-4));	%most time consuming
 %savefilename='JacobMatrix.mat';
 %save(savefilename, 'Jacob','colind','Lmatrix', 'Umatrix','-v7.3');

@@ -148,7 +148,7 @@ while itNr < maxNewtonIt && normUpdate > updateTol
     
     
     
-    JG_A=sparse(rowJGA(1:ntripletsJGA),colJGA(1:ntripletsJGA),valJGA(1:ntripletsJGA),Nlink,Nlink);%ntripletsJGH,ntripletsJGH);
+    JG_A=sparse2(rowJGA(1:ntripletsJGA),colJGA(1:ntripletsJGA),valJGA(1:ntripletsJGA),Nlink,Nlink);%ntripletsJGH,ntripletsJGH);
     JG_A  = JG_A(eqnLinks,eqnLinks);
     
     rhs_G = rhs_G(eqnLinks);

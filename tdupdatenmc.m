@@ -87,10 +87,17 @@ switch lightsource
  Js(JLinks)=J_amp*sin(2*pi*timee/epdf2);
  case 2
  Js(JLinks)=J_amp*sin(2*pi*timee/epdf2)*exp(-((timee-tzero)/tlas)^2.0);   %omega= 2*pi/1 ,E = hbar *omega =0.6582*2*3.14/1=4.1356eV ~ 300nm
+ case 3
+ if (timee<=7*tlas) 
+ Js(JLinks)=J_amp*exp(-((timee-tzero)/tlas)^2.0);   %omega= 2*pi/1 ,E = hbar *omega =0.6582*2*3.14/1=4.1356eV ~ 300nm
+ else
+ Js(JLinks)=0.0;
+ end
  otherwise
  error('undefined light source');
 end
 %%%
 [Vn,An,Hn,mJ_0n,mJ_1n,mJ_2n,mJ_1nn,mJ_2nn,Efield_nn,dtVu,dtHu] =  tdsolverhs_vectorc(V,A,H,Js,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtV,dtH,dt);
 
+%[Vn,An,Hn,mJ_0n,mJ_1n,mJ_2n,mJ_1nn,mJ_2nn,Efield_nn,dtVu,dtHu] =  tdrelaxpsteps2c(V,A,H,Js,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtV,dtH,dt);
 %%%[dtVu,dtnu,dtpu,dtHu,itNr] = tdcalupdatecc(Vn,nn,pn,An,Hn,dtVp,dtHp);

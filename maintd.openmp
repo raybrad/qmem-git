@@ -12,7 +12,7 @@
 #  orte: openmp/openmpi environment
 #  number: number of threads
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#$ -pe orte 6
+#$ -pe orte 1
 #                                
 # Send mail when finishing, suspending or aborting job
 ##$ -m sae

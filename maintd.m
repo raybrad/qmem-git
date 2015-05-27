@@ -18,6 +18,8 @@
 %7 unused subroutines is removed for clearance and there is no use to calculate main.m first,we could use V A H =0 as starting point.
 %8 actually the linkVolumes nodeVolumes nodeLinks construction should be reserved as cells, since the use of find for sparse matrix in
 %   later Jacob rhs construction is very time consuming. So now only reformulate the build up of linkvolumes and nodevolumes.
+%9 use tim davis's sparse2 method to replace sparse construction. and multiple linear solvers are tested,but lu remains best of them
+%10 reformulate the tdcalupdatec and tdbuildJaocb by part vectorlization,but still not fast,now is a bottleneck for finer grids
 
 clear global; clear;
 
@@ -67,7 +69,7 @@ global scl;
 global dt;
 dt  = 5.0e-17;
 global nsteps;
-nsteps = 100;
+nsteps = 1000;
 global epdf epdf2;
 epdf = 2.001347574e-15; %600nm epdf =wavelength/299.798
 epdf2= 2.001347574e-15; %600nm
@@ -86,6 +88,8 @@ global nedrelax;
 %R
 nedrelax =1;	%pure EM
 %nedrelax=2;	%QM/EM
+global nLead;
+nLead=0;
 global irkod;
 irkod  = 2;
 global savefile;

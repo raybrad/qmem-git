@@ -11,10 +11,10 @@ global links;
 global Nnode Nlink;
 global nodeLinks linkSurfs linkVolumes nodeVolumes;
 global nodeV linkL linkS dlinkL volumeM;
-global bndNodes dirNodes;
+global dirNodes;
 global isBndNodes;
 global metalLinks;
-global light_speed XZsurfLinks XYsurfLinks YZsurfLinks;
+global light_speed;
 global EsurfLinks BsurfLinks;
 
 %global Fc11 Fc12 Fc21 Fc22 Fc30 Fn1matrix Fn2matrix Flkmatrix;
@@ -46,7 +46,7 @@ tStart=tic;
 tic;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %rhsF
-% construct the sparse matrix by (Row,Column,Value) 
+% construct the sparse2 matrix by (Row,Column,Value) 
  rhs_F = zeros(Nnode,1);
  Fc11=zeros(Nnode,6);
  Fc12=zeros(Nnode,6);

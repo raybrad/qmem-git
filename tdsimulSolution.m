@@ -32,7 +32,7 @@ V=zeros(Nnode,1);
 H=zeros(Nlink,1);
 A=zeros(Nlink,1);
 
-%interval=2;
+interval=10;
 
 mJ_0=zeros(Nlink,1);
 mJ_1=zeros(Nlink,1);
@@ -69,6 +69,12 @@ switch lightsource
  Js(JLinks)=J_amp*sin(2*pi*timec/epdf2);
  case 2
  Js(JLinks)=J_amp*sin(2*pi*timec/epdf2)*exp(-((timec-tzero)/tlas)^2.0);   %omega= 2*pi/1 ,E = hbar *omega =0.6582*2*3.14/1=4.1356eV ~ 300nm
+ case 3
+ if (timec<=7*tlas) 
+ Js(JLinks)=J_amp*exp(-((timec-tzero)/tlas)^2.0);   %omega= 2*pi/1 ,E = hbar *omega =0.6582*2*3.14/1=4.1356eV ~ 300nm
+ else
+ Js(JLinks)=0.0;
+ end
  otherwise
  error('undefined light source');
 end
@@ -99,7 +105,7 @@ tic;
 %display('JacobMatrix.mat already exist');
 %end
 %load 'JacobMatrix.mat';
-
+if (nedrelax == 1)
 %if  (exist('JacobLU.mat') == 0 )
 tdbuildJacob(dt);
 %else
@@ -113,7 +119,10 @@ tdbuildRHSCoef(dt);
 %else
 %display('rhsF/GCoefMatrix.mat already exist');
 %end
-
+elseif (nedrelax==2)
+tdbuildJacobc(dt);
+tdbuildRHSCoefc(dt);
+end
 %load 'rhsFCoefMatrix.mat';
 %load 'rhsGCoefMatrix.mat';
 
@@ -141,11 +150,13 @@ while ntp < nsteps + 1
  mJ_2p = mJ_2uu;
  Efield_p=Efield_uu;
 
-% if (mod(ntp,interval) == 0 )
+%if (ntp>10 &&  mod(ntp,interval) == 0 )
+% savefilename = [savefile,num2str(ntp),'.mat'];
+% save(savefilename, 'V','A', 'H','dtVp','dtHp','Js');
+%elseif (ntp<=10)
  savefilename = [savefile,num2str(ntp),'.mat'];
-% save(savefilename, 'V','A', 'H','mJ_0','mJ_1','mJ_2','mJ_1p','mJ_2p','dtVp','dtHp','Js');
-  save(savefilename, 'V','A', 'H','dtVp','dtHp','Js');
-% end
+ save(savefilename, 'V','A', 'H','dtVp','dtHp','Js');
+%end
     ntp = ntp + 1;
     
 end    

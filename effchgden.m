@@ -7,6 +7,7 @@ global Nnode;
 global nodeLinks linkVolumes nodeVolumes;
 global volumeM;
 global metalNodes;
+global isqmvolm;
 
 effcd = zeros(Nnode,1); 
 
@@ -26,9 +27,15 @@ for k=1:NeqnmetalNodes
     for i = 1:length(ajlk_n1)
         n2 = ajnd_n1(i);
         lk = ajlk_n1(i);
-        ajvolS_lk = linkVolS(lk,ajvol_lk);
+        ajvol_lk = linkVolumes{lk}(1,:);
+        ajvolS_lk = linkVolumes{lk}(2,:);
         ajvolM_lk = volumeM(ajvol_lk);
-        ajvolM_lk = volumeM(ajvol_lk);
+	%%
+       %for qmi = 1:length(ajvol_lk)
+       %    if isqmvolm(ajvol_lk(qmi))
+       %       ajvolM_lk(qmi)=3;
+       %    end
+       %end
         effcd(n1) = effcd(n1)+sign_n1(i)* H(lk)*sum(Eps(ajvolM_lk).*ajvolS_lk);
     end
 %    semiV = sum(ajvolV_n1(ajvolM_n1 == 1));

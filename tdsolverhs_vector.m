@@ -2,8 +2,7 @@ function [V,A,H,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtV,dtH] = tdsolverhs_revise
 
 display(['  Start TD simulation relaxation2 per step:']);
 
-global omega_p gamma_p;
-global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2;
+global CJ01 CJ02 CJ11 CJ12 CJ13 CJ21 CJ22 CJ23;
 global links;
 global Nnode Nlink;
 global linkL; 
@@ -16,7 +15,7 @@ global EsurfLinks;
 %global Gn2matrix Gc41 Gajlk_n2matrix Gc42 Gc51 Gc52 Gc53 Gc54;
 global Fn1matrix Fn2matrix Flkmatrix Fc;
 global Gajlkmatrix11 Gajlk_n1matrix Gajlk_n2matrix Gn1matrix Gn2matrix Gc;
-global JacobLU;
+global JacobLU permutation;
 %Method 2
 %Solving Gauss' law.
 %Solving Current-continuity equations.
@@ -58,6 +57,7 @@ normUpdate = 1;
 itNr = 0;
 tStart=tic;
 
+
 while itNr < maxNewtonIt && normUpdate > updateTol
 
 tic;
@@ -70,18 +70,6 @@ tic;
    Efield(metalLinks)  = -(V(links(metalLinks,2))-V(links(metalLinks,1)))./linkL(metalLinks)-H(metalLinks);
    Efield_p(metalLinks)= -(V_p(links(metalLinks,2))-V_p(links(metalLinks,1)))./linkL(metalLinks)-H_p(metalLinks);
    
- %constant coefficient for plasmonic metal
-   CJ01=(2-gamma_p*dt)/(2+gamma_p*dt);
-   CJ02=dt*omega_p*omega_p/(2+gamma_p*dt);
-
-   CJ11=(2-lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt);
-   CJ12=(lgamma_1*dt-1)/(1+lgamma_1*dt);
-   CJ13=(lepsr_1*lomega_1*lomega_1*dt*dt)/(1+lgamma_1*dt)/(2.0*dt);
-
-   CJ21=(2-lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt);
-   CJ22=(lgamma_2*dt-1)/(1+lgamma_2*dt);
-   CJ23=(lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt);
-
    mJ_0(metalLinks)=CJ01.*mJ_0p(metalLinks)+CJ02.*(Efield(metalLinks)+Efield_p(metalLinks));
 
    mJ_1(metalLinks)=CJ11.*mJ_1p(metalLinks)+CJ12.*mJ_1pp(metalLinks)+CJ13.*(Efield(metalLinks)-Efield_pp(metalLinks));
@@ -148,27 +136,17 @@ tic;
     rhs_F = rhs_F(eqnNodes);
     rhs_G = rhs_G(eqnLinks);
       
-    rhs = -sparse([rhs_F;rhs_G]);
+    rhs = -([rhs_F;rhs_G]);
 
     display(['time for matrix reconstruction:']);
     toc;
     tic;
 
     clear rhs_F rhs_G;
-%     Jacob1 = sparse(Jacob);
-%     rhs1 = sparse(rhs);
-%     [L,U] = luinc(Jacob1,droptol);
-%     [dX,flag,relres,iter] = gmres(Jacob1,rhs1,[],linSolveTol,maxLinIt,L,U);
-%     if flag ~= 0, error('No convergence for linear solver'); end
-%     gmresItNr(l) = iter(2);
-%    invJacob = Jacob^(-1);
-%    dX = invJacob*rhs;
-%    dX = Jacob\rhs; newton raphson: x_n+1 = x_n - f(x_n)/f'(x_n)
 
-   % dX = mylusovle(Jacob,rhs,1);
     dX=zeros(size(rhs));
-    %[dX(colind),flag,relres,Itr]=bicgstab(Jacob(:,colind),rhs,1e-4,200,Lmatrix,Umatrix);
-    %display(['flag:',num2str(flag),' relres:',num2str(relres),' Itr:',num2str(Itr)]);
+
+    %1. normal lu decomposition
     dX = JacobLU.Q * (JacobLU.U \ (JacobLU.L \ (JacobLU.P * (JacobLU.R \ rhs)))) ;
 
     display(['time for solving linear equation:']);

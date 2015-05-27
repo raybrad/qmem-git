@@ -154,7 +154,7 @@ for i = 1:size(volumeNodes,1)
    colNV(ntripletsNV)=volumeNodes(i,1);
    valNV(ntripletsNV)=volumeNodes(i,3);
 end
-nodeVolV=sparse(rowNV(1:ntripletsNV),colNV(1:ntripletsNV),valNV(1:ntripletsNV),Nnode,Nvolume);
+nodeVolV=sparse2(rowNV(1:ntripletsNV),colNV(1:ntripletsNV),valNV(1:ntripletsNV),Nnode,Nvolume);
 display(['time for nodeVolV:']);
 toc;
 tic;
@@ -173,7 +173,7 @@ for i = 1:size(volumeLinks,1)
    collVS(ntripletslVS)=volumeLinks(i,1);	%volumeid
    vallVS(ntripletslVS)=volumeLinks(i,3);
 end
-linkVolS=sparse(rowlVS(1:ntripletslVS),collVS(1:ntripletslVS),vallVS(1:ntripletslVS),Nlink,Nvolume);
+linkVolS=sparse2(rowlVS(1:ntripletslVS),collVS(1:ntripletslVS),vallVS(1:ntripletslVS),Nlink,Nvolume);
 display(['time for linkVolS:']);
 toc;
 tic;
