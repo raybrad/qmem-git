@@ -59,8 +59,8 @@ tic;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
    for k=1:NeqnNodes
         n1 = eqnNodes(k);
-        ajlk_n1 = nodeLinks{n1}(1,:);
-        ajnd_n1 = nodeLinks{n1}(2,:);
+        ajnd_n1 = find(nodeLinks(n1,:));
+        ajlk_n1 = nodeLinks(n1,ajnd_n1);
         ajvol_n1 = find(nodeVolV(n1,:));
         ajvolV_n1 = nodeVolV(n1,ajvol_n1);
         ajvolM_n1 = volumeM(ajvol_n1);
@@ -157,8 +157,8 @@ Gc54=zeros(Nlink,1);
 	%links connect to bndNodes,only has half
 	%if both nodes are on surface,no Lorentz
         if ~isBndNodes(n1)
-            ajlk_n1 = nodeLinks{n1}(1,:); % sta node connected to at most 6 links
-            ajnd_n1 = nodeLinks{n1}(2,:); % sta node connected to at most 6 nodes
+            ajnd_n1 = find(nodeLinks(n1,:));% sta node connected to at most 6 links
+            ajlk_n1 = nodeLinks(n1,ajnd_n1); % sta node connected to at most 6 nodes
             sign_n1 = sign(ajnd_n1-n1);
             coef_n1 = linkS(ajlk_n1)./nodeV(n1)*linkS(l1)/linkL(l1); %linkS(Nlink,1)~ dual surface area,nodeV(Nnode,1)
             ajvol_n1 = find(nodeVolV(n1,:));
@@ -172,8 +172,8 @@ Gc54=zeros(Nlink,1);
         end
 
         if ~isBndNodes(n2)
-            ajlk_n2 = nodeLinks{n2}(1,:);%6 neighbor links around node n2
-            ajnd_n2 = nodeLinks{n2}(2,:);%6 neighboring nodes around node n2 
+            ajnd_n2 = find(nodeLinks(n2,:));	%6 neighboring nodes around node n2 
+            ajlk_n2 = nodeLinks(n2,ajnd_n2);    %6 neighbor links around node n2
             sign_n2 = sign(ajnd_n2-n2);
             coef_n2 = linkS(ajlk_n2)./nodeV(n2)*linkS(l1)/linkL(l1);
             ajvol_n2 = find(nodeVolV(n2,:));
@@ -203,7 +203,7 @@ tic;
 
 %filename='rhsGCoefMatrix.mat';
 %save(filename,'Gc11','Gajlkmatrix11','Gc12','Gc20','Gn1matrix','Gc31','Gajlk_n1matrix','Gc32',...
-%     	      'Gn2matrix','Gc41','Gajlk_n2matrix','Gc42','Gc51','Gc52','Gc53','Gc54','-v7.3');
+%    	      'Gn2matrix','Gc41','Gajlk_n2matrix','Gc42','Gc51','Gc52','Gc53','Gc54','-v7.3');
 
 display(['time for saving matrix: ']);
 toc;

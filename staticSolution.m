@@ -6,21 +6,14 @@ function [Vs] = staticSolution()
 
 display('Start static solution');
 
-global sigma epsilon_in epsilon_mt;
-global mun mup;
+global epsilon_in epsilon_mt;
 global scl;
-global nodes links contacts;
+global nodes links;
 global Nnode;
-global nodeLinks linkSurfs surfNodes surfLinks volumeNodes volumeLinks...
-    volumeSurfs linkVolS nodeVolV;
-global nodeV linkL linkS dlinkL nodeM linkM linkCenter surfCenter volumeM;
-global bndNodes edgeNodes dirNodes;
-global isBndNodes isDirNodes dcVolDirNodes;
-global doping; % doping profile
-global kx ky kz;
-global bndLinks;
-global metalNodes;
-
+global nodeLinks linkVolS nodeVolV;
+global linkL volumeM;
+global dirNodes;
+global dcVolDirNodes;
 global eqnNodes;
 
 
@@ -38,7 +31,7 @@ Nn = length(eqnNodes);
 updateTol = 1e-6;
 maxNewtonIt = 10;
 Eps = [epsilon_mt,epsilon_in];
-Sgm = [sigma,0];
+Sgm = [0,0];
 normRes = 1;
 normUpdate = 1;
 itNr = 0;
@@ -58,8 +51,8 @@ while itNr < maxNewtonIt && normUpdate > updateTol
    % Gauss's law  %integral(epsilon*laplace V-rho)=0
    % current-continuity div*J=0
     for n1 = eqnNodes.'
-        ajlk_n1 = nodeLinks{n1}(1,:);
-        ajnd_n1 = nodeLinks{n1}(2,:);
+        ajnd_n1 = find(nodeLinks(n1,:));
+        ajlk_n1 = nodeLinks(n1,ajnd_n1);
         ajvol_n1 = find(nodeVolV(n1,:));
         ajvolV_n1 = nodeVolV(n1,ajvol_n1);
         ajvolM_n1 = volumeM(ajvol_n1);
@@ -107,7 +100,7 @@ rhs = -[rhs_F];
     clear JF_v;
     clear rhs_F;
 
-    dX = mylusovle(Jacob,rhs,1);
+    dX = Jacob\rhs;
     display(['time for solving linear equation:']);
     toc;
     dV = dX(1:Nn);

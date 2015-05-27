@@ -2,7 +2,7 @@
 
 #$ -S /bin/bash
 #$ -j y
-#$ -N global20-rescale
+#$ -N maintdmp
 #     
 # Use currend working directory
 #$ -cwd

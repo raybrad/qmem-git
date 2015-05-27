@@ -1,21 +1,18 @@
 function [dtV,dtH] = tdcalupdatec(V,A,H,Js,Yp,Zp)
 
-global sigma epsilon_in;
+global epsilon_in;
 global epsilon_mt;
 global omega_p gamma_p;
 global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2;
 global scl;
-global nodes links contacts;
+global nodes links;
 global Nnode Nlink;
-global nodeLinks linkSurfs surfNodes surfLinks volumeNodes volumeLinks...
-    volumeSurfs linkVolS nodeVolV;
-global nodeV linkL linkS dlinkL nodeM linkM linkCenter surfCenter volumeM;
-global bndNodes edgeNodes dirNodes;
-global isBndNodes isDirNodes dcVolDirNodes acVolDirNodes;
-global doping; 
-global kx ky kz;
+global nodeLinks linkSurfs linkVolS nodeVolV;
+global nodeV linkL linkS dlinkL volumeM;
+global bndNodes dirNodes;
+global isBndNodes;
 global bndLinks;
-global metalNodes metalLinks;
+global metalLinks;
 
 %%%%%%% initial guess  %%%%%%%%%%%%%
 Y    = Yp;
@@ -53,8 +50,8 @@ tStart=tic;
 %get Y (dV/dt)                                     %
 %%%%%%% initial guess  %%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 for n1 = eqnNodes1.'
-    ajlk_n1 = nodeLinks{n1}(1,:);
-    ajnd_n1 = nodeLinks{n1}(2,:);
+    ajnd_n1 = find(nodeLinks(n1,:));
+    ajlk_n1 = nodeLinks(n1,ajnd_n1);
     ajvol_n1 = find(nodeVolV(n1,:));
     ajvolV_n1 = nodeVolV(n1,ajvol_n1);
     ajvolM_n1 = volumeM(ajvol_n1);
@@ -96,14 +93,15 @@ while itNr < maxNewtonIt && normUpdate > updateTol
      valJGH=zeros(ntripletsJGH,1);  
      ntripletsJGH=0;                
     
-     % F= div J_tot = 0 (for node, no A) J_tot =J_f +epsilon part E/par t    % current continuity equation + gauss' law: div J_f+ d (div D)/dt = 0
+     % F= div J_tot = 0 (for node, no A) J_tot =J_f +epsilon part E/par t    
+     % current continuity equation + gauss' law: div J_f+ d (div D)/dt = 0
      % => J_f* S+ eps *dE/dt *S =0
      % sigma*E + par E/par t (metal)                                 
      % -miu_nij/h_ij*B[-(Vj-Vi+PI_ij*h_ij)]*n_ij+miu_nij/h_ij*B[(Vj-Vi+PI_ij*h_ij)]*n_ij
      for k=1:NeqnNodes
         n1 = eqnNodes(k);
-        ajlk_n1 = nodeLinks{n1}(1,:);
-        ajnd_n1 = nodeLinks{n1}(2,:);
+        ajnd_n1 = find(nodeLinks(n1,:));
+        ajlk_n1 = nodeLinks(n1,ajnd_n1);
         ajvol_n1 = find(nodeVolV(n1,:));
         ajvolV_n1 = nodeVolV(n1,ajvol_n1);
         ajvolM_n1 = volumeM(ajvol_n1);
@@ -303,4 +301,5 @@ dtV = Y;
 dtH = Z;
 
 toc(tStart);   
+
 display(['  End tdcalupdatec .']);

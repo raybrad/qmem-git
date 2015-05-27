@@ -1,7 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%Update History%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Revised version 3
 %0 light source is added as a sheet of current density Js, which create plane wave field 
 %0 Mur absorbing boundary is added to reduce reflection
 %2 plasmonic metal is modelled using Two Lorentz poles and one drude pole.
@@ -14,6 +13,10 @@
 %6 in initGeometry the allocation of dirlinks is added to speed up
 %6 in scaling_static change Vt from 2.5852e-2 to 2.5852,so to rescale a little bit to balance the num of Js by scl.J
 %6 in initGeometry linkVolumes nodeVolumes are deleted and just used linkVolS and nodeVolV are ok,variables are changed in following sub
+%7 in initGeometry nodeLinks construction is changed to sparse matrix creation to save time
+%7 redundant global variables are removed(link(:,3) change also in initSolvertd
+%7 unused subroutines is removed for clearance and there is no use to calculate main.m first,we could use V A H =0 as starting point.
+%8
 
 clear global; clear;
 
@@ -89,10 +92,10 @@ savefile = 'dump/variables_';
 
 global kx ky kz;
 global nodes links contacts;
-global nodeLinks linkSurfs surfNodes surfLinks volumeNodes volumeLinks...
+global nodeLinks linkSurfs  surfLinks volumeNodes volumeLinks...
     volumeSurfs linkVolS nodeVolV;
 global Nnode Nlink Nsurf Nvolume;
-global nodeV linkL linkS dlinkL nodeM linkM linkCenter surfCenter volumeM;
+global nodeV linkL linkS dlinkL nodeM linkM volumeM;
 global bndNodes edgeNodes;
 global dirNodes eqnNodes;
 global bndLinks  eqnLinks ;

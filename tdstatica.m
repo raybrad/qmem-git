@@ -2,20 +2,15 @@ function [A,H] = tdstatica(V)
 
 display(['  Start TD calculation for static A:']);
 
-global sigma epsilon_in;
+global epsilon_in;
 global epsilon_mt;
 global scl;
-global nodes links contacts;
+global nodes links;
 global Nnode Nlink;
-global nodeLinks linkSurfs surfNodes surfLinks volumeNodes volumeLinks...
-    volumeSurfs linkVolS nodeVolV;
-global nodeV linkL linkS dlinkL nodeM linkM linkCenter surfCenter volumeM;
-global bndNodes edgeNodes dirNodes;
-global isBndNodes isDirNodes dcVolDirNodes acVolDirNodes;
-global kx ky kz;
+global nodeLinks linkSurfs linkVolS nodeVolV;
+global nodeV linkL linkS dlinkL volumeM;
+global isBndNodes;
 global bndLinks;
-global metalNodes;
-global savefile;
 
 %%%%%%% initial guess  %%%%%%%%%%%%%
 A = zeros(Nlink,1);
@@ -33,7 +28,6 @@ linSolveTol = 1e-6;
 maxNewtonIt = 10;
 maxLinIt = 200;
 Eps = [epsilon_mt,epsilon_in];
-Sgm = [sigma,0];
 
 Nl = length(eqnLinks);
 
@@ -98,8 +92,8 @@ while itNr < maxNewtonIt && normUpdate > updateTol
 
         %%%%%%%% gradient divergence of A and gradient of V %%%%%%%%
         if ~isBndNodes(n1)
-            ajlk_n1 = nodeLinks{n1}(1,:);
-            ajnd_n1 = nodeLinks{n1}(2,:);
+            ajnd_n1 = find(nodeLinks(n1,:));% sta node connected to at most 6 links
+            ajlk_n1 = nodeLinks(n1,ajnd_n1); % sta node connected to at most 6 nodes
             sign_n1 = sign(ajnd_n1-n1);
             coef_n1 = linkS(ajlk_n1)./nodeV(n1)*linkS(l1)/linkL(l1);
             GD(ajlk_n1) = GD(ajlk_n1)-sign_n1.*coef_n1';
@@ -112,8 +106,8 @@ while itNr < maxNewtonIt && normUpdate > updateTol
         end
 
         if ~isBndNodes(n2)
-            ajlk_n2 = nodeLinks{n2}(1,:);
-            ajnd_n2 = nodeLinks{n2}(2,:);
+            ajnd_n2 = find(nodeLinks(n2,:));		%6 neighboring nodes around node n2 
+            ajlk_n2 = nodeLinks(n2,ajnd_n2);    %6 neighbor links around node n2
             sign_n2 = sign(ajnd_n2-n2);
             coef_n2 = linkS(ajlk_n2)./nodeV(n2)*linkS(l1)/linkL(l1);
             GD(ajlk_n2) = GD(ajlk_n2)+sign_n2.*coef_n2';
@@ -142,7 +136,7 @@ while itNr < maxNewtonIt && normUpdate > updateTol
         for i = 1:length(ajvol_l1)
             switch ajvolM_l1(i)
                 case 1
-                    J = sigma*((V(n1)-V(n2)+dV1-dV2)/linkL(l1) - H(l1)) + epsilon_mt*dtE1;
+                    J =0.0 + epsilon_mt*dtE1;
                 case 2
                     J = epsilon_in*dtE1;
                 otherwise

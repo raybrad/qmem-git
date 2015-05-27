@@ -2,7 +2,7 @@
 
 #$ -S /bin/bash
 #$ -j y
-#$ -N Ag-sphere-xx
+#$ -N mainmp
 #     
 # Use currend working directory
 #$ -cwd

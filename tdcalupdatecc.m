@@ -1,28 +1,22 @@
 function [dtV,dtH] = tdcalupdatecc(V,A,H,Js,Yp,Zp)
 
-global sigma epsilon_in;
+global epsilon_in;
 global epsilon_mt;
 global epsilon_qm;
 global omega_p gamma_p;
 global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2;
 global scl;
-global nodes links contacts;
+global nodes links;
 global Nnode Nlink;
-global nodeLinks linkSurfs surfNodes surfLinks volumeNodes volumeLinks...
-    volumeSurfs linkVolS nodeVolV;
-global nodeV linkL linkS dlinkL nodeM linkM linkCenter surfCenter volumeM;
-global bndNodes edgeNodes dirNodes;
-global isBndNodes isDirNodes dcVolDirNodes acVolDirNodes;
-global doping; 
-global kx ky kz;
+global nodeLinks linkSurfs linkVolS nodeVolV;
+global nodeV linkL linkS dlinkL volumeM;
+global bndNodes dirNodes;
+global isBndNodes;
 global bndLinks;
-global metalNodes metalLinks;
+global metalLinks;
 
-global QMnodes;
-global sQMnodes;
 global isSQMlinks;
 global QMlinks;
-global isqmnodes;
 
 global currdlink;
 

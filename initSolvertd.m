@@ -1,11 +1,13 @@
 function initSolver_CNT()
-
+display('--------------------------------------------------------------------');
 display('Start solver initialization');
+tStart=tic;
+tic;
 
 global kx ky kz scl;
 global nodes links contacts;
 global Nnode Nlink Nvolume; 
-global nodeM volumeM;
+global volumeM;
 global bndNodes intNodes dirNodes eqnNodes edgeNodes;
 global eqnLinks  bndLinks ;
 global isBndNodes isDirNodes dcVolDirNodes acVolDirNodes nodeLinks volumeNodes;
@@ -37,14 +39,21 @@ global nedrelax;
 [bndNodes,intNodes] = defBoundaryNodes(kx+1,ky+1,kz+1);	%bndNodes on 6 faces of the whole cube
 isBndNodes = false(Nnode,1);
 isBndNodes(bndNodes) = true;
-edgeNodes = [];
+edgeNodes = zeros(Nnode,1);
+%allNodeIdx=1:Nnode;
+tmpcounter=0;
 for i = bndNodes'
-    ajnd = nodeLinks{i}(2,:); %connecting nodes to bndNodes
+%    ajnd = allNodeIdx(nodeLinks(i,:)~=0); %connecting nodes to bndNodes
+     ajnd = find(nodeLinks(i,:)); %connecting nodes to bndNodes
     if all(isBndNodes(ajnd))
-        edgeNodes = [edgeNodes;i]; %edge nodes on the 12 edge lines
+	tmpcounter=tmpcounter+1;
+        edgeNodes(tmpcounter) = i; %edge nodes on the 12 edge lines
     end
 end
-
+edgeNodes(tmpcounter+1:Nnode)=[];
+display('time for bndNodes edgeNodes');
+toc;
+tic;
 
 %%%%%%%%%% structure definition (in terms of node index) %%%%%%%%%%%%%%%%%%
 x_coor=[0:2.0:40];
@@ -90,6 +99,9 @@ isDirNodes = zeros(Nnode,1);
 isDirNodes(dirNodes) = 1:length(dirNodes); %counter of dirNodes
 dcVolDirNodes = [contacts{1}.dcVol;contacts{2}.dcVol;contacts{3}.dcVol;contacts{4}.dcVol;contacts{5}.dcVol;contacts{6}.dcVol];
 acVolDirNodes = [contacts{1}.acVol;contacts{2}.acVol;contacts{3}.acVol;contacts{4}.acVol;contacts{5}.acVol;contacts{6}.acVol];
+display('time for structrure and ac dc Nodes');
+toc;
+tic;
 %Vector potential links
 switch lightdirection
 case 'kxEyBz'
@@ -151,11 +163,13 @@ QMlinks   =[];
 sQMlinks  =[];
 currdlink = zeros(Nlink,6);
 
+display('time for qm Nodes');
+toc;
+tic;
 
 for ilk =1:Nlink
 
-    n1  = links(ilk,1); n2 = links(ilk,2); n3 = links(ilk,3);
-
+    n1  = links(ilk,1); n2 = links(ilk,2); n3 = find(nodes(n1,:)-nodes(n2,:));
     [nx,ny,nz]=id2co(n1); [nx1,ny1,nz1]=id2co(n2);
 
     currdlink(ilk,1)=(nx+nx1)/2;
@@ -199,6 +213,9 @@ for ilk =1:Nlink
     
 end
 
+display('time for qm Links');
+toc;
+tic;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 idMetalNodes = false(Nnode,1);
 idMetalNodes(metalNodes) = true;
@@ -208,22 +225,31 @@ idMetalNodes(metalNodes) = true;
 %%%% define doping profile %%%%%%%%%%%%%%
 
 %%%%%%%%%%%%
-bndLinks = [];
+bndLinks = zeros(Nlink,1);
+tmpcounter=0;
 for i = 1:Nlink
     n1 = links(i,1); n2 = links(i,2);
     if isBndNodes(n1) && isBndNodes(n2)
-       bndLinks = [bndLinks;i]; 
+       tmpcounter=tmpcounter+1;
+       bndLinks(tmpcounter) = i; 
     end
 end
+bndLinks(tmpcounter+1:Nlink)=[];
 
-metalLinks=[];
+metalLinks=zeros(Nlink,1);
+tmpcounter=0;
 for i = 1:Nlink
     n1 = links(i,1); n2 = links(i,2);
     if idMetalNodes(n1) && idMetalNodes(n2)
-       metalLinks = [metalLinks;i]; 
+       tmpcounter=tmpcounter+1;
+       metalLinks(tmpcounter) = i; 
     end
 end
+metalLinks(tmpcounter+1:Nlink)=[];
 
+display('time for bndLinks metalLinks');
+toc;
+tic;
 %%% material types of each volume %%%
 volumeM = 2*ones(Nvolume,1);	%insulator 2 metal 1
 for i = 1:Nvolume
@@ -236,5 +262,9 @@ for i = 1:Nvolume
    end
 end
 
+display('time for volumeM');
+toc;
 
 display('End solver initialization');
+toc(tStart);
+display('--------------------------------------------------------------------');
