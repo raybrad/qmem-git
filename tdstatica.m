@@ -8,7 +8,7 @@ global scl;
 global nodes links contacts;
 global Nnode Nlink;
 global nodeLinks linkSurfs surfNodes surfLinks volumeNodes volumeLinks...
-    volumeSurfs linkVolumes nodeVolumes;
+    volumeSurfs linkVolS nodeVolV;
 global nodeV linkL linkS dlinkL nodeM linkM linkCenter surfCenter volumeM;
 global bndNodes edgeNodes dirNodes;
 global isBndNodes isDirNodes dcVolDirNodes acVolDirNodes;
@@ -59,8 +59,8 @@ while itNr < maxNewtonIt && normUpdate > updateTol
      for l1 = eqnLinks'                                      
         n1 = links(l1,1);
         n2 = links(l1,2);
-        ajvol_l1 = linkVolumes{l1}(1,:);
-        ajvolS_l1 = linkVolumes{l1}(2,:);
+        ajvol_l1 = find(linkVolS(l1,:));
+        ajvolS_l1 = linkVolS(l1,ajvol_l1);
         ajvolM_l1 = volumeM(ajvol_l1);
         CC = zeros(1,Nlink);
         GD = zeros(1,Nlink);
@@ -103,8 +103,8 @@ while itNr < maxNewtonIt && normUpdate > updateTol
             sign_n1 = sign(ajnd_n1-n1);
             coef_n1 = linkS(ajlk_n1)./nodeV(n1)*linkS(l1)/linkL(l1);
             GD(ajlk_n1) = GD(ajlk_n1)-sign_n1.*coef_n1';
-            ajvol_n1 = nodeVolumes{n1}(1,:);
-            ajvolV_n1 = nodeVolumes{n1}(2,:);
+            ajvol_n1 = find(nodeVolV(n1,:));
+            ajvolV_n1 = nodeVolV(n1,ajvol_n1);
             ajvolM_n1 = volumeM(ajvol_n1);
             coefV_n1 = scl.K*(sum(Eps(ajvolM_n1).*ajvolV_n1)/nodeV(n1))*linkS(l1)/linkL(l1);
 
@@ -117,8 +117,8 @@ while itNr < maxNewtonIt && normUpdate > updateTol
             sign_n2 = sign(ajnd_n2-n2);
             coef_n2 = linkS(ajlk_n2)./nodeV(n2)*linkS(l1)/linkL(l1);
             GD(ajlk_n2) = GD(ajlk_n2)+sign_n2.*coef_n2';
-            ajvol_n2 = nodeVolumes{n2}(1,:);
-            ajvolV_n2 = nodeVolumes{n2}(2,:);
+            ajvol_n2 = find(nodeVolV(n2,:));
+            ajvolV_n2 = nodeVolV(n2,ajvol_n2);
             ajvolM_n2 = volumeM(ajvol_n2);
             coefV_n2 = scl.K*(sum(Eps(ajvolM_n2).*ajvolV_n2)/nodeV(n2))*linkS(l1)/linkL(l1);
 

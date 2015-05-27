@@ -10,7 +10,7 @@ global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2;
 global scl;
 global links;
 global Nnode Nlink;
-global nodeLinks linkSurfs linkVolumes nodeVolumes;
+global nodeLinks linkSurfs linkVolS nodeVolV;
 global nodeV linkL linkS dlinkL volumeM;
 global bndNodes dirNodes;
 global isBndNodes;
@@ -18,7 +18,8 @@ global bndLinks;
 global metalLinks;
 global light_speed XZsurfLinks XYsurfLinks YZsurfLinks;
 global EsurfLinks BsurfLinks;
-global Jacob colind Lmatrix Umatrix;
+%global Jacob colind Lmatrix Umatrix;
+global JacobLU;
 %Method 2
 %Solving Gauss' law.
 %Solving Current-continuity equations.
@@ -40,7 +41,6 @@ linSolveTol = 1e-6;
 maxNewtonIt = 50;
 maxLinIt = 200;
 Eps = [epsilon_mt,epsilon_in];
-Sgm = [sigma,0];
 
 NeqnNodes = length(eqnNodes);
 Nl = length(eqnLinks);
@@ -70,8 +70,8 @@ tic;
         n1 = eqnNodes(k);
         ajlk_n1 = nodeLinks{n1}(1,:);
         ajnd_n1 = nodeLinks{n1}(2,:);
-        ajvol_n1 = nodeVolumes{n1}(1,:);
-        ajvolV_n1 = nodeVolumes{n1}(2,:);
+        ajvol_n1 = find(nodeVolV(n1,:));
+        ajvolV_n1 = nodeVolV(n1,ajvol_n1);
         ajvolM_n1 = volumeM(ajvol_n1);
         sign_n1 = sign(ajnd_n1-n1);
 
@@ -79,8 +79,8 @@ tic;
             for i = 1:length(ajlk_n1)
                     n2 = ajnd_n1(i);
                     lk = ajlk_n1(i);
-                    ajvol_lk = linkVolumes{lk}(1,:);
-                    ajvolS_lk = linkVolumes{lk}(2,:);
+                    ajvol_lk = find(linkVolS(lk,:));
+                    ajvolS_lk = linkVolS(lk,ajvol_lk);
                     ajvolM_lk = volumeM(ajvol_lk);
 				
                     for j = 1:length(ajvol_lk)
@@ -121,8 +121,8 @@ tic;
 
                     n2 = ajnd_n1(i);
                     lk = ajlk_n1(i);
-                    ajvol_lk = linkVolumes{lk}(1,:);
-                    ajvolS_lk = linkVolumes{lk}(2,:);
+                    ajvol_lk = find(linkVolS(lk,:));
+                    ajvolS_lk = linkVolS(lk,ajvol_lk);
                     ajvolM_lk = volumeM(ajvol_lk);
                     coefV = sum(Eps(ajvolM_lk).*ajvolS_lk)/linkL(lk);
 
@@ -176,8 +176,8 @@ tic;
         l1 = eqnLinks(k);
         n1 = links(l1,1);	%sta node
         n2 = links(l1,2);	%end node
-        ajvol_l1 = linkVolumes{l1}(1,:);%volumeid
-        ajvolS_l1 = linkVolumes{l1}(2,:);%associate surf area,not dual area, but only its own 1/4
+        ajvol_l1 = find(linkVolS(l1,:)); %volume id
+        ajvolS_l1 = linkVolS(l1,ajvol_l1);%associate surf area,not dual area, but only its own 1/4
         ajvolM_l1 = volumeM(ajvol_l1);
         CC = zeros(1,Nlink);
         GD = zeros(1,Nlink);
@@ -257,8 +257,8 @@ tic;
             sign_n1 = sign(ajnd_n1-n1);
             coef_n1 = linkS(ajlk_n1)./nodeV(n1)*linkS(l1)/linkL(l1); %linkS(Nlink,1)~ dual surface area,nodeV(Nnode,1)
             GD(ajlk_n1) = GD(ajlk_n1)-sign_n1.*coef_n1';
-            ajvol_n1 = nodeVolumes{n1}(1,:);
-            ajvolV_n1 = nodeVolumes{n1}(2,:);
+            ajvol_n1 = find(nodeVolV(n1,:));
+            ajvolV_n1 = nodeVolV(n1,ajvol_n1);
             ajvolM_n1 = volumeM(ajvol_n1);
             coefV_n1 = scl.K*(sum(Eps(ajvolM_n1).*ajvolV_n1)/nodeV(n1))*linkS(l1)/linkL(l1);
 	
@@ -274,8 +274,8 @@ tic;
             sign_n2 = sign(ajnd_n2-n2);
             coef_n2 = linkS(ajlk_n2)./nodeV(n2)*linkS(l1)/linkL(l1);
             GD(ajlk_n2) = GD(ajlk_n2)+sign_n2.*coef_n2';
-            ajvol_n2 = nodeVolumes{n2}(1,:);	%volumeid
-            ajvolV_n2 = nodeVolumes{n2}(2,:);	%associate 1/8 volume
+            ajvol_n2 = find(nodeVolV(n2,:));
+            ajvolV_n2 = nodeVolV(n2,ajvol_n2);
             ajvolM_n2 = volumeM(ajvol_n2);
             coefV_n2 = scl.K*(sum(Eps(ajvolM_n2).*ajvolV_n2)/nodeV(n2))*linkS(l1)/linkL(l1);
 
@@ -347,9 +347,15 @@ Jacob =sparse([JF;JG]);
 
 clear JF JG;
 
-colind=colamd(Jacob);
-aspas = sparse(Jacob(:,colind));
-[Lmatrix,Umatrix] = ilu(aspas,struct('type','ilutp','droptol',1e-8));	%most time consuming
+%colind=colamd(Jacob);
+%aspas = sparse(Jacob(:,colind));
+%[Lmatrix,Umatrix] = ilu(aspas,struct('type','ilutp','droptol',1e-4));	%most time consuming
+%savefilename='JacobMatrix.mat';
+%save(savefilename, 'Jacob','-v7.3');
+
+[JacobLU.L, JacobLU.U, JacobLU.P, JacobLU.Q, JacobLU.R] = lu (Jacob) ;
+%savefilename='JacobLU.mat';
+%save(savefilename, 'JacobLU','-v7.3');
 
 display(['time for matrix Jacob matrix combination:']);
 toc;

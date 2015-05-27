@@ -76,7 +76,6 @@ tempsurf  =zeros(2*Nx,2*Ny,2*Nz);
 volumeNodes=zeros(Nvolume*8,3);
 volumeLinks=zeros(Nvolume*12,3);
 volumeSurfs=zeros(Nvolume*6,3);	
-%nodeV(Nnode),linkSs(Nlink),dlinkL(Nsurf),nodeVolV(Nnode,Nvolume),linkVolS(Nlink,Nvolume))
 
 if ~(plotx || ploty || plotz)
     display('Warning! No grids are plotting!');

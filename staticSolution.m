@@ -12,7 +12,7 @@ global scl;
 global nodes links contacts;
 global Nnode;
 global nodeLinks linkSurfs surfNodes surfLinks volumeNodes volumeLinks...
-    volumeSurfs linkVolumes nodeVolumes;
+    volumeSurfs linkVolS nodeVolV;
 global nodeV linkL linkS dlinkL nodeM linkM linkCenter surfCenter volumeM;
 global bndNodes edgeNodes dirNodes;
 global isBndNodes isDirNodes dcVolDirNodes;
@@ -60,8 +60,8 @@ while itNr < maxNewtonIt && normUpdate > updateTol
     for n1 = eqnNodes.'
         ajlk_n1 = nodeLinks{n1}(1,:);
         ajnd_n1 = nodeLinks{n1}(2,:);
-        ajvol_n1 = nodeVolumes{n1}(1,:);
-        ajvolV_n1 = nodeVolumes{n1}(2,:);
+        ajvol_n1 = find(nodeVolV(n1,:));
+        ajvolV_n1 = nodeVolV(n1,ajvol_n1);
         ajvolM_n1 = volumeM(ajvol_n1);
             for i = 1:length(ajlk_n1)
                 n2 = ajnd_n1(i);
@@ -69,8 +69,8 @@ while itNr < maxNewtonIt && normUpdate > updateTol
 
                     dV2 = 0;
 
-                ajvol_lk = linkVolumes{lk}(1,:);
-                ajvolS_lk = linkVolumes{lk}(2,:);
+        	ajvol_lk = find(linkVolS(lk,:)); %volume id
+        	ajvolS_lk = linkVolS(lk,ajvol_lk);%associate surf area,not dual area, but only its own 1/4
                 ajvolM_lk = volumeM(ajvol_lk);
 
                 if any(ajvolM_n1 == 1)

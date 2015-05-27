@@ -4,7 +4,7 @@ display('Start geometry initialization');
 
 global kx ky kz;
 global nodes links;
-global nodeLinks linkSurfs surfNodes surfLinks volumeNodes volumeLinks volumeSurfs linkVolumes nodeVolumes;
+global nodeLinks linkSurfs surfNodes surfLinks volumeNodes volumeLinks volumeSurfs linkVolS nodeVolV;
 global Nnode Nlink Nsurf Nvolume;
 global nodeV linkL linkS dlinkL linkCenter surfCenter;
 %%%new global variables for light source and bnd
@@ -12,6 +12,8 @@ global dirxLinks diryLinks dirzLinks;
 global EsurfLinks BsurfLinks;
 global lightdirection;
 
+tStart=tic;
+tic;
 nodes = sortrows(nodes);
 nodes = nodes(:,2:4);
 links = links(:,2:3);
@@ -24,24 +26,30 @@ ky = length(unique(nodes(:,2)))-1;
 kz = length(unique(nodes(:,3)))-1;
 
 %%%define directional Links,light sheet
-dirxLinks=[];
-diryLinks=[];
-dirzLinks=[];
+dirxLinks=zeros(Nlink/3,1);
+diryLinks=zeros(Nlink/3,1);
+dirzLinks=zeros(Nlink/3,1);
     tmpcounter = 0;    
+    indcounterx= 0;
+    indcountery= 0;
+    indcounterz= 0;
     for k = 1:kz+1
         for j = 1:ky+1
             for i = 1:kx+1
                 if (i <=kx) 
                 tmpcounter = 1 + tmpcounter;
-                dirxLinks=[dirxLinks;tmpcounter];
+		indcounterx=indcounterx+1;
+                dirxLinks(indcounterx)=tmpcounter;
                 end
                 if (j <=ky) 
                 tmpcounter = 1 + tmpcounter;
-                diryLinks=[diryLinks;tmpcounter];
+		indcountery=indcountery+1;
+                diryLinks(indcountery)=tmpcounter;
                 end
                 if (k <=kz) 
                 tmpcounter = 1 + tmpcounter;
-	        dirzLinks=[dirzLinks;tmpcounter];
+		indcounterz=indcounterz+1;
+                dirzLinks(indcounterz)=tmpcounter;
                 end
             end
         end
@@ -127,12 +135,17 @@ for i = 1:Nsurf
     surfCenter(i,:) = sum(nodes(surfNodes(i,:),:))/4;
 end
 display('End surfNodes');
+
 %nodes(Nnodes,xyz coord)
 %length of links	 (links(Nlink,sta),
 linkL = sqrt(sum((nodes(links(:,1),:)-nodes(links(:,2),:)).^2,2));       %linkL(Nlink)
 
 %link connectivity of surfaces
 surfLinks = reshape(surfLinks(:,2),4,Nsurf)';
+
+display(['time for part 1:']);
+toc;
+tic;
 
 %link connectivity of volumes & dual area of links
 nodeV = zeros(Nnode,1);
@@ -155,6 +168,9 @@ for i = 1:size(volumeNodes,1)
 end
 nodeVolV=sparse(rowNV(1:ntripletsNV),colNV(1:ntripletsNV),valNV(1:ntripletsNV),Nnode,Nvolume);
 display('finish generating nodeVolV');
+display(['time for part 2:']);
+toc;
+tic;
 
 %linkVolS = zeros(Nlink,Nvolume);
 ntripletslVS=size(volumeLinks,1);
@@ -168,12 +184,16 @@ for i = 1:size(volumeLinks,1)
 %  linkVolS(volumeLinks(i,2),volumeLinks(i,1)) = volumeLinks(i,3);
    	    %(link,volumeid)                      surface 1/4
    ntripletslVS=ntripletslVS+1;
-   rowlVS(ntripletslVS)=volumeLinks(i,2);
-   collVS(ntripletslVS)=volumeLinks(i,1);
+   rowlVS(ntripletslVS)=volumeLinks(i,2);	%link
+   collVS(ntripletslVS)=volumeLinks(i,1);	%
    vallVS(ntripletslVS)=volumeLinks(i,3);
 end
 linkVolS=sparse(rowlVS(1:ntripletslVS),collVS(1:ntripletslVS),vallVS(1:ntripletslVS),Nlink,Nvolume);
 display('finish generating linkVolS');
+
+display(['time for part 3:']);
+toc;
+tic;
 
 for i = 1:size(volumeSurfs,1)
 %which cube%volumeSurf~ one half of the prependicular length  in the corresponding cube with respect to a surf
@@ -217,23 +237,49 @@ for i = 1:Nsurf
 end
 
 display('End linkSurfs');
+display(['time for part 4:']);
+toc;
+%tic;
 %%% adjacent volumes of nodes and links. Format: [volumeid;associated volume or area]
-linkVolumes = cell(Nlink,1);
-nodeVolumes = cell(Nnode,1);
-for i = 1:Nvolume
-    nd = volumeNodes(i,:);
-    for j = 1:length(nd)
-        nodeVolumes{nd(j)} = [nodeVolumes{nd(j)},[i;nodeVolV(nd(j),i)]]; % 1   1   1  1 1 1 1 1
-    end                                                                  % V/8 V/8 '''''''''
-    lk = volumeLinks(i,:);                                                      
-    for j = 1:length(lk)
-        linkVolumes{lk(j)} = [linkVolumes{lk(j)},[i;linkVolS(lk(j),i)]];
-						% volumeid;surface area
-    end
-end
+%nodeVolumes = cell(Nnode,1);
+%linkVolumes = cell(Nlink,1);
+%for i=1:Nnode
+%IndexNodes=find(nodeVolV(i,:));
+%nodeVolmes{i}=zeros(2,length(IndexNodes));
+%nodeVolumes{i}(1,:)=IndexNodes;
+%nodeVolumes{i}(2,:)=nodeVolV(i,IndexNodes);
+%end
 
-display('End nodeVolumes linkVolumes');
+%for i=1:Nlink
+%IndexLinks=find(linkVolS(i,:));
+%linkVolmes{i}=zeros(2,length(IndexLinks));
+%linkVolumes{i}(1,:)=IndexLinks;
+%linkVolumes{i}(2,:)=linkVolS(i,IndexLinks);
+%end
+
+
+%linkVolumes = cell(Nlink,1);
+%nodeVolumes = cell(Nnode,1);
+%for i = 1:Nvolume
+%    nd = volumeNodes(i,:);
+%   for j = 1:length(nd)
+%       nodeVolumes{nd(j)} = [nodeVolumes{nd(j)},[i;nodeVolV(nd(j),i)]]; % volumeid1   1   2   ''''''' 
+%   end                                                                  % volume1     V/8 V/8 '''''''''
+%   lk = volumeLinks(i,:);                                                      
+%  for j = 1:length(lk)
+%      linkVolumes{lk(j)} = [linkVolumes{lk(j)},[i;linkVolS(lk(j),i)]];
+%      			%	{lk}	% volumeid1    (1,1)	volumeid2     (1,2)    (1,3)...
+%      		 	% usual 2*4	% surface area1(2,1)	surface area2 (2,2)    (2,3)...
+%  end
+%end
+
+%display('End nodeVolumes & linkVolumes');
+%display(['time for part 5:']);
+%toc;
+%tic;
+
+
 %%% scale down to nm range %%%%%%
 
 display('End geometry initialization');
-
+toc(tStart);

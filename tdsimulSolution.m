@@ -19,10 +19,18 @@ global isqmnodes;
 
 global JLinks J_amp;
 global lightsource tlas tzero;
+%global Jacob colind Lmatrix Umatrix;
+%global JacobLU;
+%global Fc11 Fc12 Fc21 Fc22 Fc30 Fn1matrix Fn2matrix Flkmatrix;
+%global Gc11 Gajlkmatrix11 Gc12 Gc20 Gn1matrix Gc31 Gajlk_n1matrix Gc32;
+%global Gn2matrix Gc41 Gajlk_n2matrix Gc42 Gc51 Gc52 Gc53 Gc54;
 %%%%%%% initial guess  %%%%%%%%%%%%%
-initials = 'tdinis.mat';
+%initials = 'tdinis.mat';
 
-load(initials);
+%load(initials);
+V=zeros(Nnode,1);
+H=zeros(Nlink,1);
+A=zeros(Nlink,1);
 
 %interval=2;
 
@@ -68,10 +76,14 @@ end
 %tdcalupdatec.m updates dtV,dtH,dtn,dtp 
 %(more specificly,Newton's method to get dtV dtH.. dtn dtp are calculated directly usiing continuity equation)
 %tdrelaxstep2.m and others update  V n p A H (dV,dn ,dp,dA,dH are in Newton)(dtV,dtH,dtn,dtp are calculated by  numerical differentiation)
+if (nedrelax==1)
 [dtVp,dtHp] = tdcalupdatec(V,A,H,Js,dtVp,dtHp);
-
+elseif (nedrelax==2)
+[dtVp,dtHp] = tdcalupdatecc(V,A,H,Js,dtVp,dtHp);
+end
 savefilename = [savefile,num2str(0),'.mat'];
-save(savefilename, 'V', 'A', 'H','mJ_0','mJ_1','mJ_2','mJ_1p','mJ_2p','dtVp','dtHp','Js');
+%save(savefilename, 'V', 'A', 'H','mJ_0','mJ_1','mJ_2','mJ_1p','mJ_2p','dtVp','dtHp','Js');
+ save(savefilename, 'V','A', 'H','dtVp','dtHp','Js');
 
 if nedrelax==2
   fp = fopen('tdqmcurrd.dat','w');  % clear content of dat & create file
@@ -80,8 +92,30 @@ end
 
 ntp  = 1; 
 tic;
+%if  (exist('JacobMatrix.mat') == 0 )
+%tdbuildJacob(dt);
+%else
+%display('JacobMatrix.mat already exist');
+%end
+%load 'JacobMatrix.mat';
 
+%if  (exist('JacobLU.mat') == 0 )
 tdbuildJacob(dt);
+%else
+%display('JacobLU.mat already exist');
+%end
+
+%load 'JacobLU.mat';
+
+%if  (exist('rhsFCoefMatrix.mat') == 0 || exist('rhsGCoefMatrix.mat') == 0 )
+tdbuildRHSCoef(dt);
+%else
+%display('rhsF/GCoefMatrix.mat already exist');
+%end
+
+%load 'rhsFCoefMatrix.mat';
+%load 'rhsGCoefMatrix.mat';
+
 while ntp < nsteps + 1
    
  display(['Time step:',num2str(ntp)]);
@@ -108,7 +142,8 @@ while ntp < nsteps + 1
 
 % if (mod(ntp,interval) == 0 )
  savefilename = [savefile,num2str(ntp),'.mat'];
- save(savefilename, 'V','A', 'H','mJ_0','mJ_1','mJ_2','mJ_1p','mJ_2p','dtVp','dtHp','Js');
+% save(savefilename, 'V','A', 'H','mJ_0','mJ_1','mJ_2','mJ_1p','mJ_2p','dtVp','dtHp','Js');
+  save(savefilename, 'V','A', 'H','dtVp','dtHp','Js');
 % end
     ntp = ntp + 1;
     

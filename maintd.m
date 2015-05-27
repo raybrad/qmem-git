@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%Update History%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Revised version 2
+%Revised version 3
 %0 light source is added as a sheet of current density Js, which create plane wave field 
 %0 Mur absorbing boundary is added to reduce reflection
 %2 plasmonic metal is modelled using Two Lorentz poles and one drude pole.
@@ -9,6 +9,12 @@
 %3 in initGeometry sparse matrix creation is used for linkVolS nodeVolV
 %4 tdbuilJacob.m prebuild,precondition and save  the Jacobian matrix,which is unchanged in time propagation. Semiconductor part is removed.
 %4 tdsolverhs construct the right hand side matrix, and some simple vectorization technique is used. So tdrelaxstep2 is replaced.
+%5 tdbuildRHSCoef fully vectorize the rhs coefficients,prebuild and save it. 
+%5 tdsolerhs_vector use previous coefficient matrix to reconstruct the rhs matrix. So tdsolverhs is replaced. 
+%6 in initGeometry the allocation of dirlinks is added to speed up
+%6 in scaling_static change Vt from 2.5852e-2 to 2.5852,so to rescale a little bit to balance the num of Js by scl.J
+%6 in initGeometry linkVolumes nodeVolumes are deleted and just used linkVolS and nodeVolV are ok,variables are changed in following sub
+
 clear global; clear;
 
 %plasmonic metal parameters
@@ -16,11 +22,6 @@ global sigma0  omega_p gamma_p; %Conductivity and Permeability
 global mu;
 global epsilon epsilon_mt epsilon_in epsilon_qm; %Dielectric constant
 global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2; %Lorentz pole
-%Silver (John and Christy:400nm-800nm)
-%epsilon_mt= 4.07666;
-%omega_p   = 1.40056E16; 
-%gamma_p   = 4.21755E13; 
-
 %Silver (From material database fitting with Drude+2 Lorentz model) 
 %suitable over 1.24 - 5 eV
 PLANCKEV=4.13566733e-15;
@@ -62,7 +63,7 @@ global scl;
 global dt;
 dt  = 5.0e-17;
 global nsteps;
-nsteps = 10000;
+nsteps = 100;
 global epdf epdf2;
 epdf = 2.001347574e-15; %600nm epdf =wavelength/299.798
 epdf2= 2.001347574e-15; %600nm
@@ -89,7 +90,7 @@ savefile = 'dump/variables_';
 global kx ky kz;
 global nodes links contacts;
 global nodeLinks linkSurfs surfNodes surfLinks volumeNodes volumeLinks...
-    volumeSurfs linkVolumes nodeVolumes;
+    volumeSurfs linkVolS nodeVolV;
 global Nnode Nlink Nsurf Nvolume;
 global nodeV linkL linkS dlinkL nodeM linkM linkCenter surfCenter volumeM;
 global bndNodes edgeNodes;
@@ -158,7 +159,4 @@ ingvt=0;
 
 [Ve,Ae,He] = tdsimulSolution(dt,nsteps);
 
-%[VT,AT,HT] = tdvara(nsteps);
-
 t_all = cputime-t_all;
-%figure; loglog(f,condNr);

@@ -45,7 +45,7 @@ isBsurfLinks=false(Nlink,1);
 isBsurfLinks(BsurfLinks)=true;		        %for B boundary condition
 
 %%%%%%%% start Newton's iteration %%%%%%%%
-updateTol = 1e-8;
+updateTol = 1e-4;
 droptol = 1e-6;
 linSolveTol = 1e-6;
 maxNewtonIt = 50;
@@ -61,6 +61,8 @@ normRes = 1;
 normUpdate = 1;
 itNr = 0;
 tStart=tic;
+
+
 while itNr < maxNewtonIt && normUpdate > updateTol
 
 tic;
@@ -101,31 +103,29 @@ tic;
         sign_n1 = sign(ajnd_n1-n1);
 
         %if any(ajvolM_n1 == 1) 
-            for i = 1:length(ajlk_n1)
+          for i = 1:length(ajlk_n1)
                     n2 = ajnd_n1(i);
                     lk = ajlk_n1(i);
-                    ajvol_lk = linkVolumes{lk}(1,:);
-                    ajvolS_lk = linkVolumes{lk}(2,:);
+                    ajvol_lk = linkVolumes{lk}(1,:);  % volumeid
+                    ajvolS_lk = linkVolumes{lk}(2,:); % 1/4 orthogonal surface area, 4
                     ajvolM_lk = volumeM(ajvol_lk);
- 
-
-                %   dtE1 = -(dtV(n2)-dtV(n1))/linkL(lk)-sign_n1(i)*dtH(lk);
-				
-                %   for j = 1:length(ajvol_lk)
-                %       switch ajvolM_lk(j)
-                %           case 1
-                % 		J=sign_n1(i)*(mJ_0(lk)+mJ_1(lk)+mJ_2(lk))+epsilon_mt*dtE1;
-                %           case 2
-                %               J= epsilon_in*dtE1;
-                %           otherwise
-                %               error('undefined material');
-                %        end
-		%	rhs_F(n1) = rhs_F(n1)+ajvolS_lk(j)*J;
-                %    end
-		    rhs_F(n1) = rhs_F(n1)+sum((Eps(ajvolM_lk).*((-(dtV(n2)-dtV(n1))/linkL(lk)-sign_n1(i)*dtH(lk))*(any(ajvolM_n1 == 1))+ ...
-					     ((-(V(n2)-V(n1))/linkL(lk)-sign_n1(i)* H(lk)))*(all(ajvolM_n1 ~= 1)))+...
-					    prefac(ajvolM_lk).*sign_n1(i)* (mJ_0(lk)+mJ_1(lk)+mJ_2(lk))).*ajvolS_lk);
-            end
+                    % dtE1 = -(dtV(n2)-dtV(n1))/linkL(lk)-sign_n1(i)*dtH(lk);
+                    % for j = 1:length(ajvol_lk)
+                    %     switch ajvolM_lk(j)
+                    %         case 1
+                    %     	J=sign_n1(i)*(mJ_0(lk)+mJ_1(lk)+mJ_2(lk))+epsilon_mt*dtE1;
+                    %         case 2
+                    %             J= epsilon_in*dtE1;
+                    %         otherwise
+                    %             error('undefined material');
+                    %      end
+		    %     rhs_F(n1) = rhs_F(n1)+ajvolS_lk(j)*J;
+                    %  end
+			%C11*dtV+C12*dtH +C21*V+C22*H+C3*mJ
+	     rhs_F(n1) = rhs_F(n1)+sum((Eps(ajvolM_lk).*((-(dtV(n2)-dtV(n1))/linkL(lk)-sign_n1(i)*dtH(lk))*(any(ajvolM_n1==1))+...
+		     	  ((-(V(n2)-V(n1))/linkL(lk)-sign_n1(i)* H(lk)))*(all(ajvolM_n1~=1)))+...
+		     	  prefac(ajvolM_lk).*sign_n1(i)* (mJ_0(lk)+mJ_1(lk)+mJ_2(lk))).*ajvolS_lk);
+          end
        % else
        %         for i = 1:length(ajlk_n1)
        %             n2 = ajnd_n1(i);
@@ -138,7 +138,7 @@ tic;
        %         end
        % end
      end
-display(['time for matrix collection,F matrix:']);
+display(['time for rhs_F matrix collection:']);
 toc;
 tic;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -248,10 +248,13 @@ tic;
             rhs_G(l1) = rhs_G(l1)-scl.K*sum((Eps(ajvolM_l1).*(-(dtV(n2)-dtV(n1))/linkL(l1)-dtH(l1))+...
 				   prefac(ajvolM_l1).*(mJ_0(l1)+mJ_1(l1)+mJ_2(l1))+Js(l1)).*ajvolS_l1);
      end
-display(['time for matrix collection,G matrix:']);
+display(['time for rhs_G matrix collection:']);
 toc;
 tic;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+ %savefilename = ['rhs',num2str(itNr),'.mat'];
+ %save(savefilename, 'rhs_F','rhs_G');
 
     rhs_F = rhs_F(eqnNodes);
     rhs_G = rhs_G(eqnLinks);
@@ -275,8 +278,8 @@ tic;
 
    % dX = mylusovle(Jacob,rhs,1);
     dX=zeros(size(rhs));
-    [dX(colind),flag,relres]=bicgstab(Jacob(:,colind),rhs,1e-4,200,Lmatrix,Umatrix);
-    display(['flag:',num2str(flag),' relres:',num2str(relres)]);
+    [dX(colind),flag,relres,Itr]=bicgstab(Jacob(:,colind),rhs,1e-4,200,Lmatrix,Umatrix);
+    display(['flag:',num2str(flag),' relres:',num2str(relres),' Itr:',num2str(Itr)]);
 
     display(['time for solving linear equation:']);
     toc;

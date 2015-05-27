@@ -8,7 +8,7 @@ global scl;
 global nodes links contacts;
 global Nnode Nlink;
 global nodeLinks linkSurfs surfNodes surfLinks volumeNodes volumeLinks...
-    volumeSurfs linkVolumes nodeVolumes;
+    volumeSurfs linkVolS nodeVolV;
 global nodeV linkL linkS dlinkL nodeM linkM linkCenter surfCenter volumeM;
 global bndNodes edgeNodes dirNodes;
 global isBndNodes isDirNodes dcVolDirNodes acVolDirNodes;
@@ -55,8 +55,8 @@ tStart=tic;
 for n1 = eqnNodes1.'
     ajlk_n1 = nodeLinks{n1}(1,:);
     ajnd_n1 = nodeLinks{n1}(2,:);
-    ajvol_n1 = nodeVolumes{n1}(1,:);
-    ajvolV_n1 = nodeVolumes{n1}(2,:);
+    ajvol_n1 = find(nodeVolV(n1,:));
+    ajvolV_n1 = nodeVolV(n1,ajvol_n1);
     ajvolM_n1 = volumeM(ajvol_n1);
     sign_n1 = sign(ajnd_n1-n1);
     coef_n1 = linkS(ajlk_n1)./nodeV(n1);
@@ -96,8 +96,7 @@ while itNr < maxNewtonIt && normUpdate > updateTol
      valJGH=zeros(ntripletsJGH,1);  
      ntripletsJGH=0;                
     
-     % F= div J_tot = 0 (for node, no A) J_tot =J_f +epsilon part E/par t    
-     % current continuity equation + gauss' law: div J_f+ d (div D)/dt = 0
+     % F= div J_tot = 0 (for node, no A) J_tot =J_f +epsilon part E/par t    % current continuity equation + gauss' law: div J_f+ d (div D)/dt = 0
      % => J_f* S+ eps *dE/dt *S =0
      % sigma*E + par E/par t (metal)                                 
      % -miu_nij/h_ij*B[-(Vj-Vi+PI_ij*h_ij)]*n_ij+miu_nij/h_ij*B[(Vj-Vi+PI_ij*h_ij)]*n_ij
@@ -105,16 +104,16 @@ while itNr < maxNewtonIt && normUpdate > updateTol
         n1 = eqnNodes(k);
         ajlk_n1 = nodeLinks{n1}(1,:);
         ajnd_n1 = nodeLinks{n1}(2,:);
-        ajvol_n1 = nodeVolumes{n1}(1,:);
-        ajvolV_n1 = nodeVolumes{n1}(2,:);
+        ajvol_n1 = find(nodeVolV(n1,:));
+        ajvolV_n1 = nodeVolV(n1,ajvol_n1);
         ajvolM_n1 = volumeM(ajvol_n1);
         sign_n1 = sign(ajnd_n1-n1);
         
 	for i = 1:length(ajlk_n1)
             n2 = ajnd_n1(i);
             lk = ajlk_n1(i);
-            ajvol_lk = linkVolumes{lk}(1,:);
-            ajvolS_lk = linkVolumes{lk}(2,:);
+            ajvol_lk = find(linkVolS(lk,:)); %volume id
+            ajvolS_lk = linkVolS(lk,ajvol_lk);%associate surf area,not dual area, but only its own 1/4
             ajvolM_lk = volumeM(ajvol_lk);
 
             dtE1 = -(Y(n2)-Y(n1))/linkL(lk)-sign_n1(i)*Z(lk);		%? how about W
@@ -169,8 +168,8 @@ while itNr < maxNewtonIt && normUpdate > updateTol
         l1 = eqnLinks(k);
         n1 = links(l1,1);
         n2 = links(l1,2);
-        ajvol_l1 = linkVolumes{l1}(1,:);
-        ajvolS_l1 = linkVolumes{l1}(2,:);
+        ajvol_l1 = find(linkVolS(l1,:)); %volume id
+        ajvolS_l1 = linkVolS(l1,ajvol_l1);%associate surf area,not dual area, but only its own 1/4
         ajvolM_l1 = volumeM(ajvol_l1);
         CC = zeros(1,Nlink);
 
@@ -304,5 +303,4 @@ dtV = Y;
 dtH = Z;
 
 toc(tStart);   
-
 display(['  End tdcalupdatec .']);

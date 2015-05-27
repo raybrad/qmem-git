@@ -30,6 +30,7 @@ global qkx qky qkz;
 global dirxLinks diryLinks dirzLinks;
 global JLinks J_amp;
 global lightdirection Posz;
+global nedrelax;
 %%%
 
 %%%%%%%%% define boundary and edge nodes %%%%%%%%%%%
@@ -46,7 +47,6 @@ end
 
 
 %%%%%%%%%% structure definition (in terms of node index) %%%%%%%%%%%%%%%%%%
-%%%%%%%%%%% plasmonic metal block %%%%%%%%%%%%%%%%%%
 x_coor=[0:2.0:40];
 y_coor=[0:2.0:40];
 z_coor=[0:2.0:40];
@@ -130,10 +130,13 @@ metalNodes=defSphereNodes([20.0,20.0,20.0],scl.lambda,Radius,nodes);
 savefilename='metalNodes.mat';
 save(savefilename, 'metalNodes','Nnode','kx','ky','kz','x_coor','y_coor','z_coor');
 
-%QMnodes = [];
-%sQMnodes = [];
- QMnodes =defBrickNodes([qmx1,qmy1,qmz1],[qmx2,qmy2,qmz2]);
- sQMnodes =defBrickNodes([qmx1+1,qmy1+1,qmz1+1],[qmx2-1,qmy2-1,qmz2-1]);
+if(nedrelax==1)
+QMnodes = [];
+sQMnodes = [];
+else
+QMnodes =defBrickNodes([qmx1,qmy1,qmz1],[qmx2,qmy2,qmz2]);
+sQMnodes =defBrickNodes([qmx1+1,qmy1+1,qmz1+1],[qmx2-1,qmy2-1,qmz2-1]);
+end
 
 istqmnodes            = false(Nnode,1);
 istqmnodes(QMnodes)   = true;
@@ -221,22 +224,17 @@ for i = 1:Nlink
     end
 end
 
-%%% material types of each volume (semiconductor = 1, metal = 2, insulator =3 %%%
-%%% second insulator  = 4		
-volumeM = 2*ones(Nvolume,1);
+%%% material types of each volume %%%
+volumeM = 2*ones(Nvolume,1);	%insulator 2 metal 1
 for i = 1:Nvolume
    vNodes = volumeNodes(i,:);
    if all(idMetalNodes(vNodes))
       volumeM(i) = 1; 
    end
-end
-
-isqmvolm = false(Nvolume,1);
-for i = 1:Nvolume
-   vNodes = volumeNodes(i,:);
-   if all(istqmnodes(vNodes))
-      isqmvolm(i) = true;
+   if (nedrelax==2 && all(istqmnodes(vNodes)))
+      volumeM(i) = 3; 
    end
 end
+
 
 display('End solver initialization');

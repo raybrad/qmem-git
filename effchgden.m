@@ -8,7 +8,7 @@ global scl;
 global nodes links contacts;
 global Nnode Nlink;
 global nodeLinks linkSurfs surfNodes surfLinks volumeNodes volumeLinks...
-    volumeSurfs linkVolumes nodeVolumes;
+    volumeSurfs linkVolS nodeVolV;
 global nodeV linkL linkS dlinkL nodeM linkM linkCenter surfCenter volumeM;
 global bndNodes edgeNodes dirNodes;
 global isBndNodes isDirNodes dcVolDirNodes acVolDirNodes;
@@ -54,16 +54,16 @@ for k=1:NeqnmetalNodes
     n1=metalNodes(k);
     ajlk_n1 = nodeLinks{n1}(1,:);
     ajnd_n1 = nodeLinks{n1}(2,:);
-    ajvol_n1 = nodeVolumes{n1}(1,:);
-    ajvolV_n1 = nodeVolumes{n1}(2,:);
+    ajvol_n1 = find(nodeVolV(n1,:));
+    ajvolV_n1 = nodeVolV(n1,ajvol_n1);
     ajvolM_n1 = volumeM(ajvol_n1);
     sign_n1 = sign(ajnd_n1-n1);
 
     for i = 1:length(ajlk_n1)
         n2 = ajnd_n1(i);
         lk = ajlk_n1(i);
-        ajvol_lk = linkVolumes{lk}(1,:);
-        ajvolS_lk = linkVolumes{lk}(2,:);
+        ajvolS_lk = linkVolS(lk,ajvol_lk);
+        ajvolM_lk = volumeM(ajvol_lk);
         ajvolM_lk = volumeM(ajvol_lk);
         for qmi = 1:length(ajvol_lk)
             if isqmvolm(ajvol_lk(qmi))

@@ -66,7 +66,6 @@ normRes_pre = 1e10;
 itNr = 0;
 tStart=tic;
 while itNr < maxNewtonIt && normUpdate > updateTol
-
 tic;
      % construct the sparse matrix by (Row,Column,Value) 
      rhs_F = zeros(Nnode,1); 
@@ -104,7 +103,8 @@ tic;
 display(['time for updating metalLinks:']);
 toc;
 tic;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%rhsF
    for k=1:NeqnNodes
         n1 = eqnNodes(k);
         ajlk_n1 = nodeLinks{n1}(1,:);
@@ -205,7 +205,8 @@ clear JF_v JF_H;
 display(['time for matrix collection,F matrix:']);
 toc;
 tic;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%rhsG
 
     %%%%%%%%%%%%% Build Jacobian and rhs of G (Ampere's law) %%%%%%%%%%%%%
     % G = cur curl A - {grad div A+grad V}+{-J+par E/par t} =0 (for link A,PI)

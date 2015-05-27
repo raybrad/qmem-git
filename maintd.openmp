@@ -2,7 +2,7 @@
 
 #$ -S /bin/bash
 #$ -j y
-#$ -N qmem_revisedt0.05
+#$ -N global20-rescale
 #     
 # Use currend working directory
 #$ -cwd

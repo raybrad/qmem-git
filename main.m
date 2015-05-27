@@ -80,7 +80,7 @@ savefile = 'dump/variables_';
 global kx ky kz;
 global nodes links contacts;
 global nodeLinks linkSurfs surfNodes surfLinks volumeNodes volumeLinks...
-    volumeSurfs linkVolumes nodeVolumes;
+    volumeSurfs linkVolS nodeVolV;
 global Nnode Nlink Nsurf Nvolume;
 global nodeV linkL linkS dlinkL nodeM linkM linkCenter surfCenter volumeM;
 global bndNodes edgeNodes;
