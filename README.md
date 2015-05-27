@@ -29,3 +29,6 @@ Version 1.0
 %Revised version 6
 %9 use tim davis  sparse2 method to replace sparse construction. and multiple linear solvers are tested,but lu remains best of them
 %10 reformulate the tdcalupdatec and tdbuildJaocb by part vectorlization,but still not fast,now is a bottleneck for finer grids
+
+%Revised version 7
+%11 test different lu and linear solver
