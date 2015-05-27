@@ -1,5 +1,0 @@
-#total grids(8000*X)		average time per step in original         average time per step in revised version   tol1e-4
-1				292.118						136.189					72.6439
-3.375				1456.17						645.701
-8				6843.85						1332.45					1051.13
-
