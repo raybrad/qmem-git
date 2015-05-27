@@ -1,0 +1,1877 @@
+Warning: No display specified.  You will not be able to display graphics on the screen.
+Warning: No window system found.  Java option 'MWT' ignored
+
+                            < M A T L A B (R) >
+                  Copyright 1984-2010 The MathWorks, Inc.
+                Version 7.10.0.499 (R2010a) 64-bit (glnxa64)
+                              February 5, 2010
+
+ 
+  To get started, type one of these: helpwin, helpdesk, or demo.
+  For product information, visit www.mathworks.com.
+ 
+>> Start geometry initialization
+End directional links collection
+End nodeLinks
+End surfNodes
+finish generating nodeVolV
+finish generating linkVolS
+End linkSurfs
+End nodeVolumes linkVolumes
+End geometry initialization
+Start solver initialization
+End solver initialization
+Start TD dynamic solution
+time for matrix collection,F matrix:
+Elapsed time is 0.033097 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 5.343270 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.028060 seconds.
+time for solving linear equation:
+Elapsed time is 0.001518 seconds.
+max dY:
+max dZ:0
+  Iter:1; normRes:0; normUpdate:0
+Elapsed time is 5.842552 seconds.
+  End tdcalupdatec .
+Time step:1
+  Start TD simulation relaxation2 per step:
+time for matrix collection,F matrix:
+Elapsed time is 3.325386 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.164575 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008674 seconds.
+time for solving linear equation:
+Elapsed time is 4.361021 seconds.
+ maxdV: 1
+ maxdH: 1
+  Iter:1; normRes:2.155e-07; normUpdate:2.155e-07; normdV:5.6855e-11
+max mJ0:0
+max mJ1:0
+max mJ2:0
+time for matrix collection,F matrix:
+Elapsed time is 3.219809 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.806755 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008144 seconds.
+time for solving linear equation:
+Elapsed time is 4.381441 seconds.
+ maxdV: 4.8056
+ maxdH: 0.0026586
+  Iter:2; normRes:5.9012e-10; normUpdate:5.9012e-10; normdV:6.5342e-11
+max mJ0:2.12e-15
+max mJ1:2.3611e-16
+max mJ2:1.0083e-16
+Elapsed time is 45.299062 seconds.
+  End TD simulation relaxation2 per step.
+Time step:2
+  Start TD simulation relaxation2 per step:
+time for matrix collection,F matrix:
+Elapsed time is 3.221933 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.786892 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009017 seconds.
+time for solving linear equation:
+Elapsed time is 4.275248 seconds.
+ maxdV: 1.0463
+ maxdH: 0.27852
+  Iter:1; normRes:2.3189e-07; normUpdate:2.3189e-07; normdV:5.1794e-10
+max mJ0:3.8205e-15
+max mJ1:4.5587e-16
+max mJ2:1.9483e-16
+time for matrix collection,F matrix:
+Elapsed time is 3.227717 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.761200 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009677 seconds.
+time for solving linear equation:
+Elapsed time is 4.072032 seconds.
+ maxdV: 3.7462
+ maxdH: 0.007328
+  Iter:2; normRes:5.2169e-09; normUpdate:5.2169e-09; normdV:5.7391e-10
+max mJ0:2.0381e-14
+max mJ1:2.509e-15
+max mJ2:1.0716e-15
+Elapsed time is 44.377945 seconds.
+  End TD simulation relaxation2 per step.
+Time step:3
+  Start TD simulation relaxation2 per step:
+time for matrix collection,F matrix:
+Elapsed time is 3.215156 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.698233 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008081 seconds.
+time for solving linear equation:
+Elapsed time is 4.213920 seconds.
+ maxdV: 1.0854
+ maxdH: 0.13448
+  Iter:1; normRes:1.5528e-07; normUpdate:1.5528e-07; normdV:2.2116e-09
+max mJ0:4.5696e-14
+max mJ1:5.1171e-15
+max mJ2:2.1872e-15
+time for matrix collection,F matrix:
+Elapsed time is 3.260645 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.699575 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009652 seconds.
+time for solving linear equation:
+Elapsed time is 4.080402 seconds.
+ maxdV: 2.8483
+ maxdH: 0.017395
+  Iter:2; normRes:2.4222e-08; normUpdate:2.4222e-08; normdV:2.3493e-09
+max mJ0:9.1415e-14
+max mJ1:1.2561e-14
+max mJ2:5.3662e-15
+time for matrix collection,F matrix:
+Elapsed time is 3.250401 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.697756 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009053 seconds.
+time for solving linear equation:
+Elapsed time is 4.219386 seconds.
+ maxdV: 1.1493
+ maxdH: 0.020224
+  Iter:3; normRes:2.807e-08; normUpdate:2.807e-08; normdV:9.1955e-10
+max mJ0:9.9404e-14
+max mJ1:8.4e-15
+max mJ2:3.5867e-15
+time for matrix collection,F matrix:
+Elapsed time is 3.259331 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.792885 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009297 seconds.
+time for solving linear equation:
+Elapsed time is 4.025836 seconds.
+ maxdV: 0.37488
+ maxdH: 0.027266
+  Iter:4; normRes:3.7512e-08; normUpdate:3.7512e-08; normdV:2.5545e-10
+max mJ0:9.7551e-14
+max mJ1:1.4447e-14
+max mJ2:6.1712e-15
+time for matrix collection,F matrix:
+Elapsed time is 3.214326 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.744407 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008713 seconds.
+time for solving linear equation:
+Elapsed time is 4.153880 seconds.
+ maxdV: 0.38427
+ maxdH: 0.038129
+  Iter:5; normRes:5.2071e-08; normUpdate:5.2071e-08; normdV:2.8127e-10
+max mJ0:1.7649e-13
+max mJ1:1.6985e-14
+max mJ2:7.2529e-15
+time for matrix collection,F matrix:
+Elapsed time is 3.239401 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.704701 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008395 seconds.
+time for solving linear equation:
+Elapsed time is 4.287453 seconds.
+ maxdV: 0.79662
+ maxdH: 0.054169
+  Iter:6; normRes:7.3555e-08; normUpdate:7.3555e-08; normdV:6.683e-10
+max mJ0:1.9191e-13
+max mJ1:2.3865e-14
+max mJ2:1.0192e-14
+time for matrix collection,F matrix:
+Elapsed time is 3.273725 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.768121 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009787 seconds.
+time for solving linear equation:
+Elapsed time is 4.024159 seconds.
+ maxdV: 1.166
+ maxdH: 0.077445
+  Iter:7; normRes:1.0492e-07; normUpdate:1.0492e-07; normdV:1.0757e-09
+max mJ0:3.4181e-13
+max mJ1:3.636e-14
+max mJ2:1.5527e-14
+time for matrix collection,F matrix:
+Elapsed time is 3.269344 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.780264 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008774 seconds.
+time for solving linear equation:
+Elapsed time is 4.182850 seconds.
+ maxdV: 1.3209
+ maxdH: 0.11139
+  Iter:8; normRes:1.5057e-07; normUpdate:1.5057e-07; normdV:1.534e-09
+max mJ0:4.3294e-13
+max mJ1:5.0046e-14
+max mJ2:2.1373e-14
+time for matrix collection,F matrix:
+Elapsed time is 3.236528 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.769967 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008804 seconds.
+time for solving linear equation:
+Elapsed time is 4.154078 seconds.
+ maxdV: 1.5457
+ maxdH: 0.16013
+  Iter:9; normRes:2.1692e-07; normUpdate:2.1692e-07; normdV:2.0776e-09
+max mJ0:6.959e-13
+max mJ1:7.5796e-14
+max mJ2:3.2369e-14
+time for matrix collection,F matrix:
+Elapsed time is 3.226856 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.785677 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008237 seconds.
+time for solving linear equation:
+Elapsed time is 4.097680 seconds.
+ maxdV: 1.578
+ maxdH: 0.23087
+  Iter:10; normRes:3.1331e-07; normUpdate:3.1331e-07; normdV:2.7441e-09
+max mJ0:9.3121e-13
+max mJ1:1.0554e-13
+max mJ2:4.5072e-14
+time for matrix collection,F matrix:
+Elapsed time is 3.228399 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.747824 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009978 seconds.
+time for solving linear equation:
+Elapsed time is 4.115687 seconds.
+ maxdV: 1.6991
+ maxdH: 0.33008
+  Iter:11; normRes:4.5336e-07; normUpdate:4.5336e-07; normdV:3.579e-09
+max mJ0:1.4234e-12
+max mJ1:1.5682e-13
+max mJ2:6.6971e-14
+time for matrix collection,F matrix:
+Elapsed time is 3.237697 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.861447 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008459 seconds.
+time for solving linear equation:
+Elapsed time is 4.216005 seconds.
+ maxdV: 1.6923
+ maxdH: 0.47046
+  Iter:12; normRes:6.5681e-07; normUpdate:6.5681e-07; normdV:4.641e-09
+max mJ0:1.9707e-12
+max mJ1:2.2131e-13
+max mJ2:9.4512e-14
+time for matrix collection,F matrix:
+Elapsed time is 3.235795 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.800004 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009047 seconds.
+time for solving linear equation:
+Elapsed time is 4.063630 seconds.
+ maxdV: 1.7513
+ maxdH: 0.65182
+  Iter:13; normRes:9.5241e-07; normUpdate:9.5241e-07; normdV:6.0086e-09
+max mJ0:2.936e-12
+max mJ1:3.2528e-13
+max mJ2:1.3891e-13
+time for matrix collection,F matrix:
+Elapsed time is 3.238227 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.823803 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008376 seconds.
+time for solving linear equation:
+Elapsed time is 4.242556 seconds.
+ maxdV: 1.7367
+ maxdH: 0.88177
+  Iter:14; normRes:1.3819e-06; normUpdate:1.3819e-06; normdV:7.7894e-09
+max mJ0:4.1492e-12
+max mJ1:4.6393e-13
+max mJ2:1.9813e-13
+time for matrix collection,F matrix:
+Elapsed time is 3.226654 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.784678 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008176 seconds.
+time for solving linear equation:
+Elapsed time is 4.237310 seconds.
+ maxdV: 1.762
+ maxdH: 1.1146
+  Iter:15; normRes:2.0059e-06; normUpdate:2.0059e-06; normdV:1.0133e-08
+max mJ0:6.0996e-12
+max mJ1:6.7761e-13
+max mJ2:2.8938e-13
+time for matrix collection,F matrix:
+Elapsed time is 3.233213 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.825387 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009056 seconds.
+time for solving linear equation:
+Elapsed time is 4.086915 seconds.
+ maxdV: 1.7483
+ maxdH: 1.3375
+  Iter:16; normRes:2.9126e-06; normUpdate:2.9126e-06; normdV:1.3253e-08
+max mJ0:8.7266e-12
+max mJ1:9.7372e-13
+max mJ2:4.1584e-13
+time for matrix collection,F matrix:
+Elapsed time is 3.233814 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.815951 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008928 seconds.
+time for solving linear equation:
+Elapsed time is 4.081321 seconds.
+ maxdV: 1.7559
+ maxdH: 1.4835
+  Iter:17; normRes:4.2301e-06; normUpdate:4.2301e-06; normdV:1.7452e-08
+max mJ0:1.2739e-11
+max mJ1:1.4171e-12
+max mJ2:6.0519e-13
+time for matrix collection,F matrix:
+Elapsed time is 3.223902 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.781806 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008413 seconds.
+time for solving linear equation:
+Elapsed time is 4.140490 seconds.
+ maxdV: 1.7442
+ maxdH: 1.588
+  Iter:18; normRes:6.1445e-06; normUpdate:6.1445e-06; normdV:2.3168e-08
+max mJ0:1.836e-11
+max mJ1:2.0466e-12
+max mJ2:8.74e-13
+time for matrix collection,F matrix:
+Elapsed time is 3.228737 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.765025 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009855 seconds.
+time for solving linear equation:
+Elapsed time is 4.301213 seconds.
+ maxdV: 1.743
+ maxdH: 1.6334
+  Iter:19; normRes:8.9263e-06; normUpdate:8.9263e-06; normdV:3.1036e-08
+max mJ0:2.6706e-11
+max mJ1:2.9726e-12
+max mJ2:1.2695e-12
+time for matrix collection,F matrix:
+Elapsed time is 3.226626 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.713375 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008520 seconds.
+time for solving linear equation:
+Elapsed time is 4.347387 seconds.
+ maxdV: 1.7333
+ maxdH: 1.6652
+  Iter:20; normRes:1.2968e-05; normUpdate:1.2968e-05; normdV:4.1977e-08
+max mJ0:3.8653e-11
+max mJ1:4.3066e-12
+max mJ2:1.8392e-12
+time for matrix collection,F matrix:
+Elapsed time is 3.265816 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.675517 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009574 seconds.
+time for solving linear equation:
+Elapsed time is 4.329135 seconds.
+ maxdV: 1.7286
+ maxdH: 1.6747
+  Iter:21; normRes:1.8842e-05; normUpdate:1.8842e-05; normdV:5.733e-08
+max mJ0:5.6143e-11
+max mJ1:6.2509e-12
+max mJ2:2.6695e-12
+time for matrix collection,F matrix:
+Elapsed time is 3.262035 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.734689 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009290 seconds.
+time for solving linear equation:
+Elapsed time is 4.190689 seconds.
+ maxdV: 1.7209
+ maxdH: 1.6835
+  Iter:22; normRes:2.7377e-05; normUpdate:2.7377e-05; normdV:7.9046e-08
+max mJ0:8.1432e-11
+max mJ1:9.071e-12
+max mJ2:3.8739e-12
+time for matrix collection,F matrix:
+Elapsed time is 3.218379 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.743030 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009104 seconds.
+time for solving linear equation:
+Elapsed time is 3.883037 seconds.
+ maxdV: 1.7157
+ maxdH: 1.6848
+  Iter:23; normRes:3.9779e-05; normUpdate:3.9779e-05; normdV:1.0996e-07
+max mJ0:1.1827e-10
+max mJ1:1.317e-11
+max mJ2:5.6243e-12
+time for matrix collection,F matrix:
+Elapsed time is 3.224163 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.763390 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009262 seconds.
+time for solving linear equation:
+Elapsed time is 3.883102 seconds.
+ maxdV: 1.71
+ maxdH: 1.6874
+  Iter:24; normRes:5.7801e-05; normUpdate:5.7801e-05; normdV:1.5418e-07
+max mJ0:1.7166e-10
+max mJ1:1.912e-11
+max mJ2:8.1652e-12
+time for matrix collection,F matrix:
+Elapsed time is 3.229862 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.732241 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008760 seconds.
+time for solving linear equation:
+Elapsed time is 3.897221 seconds.
+ maxdV: 1.7058
+ maxdH: 1.6872
+  Iter:25; normRes:8.3989e-05; normUpdate:8.3989e-05; normdV:2.177e-07
+max mJ0:2.4932e-10
+max mJ1:2.7765e-11
+max mJ2:1.1857e-11
+time for matrix collection,F matrix:
+Elapsed time is 3.253777 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.745015 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008850 seconds.
+time for solving linear equation:
+Elapsed time is 3.964225 seconds.
+ maxdV: 1.7019
+ maxdH: 1.6881
+  Iter:26; normRes:0.00012204; normUpdate:0.00012204; normdV:3.0921e-07
+max mJ0:3.6202e-10
+max mJ1:4.032e-11
+max mJ2:1.7219e-11
+time for matrix collection,F matrix:
+Elapsed time is 3.282825 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.789086 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008846 seconds.
+time for solving linear equation:
+Elapsed time is 4.133663 seconds.
+ maxdV: 1.699
+ maxdH: 1.6879
+  Iter:27; normRes:0.00017734; normUpdate:0.00017734; normdV:4.4134e-07
+max mJ0:5.2584e-10
+max mJ1:5.8562e-11
+max mJ2:2.5009e-11
+time for matrix collection,F matrix:
+Elapsed time is 3.255256 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.811836 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008968 seconds.
+time for solving linear equation:
+Elapsed time is 4.246782 seconds.
+ maxdV: 1.6965
+ maxdH: 1.6882
+  Iter:28; normRes:0.00025769; normUpdate:0.00025769; normdV:6.3243e-07
+max mJ0:7.6373e-10
+max mJ1:8.506e-11
+max mJ2:3.6326e-11
+time for matrix collection,F matrix:
+Elapsed time is 3.232009 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.771081 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008321 seconds.
+time for solving linear equation:
+Elapsed time is 4.000613 seconds.
+ maxdV: 1.6946
+ maxdH: 1.6881
+  Iter:29; normRes:0.00037446; normUpdate:0.00037446; normdV:9.0913e-07
+max mJ0:1.1095e-09
+max mJ1:1.2356e-10
+max mJ2:5.2767e-11
+time for matrix collection,F matrix:
+Elapsed time is 3.230288 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.768905 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009507 seconds.
+time for solving linear equation:
+Elapsed time is 3.975819 seconds.
+ maxdV: 1.6931
+ maxdH: 1.6882
+  Iter:30; normRes:0.00054413; normUpdate:0.00054413; normdV:1.3102e-06
+max mJ0:1.6116e-09
+max mJ1:1.7949e-10
+max mJ2:7.6653e-11
+time for matrix collection,F matrix:
+Elapsed time is 3.235805 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.795026 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008469 seconds.
+time for solving linear equation:
+Elapsed time is 4.202602 seconds.
+ maxdV: 1.6919
+ maxdH: 1.6881
+  Iter:31; normRes:0.00079068; normUpdate:0.00079068; normdV:1.8918e-06
+max mJ0:2.3413e-09
+max mJ1:2.6076e-10
+max mJ2:1.1136e-10
+time for matrix collection,F matrix:
+Elapsed time is 3.242170 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.800958 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008780 seconds.
+time for solving linear equation:
+Elapsed time is 4.250423 seconds.
+ maxdV: 1.691
+ maxdH: 1.6882
+  Iter:32; normRes:0.001149; normUpdate:0.001149; normdV:2.7357e-06
+max mJ0:3.4014e-09
+max mJ1:3.7883e-10
+max mJ2:1.6178e-10
+time for matrix collection,F matrix:
+Elapsed time is 3.236330 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.819977 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008335 seconds.
+time for solving linear equation:
+Elapsed time is 4.243107 seconds.
+ maxdV: 1.6903
+ maxdH: 1.6882
+  Iter:33; normRes:0.0016696; normUpdate:0.0016696; normdV:3.9607e-06
+max mJ0:4.9419e-09
+max mJ1:5.5038e-10
+max mJ2:2.3504e-10
+time for matrix collection,F matrix:
+Elapsed time is 3.238306 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.835246 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008998 seconds.
+time for solving linear equation:
+Elapsed time is 4.232670 seconds.
+ maxdV: 1.6898
+ maxdH: 1.6882
+  Iter:34; normRes:0.0024261; normUpdate:0.0024261; normdV:5.7393e-06
+max mJ0:7.1799e-09
+max mJ1:7.9964e-10
+max mJ2:3.4149e-10
+time for matrix collection,F matrix:
+Elapsed time is 3.234655 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.746542 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009024 seconds.
+time for solving linear equation:
+Elapsed time is 3.962134 seconds.
+ maxdV: 1.6894
+ maxdH: 1.6882
+  Iter:35; normRes:0.0035254; normUpdate:0.0035254; normdV:8.3222e-06
+max mJ0:1.0432e-08
+max mJ1:1.1618e-09
+max mJ2:4.9617e-10
+time for matrix collection,F matrix:
+Elapsed time is 3.223289 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.793822 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008370 seconds.
+time for solving linear equation:
+Elapsed time is 3.961572 seconds.
+ maxdV: 1.6891
+ maxdH: 1.6882
+  Iter:36; normRes:0.0051229; normUpdate:0.0051229; normdV:1.2074e-05
+max mJ0:1.5157e-08
+max mJ1:1.6881e-09
+max mJ2:7.2091e-10
+time for matrix collection,F matrix:
+Elapsed time is 3.233579 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.799430 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008406 seconds.
+time for solving linear equation:
+Elapsed time is 3.967372 seconds.
+ maxdV: 1.6889
+ maxdH: 1.6882
+  Iter:37; normRes:0.0074441; normUpdate:0.0074441; normdV:1.7523e-05
+max mJ0:2.2023e-08
+max mJ1:2.4528e-09
+max mJ2:1.0475e-09
+time for matrix collection,F matrix:
+Elapsed time is 3.221927 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.763753 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009326 seconds.
+time for solving linear equation:
+Elapsed time is 3.957141 seconds.
+ maxdV: 1.6887
+ maxdH: 1.6882
+  Iter:38; normRes:0.010817; normUpdate:0.010817; normdV:2.544e-05
+max mJ0:3.2e-08
+max mJ1:3.5639e-09
+max mJ2:1.522e-09
+time for matrix collection,F matrix:
+Elapsed time is 3.217849 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.742091 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008990 seconds.
+time for solving linear equation:
+Elapsed time is 4.001760 seconds.
+ maxdV: 1.6886
+ maxdH: 1.6882
+  Iter:39; normRes:0.015719; normUpdate:0.015719; normdV:3.6942e-05
+max mJ0:4.6497e-08
+max mJ1:5.1784e-09
+max mJ2:2.2115e-09
+time for matrix collection,F matrix:
+Elapsed time is 3.251768 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.720973 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008404 seconds.
+time for solving linear equation:
+Elapsed time is 4.236134 seconds.
+ maxdV: 1.6885
+ maxdH: 1.6882
+  Iter:40; normRes:0.022841; normUpdate:0.022841; normdV:5.3654e-05
+max mJ0:6.7561e-08
+max mJ1:7.5244e-09
+max mJ2:3.2134e-09
+time for matrix collection,F matrix:
+Elapsed time is 3.259801 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.726149 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008183 seconds.
+time for solving linear equation:
+Elapsed time is 4.292312 seconds.
+ maxdV: 1.6884
+ maxdH: 1.6882
+  Iter:41; normRes:0.033191; normUpdate:0.033191; normdV:7.7935e-05
+max mJ0:9.817e-08
+max mJ1:1.0933e-08
+max mJ2:4.6692e-09
+time for matrix collection,F matrix:
+Elapsed time is 3.277640 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.709891 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009201 seconds.
+time for solving linear equation:
+Elapsed time is 4.193008 seconds.
+ maxdV: 1.6883
+ maxdH: 1.6882
+  Iter:42; normRes:0.048231; normUpdate:0.048231; normdV:0.00011322
+max mJ0:1.4265e-07
+max mJ1:1.5887e-08
+max mJ2:6.7846e-09
+time for matrix collection,F matrix:
+Elapsed time is 3.232676 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.732838 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008895 seconds.
+time for solving linear equation:
+Elapsed time is 4.264697 seconds.
+ maxdV: 1.6883
+ maxdH: 1.6882
+  Iter:43; normRes:0.070086; normUpdate:0.070086; normdV:0.00016448
+max mJ0:2.0728e-07
+max mJ1:2.3085e-08
+max mJ2:9.8586e-09
+time for matrix collection,F matrix:
+Elapsed time is 3.213608 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.725906 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009369 seconds.
+time for solving linear equation:
+Elapsed time is 4.211132 seconds.
+ maxdV: 1.6883
+ maxdH: 1.6882
+  Iter:44; normRes:0.10184; normUpdate:0.10184; normdV:0.00023897
+max mJ0:3.0119e-07
+max mJ1:3.3544e-08
+max mJ2:1.4325e-08
+time for matrix collection,F matrix:
+Elapsed time is 3.233730 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.702458 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009041 seconds.
+time for solving linear equation:
+Elapsed time is 4.408343 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:45; normRes:0.14799; normUpdate:0.14799; normdV:0.00034721
+max mJ0:4.3765e-07
+max mJ1:4.8742e-08
+max mJ2:2.0816e-08
+time for matrix collection,F matrix:
+Elapsed time is 3.302871 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.023323 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009903 seconds.
+time for solving linear equation:
+Elapsed time is 4.227079 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:46; normRes:0.21505; normUpdate:0.21505; normdV:0.00050448
+max mJ0:6.3595e-07
+max mJ1:7.0827e-08
+max mJ2:3.0247e-08
+time for matrix collection,F matrix:
+Elapsed time is 3.285809 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.053436 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008926 seconds.
+time for solving linear equation:
+Elapsed time is 4.011260 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:47; normRes:0.3125; normUpdate:0.3125; normdV:0.00073303
+max mJ0:9.241e-07
+max mJ1:1.0292e-07
+max mJ2:4.3952e-08
+time for matrix collection,F matrix:
+Elapsed time is 3.260394 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.050609 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008380 seconds.
+time for solving linear equation:
+Elapsed time is 4.016321 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:48; normRes:0.4541; normUpdate:0.4541; normdV:0.0010651
+max mJ0:1.3428e-06
+max mJ1:1.4955e-07
+max mJ2:6.3867e-08
+time for matrix collection,F matrix:
+Elapsed time is 3.263554 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.068231 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009126 seconds.
+time for solving linear equation:
+Elapsed time is 4.013970 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:49; normRes:0.65986; normUpdate:0.65986; normdV:0.0015477
+max mJ0:1.9512e-06
+max mJ1:2.1731e-07
+max mJ2:9.2806e-08
+time for matrix collection,F matrix:
+Elapsed time is 3.260035 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.064041 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009145 seconds.
+time for solving linear equation:
+Elapsed time is 4.014370 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:50; normRes:0.95886; normUpdate:0.95886; normdV:0.0022489
+max mJ0:2.8354e-06
+max mJ1:3.1578e-07
+max mJ2:1.3486e-07
+reach maxNewtonIt and still not converge
+Elapsed time is 1108.953566 seconds.
+  End TD simulation relaxation2 per step.
+Time step:4
+  Start TD simulation relaxation2 per step:
+time for matrix collection,F matrix:
+Elapsed time is 3.251801 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.066444 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008146 seconds.
+time for solving linear equation:
+Elapsed time is 4.155035 seconds.
+ maxdV: 3.6806
+ maxdH: 4.9521
+  Iter:1; normRes:2.1387; normUpdate:2.1387; normdV:0.0038018
+max mJ0:1.3646e-05
+max mJ1:7.4859e-07
+max mJ2:3.1949e-07
+time for matrix collection,F matrix:
+Elapsed time is 3.263704 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.075065 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008679 seconds.
+time for solving linear equation:
+Elapsed time is 4.448591 seconds.
+ maxdV: 0.95635
+ maxdH: 1.1185
+  Iter:2; normRes:3.0312; normUpdate:3.0312; normdV:0.0065112
+max mJ0:1.91e-06
+max mJ1:9.8388e-07
+max mJ2:4.2038e-07
+time for matrix collection,F matrix:
+Elapsed time is 3.264815 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.022188 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009125 seconds.
+time for solving linear equation:
+Elapsed time is 4.497965 seconds.
+ maxdV: 3.1779
+ maxdH: 2.5571
+  Iter:3; normRes:4.3822; normUpdate:4.3822; normdV:0.0098586
+max mJ0:2.0439e-05
+max mJ1:1.5051e-06
+max mJ2:6.4256e-07
+time for matrix collection,F matrix:
+Elapsed time is 3.250799 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.039996 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008716 seconds.
+time for solving linear equation:
+Elapsed time is 4.003327 seconds.
+ maxdV: 1.2643
+ maxdH: 1.3622
+  Iter:4; normRes:6.3576; normUpdate:6.3576; normdV:0.014595
+max mJ0:1.1755e-05
+max mJ1:2.0803e-06
+max mJ2:8.8864e-07
+time for matrix collection,F matrix:
+Elapsed time is 3.253807 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.004532 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008538 seconds.
+time for solving linear equation:
+Elapsed time is 3.963452 seconds.
+ maxdV: 2.1648
+ maxdH: 2.016
+  Iter:5; normRes:9.2326; normUpdate:9.2326; normdV:0.021413
+max mJ0:3.4752e-05
+max mJ1:3.0992e-06
+max mJ2:1.3233e-06
+time for matrix collection,F matrix:
+Elapsed time is 3.263003 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.002065 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009906 seconds.
+time for solving linear equation:
+Elapsed time is 3.972384 seconds.
+ maxdV: 1.4615
+ maxdH: 1.5168
+  Iter:6; normRes:13.4124; normUpdate:13.4124; normdV:0.031269
+max mJ0:3.2576e-05
+max mJ1:4.3992e-06
+max mJ2:1.8789e-06
+time for matrix collection,F matrix:
+Elapsed time is 3.303319 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.960625 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008534 seconds.
+time for solving linear equation:
+Elapsed time is 3.976148 seconds.
+ maxdV: 1.8847
+ maxdH: 1.8295
+  Iter:7; normRes:19.4873; normUpdate:19.4873; normdV:0.045555
+max mJ0:6.5033e-05
+max mJ1:6.4716e-06
+max mJ2:2.7636e-06
+time for matrix collection,F matrix:
+Elapsed time is 3.301924 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.959930 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009409 seconds.
+time for solving linear equation:
+Elapsed time is 4.086411 seconds.
+ maxdV: 1.5736
+ maxdH: 1.6026
+  Iter:8; normRes:28.3156; normUpdate:28.3156; normdV:0.066288
+max mJ0:7.6605e-05
+max mJ1:9.3027e-06
+max mJ2:3.973e-06
+time for matrix collection,F matrix:
+Elapsed time is 3.268027 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.011670 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009078 seconds.
+time for solving linear equation:
+Elapsed time is 4.266471 seconds.
+ maxdV: 1.776
+ maxdH: 1.7524
+  Iter:9; normRes:41.1444; normUpdate:41.1444; normdV:0.096395
+max mJ0:0.00012904
+max mJ1:1.36e-05
+max mJ2:5.8077e-06
+time for matrix collection,F matrix:
+Elapsed time is 3.253874 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.004578 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009337 seconds.
+time for solving linear equation:
+Elapsed time is 4.205697 seconds.
+ maxdV: 1.6321
+ maxdH: 1.6466
+  Iter:10; normRes:59.7867; normUpdate:59.7867; normdV:0.14013
+max mJ0:0.00016963
+max mJ1:1.9663e-05
+max mJ2:8.3976e-06
+time for matrix collection,F matrix:
+Elapsed time is 3.289847 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.043079 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009088 seconds.
+time for solving linear equation:
+Elapsed time is 4.247587 seconds.
+ maxdV: 1.7287
+ maxdH: 1.718
+  Iter:11; normRes:86.8764; normUpdate:86.8764; normdV:0.20368
+max mJ0:0.00026423
+max mJ1:2.8657e-05
+max mJ2:1.2238e-05
+time for matrix collection,F matrix:
+Elapsed time is 3.289791 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.043741 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008869 seconds.
+time for solving linear equation:
+Elapsed time is 4.254247 seconds.
+ maxdV: 1.6612
+ maxdH: 1.6682
+  Iter:12; normRes:126.2412; normUpdate:126.2412; normdV:0.296
+max mJ0:0.0003661
+max mJ1:4.1545e-05
+max mJ2:1.7742e-05
+time for matrix collection,F matrix:
+Elapsed time is 3.267350 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.036408 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008267 seconds.
+time for solving linear equation:
+Elapsed time is 4.270438 seconds.
+ maxdV: 1.7072
+ maxdH: 1.7022
+  Iter:13; normRes:183.4434; normUpdate:183.4434; normdV:0.43016
+max mJ0:0.00054974
+max mJ1:6.0455e-05
+max mJ2:2.5818e-05
+time for matrix collection,F matrix:
+Elapsed time is 3.253066 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.044674 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009161 seconds.
+time for solving linear equation:
+Elapsed time is 4.284397 seconds.
+ maxdV: 1.6753
+ maxdH: 1.6787
+  Iter:14; normRes:266.5655; normUpdate:266.5655; normdV:0.62511
+max mJ0:0.00078101
+max mJ1:8.7753e-05
+max mJ2:3.7476e-05
+time for matrix collection,F matrix:
+Elapsed time is 3.259924 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.056401 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008558 seconds.
+time for solving linear equation:
+Elapsed time is 4.200045 seconds.
+ maxdV: 1.6971
+ maxdH: 1.6948
+  Iter:15; normRes:387.3524; normUpdate:387.3524; normdV:0.90838
+max mJ0:0.0011527
+max mJ1:0.0001276
+max mJ2:5.4493e-05
+time for matrix collection,F matrix:
+Elapsed time is 3.258828 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.064695 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009078 seconds.
+time for solving linear equation:
+Elapsed time is 4.241808 seconds.
+ maxdV: 1.6821
+ maxdH: 1.6837
+  Iter:16; normRes:562.8709; normUpdate:562.8709; normdV:1.32
+max mJ0:0.0016571
+max mJ1:0.00018533
+max mJ2:7.9146e-05
+time for matrix collection,F matrix:
+Elapsed time is 3.235336 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.822373 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008377 seconds.
+time for solving linear equation:
+Elapsed time is 3.991071 seconds.
+ maxdV: 1.6924
+ maxdH: 1.6913
+  Iter:17; normRes:817.9214; normUpdate:817.9214; normdV:1.9182
+max mJ0:0.0024258
+max mJ1:0.00026939
+max mJ2:0.00011504
+time for matrix collection,F matrix:
+Elapsed time is 3.247282 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.844263 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009010 seconds.
+time for solving linear equation:
+Elapsed time is 4.127554 seconds.
+ maxdV: 1.6853
+ maxdH: 1.686
+  Iter:18; normRes:1188.5417; normUpdate:1188.5417; normdV:2.7873
+max mJ0:0.0035071
+max mJ1:0.00039136
+max mJ2:0.00016714
+time for matrix collection,F matrix:
+Elapsed time is 3.283451 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.082819 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008486 seconds.
+time for solving linear equation:
+Elapsed time is 4.011233 seconds.
+ maxdV: 1.6902
+ maxdH: 1.6896
+  Iter:19; normRes:1727.0996; normUpdate:1727.0996; normdV:4.0504
+max mJ0:0.005114
+max mJ1:0.00056879
+max mJ2:0.00024291
+time for matrix collection,F matrix:
+Elapsed time is 3.252270 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.008410 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009162 seconds.
+time for solving linear equation:
+Elapsed time is 4.014889 seconds.
+ maxdV: 1.6868
+ maxdH: 1.6872
+  Iter:20; normRes:2509.6918; normUpdate:2509.6918; normdV:5.8857
+max mJ0:0.0074135
+max mJ1:0.00082643
+max mJ2:0.00035293
+time for matrix collection,F matrix:
+Elapsed time is 3.261610 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.988782 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008501 seconds.
+time for solving linear equation:
+Elapsed time is 3.978159 seconds.
+ maxdV: 1.6891
+ maxdH: 1.6889
+  Iter:21; normRes:3646.8963; normUpdate:3646.8963; normdV:8.5526
+max mJ0:0.010791
+max mJ1:0.001201
+max mJ2:0.00051289
+time for matrix collection,F matrix:
+Elapsed time is 3.278058 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.991793 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009072 seconds.
+time for solving linear equation:
+Elapsed time is 4.033857 seconds.
+ maxdV: 1.6875
+ maxdH: 1.6877
+  Iter:22; normRes:5299.3971; normUpdate:5299.3971; normdV:12.4281
+max mJ0:0.015662
+max mJ1:0.0017451
+max mJ2:0.00074526
+time for matrix collection,F matrix:
+Elapsed time is 3.279876 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.712559 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008258 seconds.
+time for solving linear equation:
+Elapsed time is 4.214035 seconds.
+ maxdV: 1.6886
+ maxdH: 1.6885
+  Iter:23; normRes:7700.6877; normUpdate:7700.6877; normdV:18.0596
+max mJ0:0.022777
+max mJ1:0.0025359
+max mJ2:0.001083
+time for matrix collection,F matrix:
+Elapsed time is 3.242270 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.749850 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009402 seconds.
+time for solving linear equation:
+Elapsed time is 3.969248 seconds.
+ maxdV: 1.6879
+ maxdH: 1.6879
+  Iter:24; normRes:11190.0641; normUpdate:11190.0641; normdV:26.2428
+max mJ0:0.03308
+max mJ1:0.0036849
+max mJ2:0.0015737
+time for matrix collection,F matrix:
+Elapsed time is 3.233666 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.767746 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008892 seconds.
+time for solving linear equation:
+Elapsed time is 4.202386 seconds.
+ maxdV: 1.6884
+ maxdH: 1.6883
+  Iter:25; normRes:16260.5652; normUpdate:16260.5652; normdV:38.1341
+max mJ0:0.048087
+max mJ1:0.0053547
+max mJ2:0.0022868
+time for matrix collection,F matrix:
+Elapsed time is 3.220142 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.761703 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009465 seconds.
+time for solving linear equation:
+Elapsed time is 4.202729 seconds.
+ maxdV: 1.688
+ maxdH: 1.6881
+  Iter:26; normRes:23628.6387; normUpdate:23628.6387; normdV:55.4136
+max mJ0:0.069859
+max mJ1:0.007781
+max mJ2:0.003323
+time for matrix collection,F matrix:
+Elapsed time is 3.251576 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.760864 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008786 seconds.
+time for solving linear equation:
+Elapsed time is 4.198246 seconds.
+ maxdV: 1.6883
+ maxdH: 1.6882
+  Iter:27; normRes:34335.373; normUpdate:34335.373; normdV:80.5229
+max mJ0:0.10153
+max mJ1:0.011307
+max mJ2:0.0048287
+time for matrix collection,F matrix:
+Elapsed time is 3.272468 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.770891 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009540 seconds.
+time for solving linear equation:
+Elapsed time is 4.185318 seconds.
+ maxdV: 1.6881
+ maxdH: 1.6881
+  Iter:28; normRes:49893.5996; normUpdate:49893.5996; normdV:117.0099
+max mJ0:0.14752
+max mJ1:0.01643
+max mJ2:0.0070167
+time for matrix collection,F matrix:
+Elapsed time is 3.243380 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.795760 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008338 seconds.
+time for solving linear equation:
+Elapsed time is 4.174183 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:29; normRes:72501.6527; normUpdate:72501.6527; normdV:170.03
+max mJ0:0.21438
+max mJ1:0.023875
+max mJ2:0.010196
+time for matrix collection,F matrix:
+Elapsed time is 3.233944 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.781068 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008898 seconds.
+time for solving linear equation:
+Elapsed time is 4.170497 seconds.
+ maxdV: 1.6881
+ maxdH: 1.6881
+  Iter:30; normRes:105353.9871; normUpdate:105353.9871; normdV:247.0749
+max mJ0:0.31151
+max mJ1:0.034694
+max mJ2:0.014816
+time for matrix collection,F matrix:
+Elapsed time is 3.222367 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.785022 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008604 seconds.
+time for solving linear equation:
+Elapsed time is 4.190430 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:31; normRes:153092.5459; normUpdate:153092.5459; normdV:359.0307
+max mJ0:0.45267
+max mJ1:0.050414
+max mJ2:0.02153
+time for matrix collection,F matrix:
+Elapsed time is 3.227746 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.811193 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009143 seconds.
+time for solving linear equation:
+Elapsed time is 4.175021 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:32; normRes:222462.6545; normUpdate:222462.6545; normdV:521.7167
+max mJ0:0.65778
+max mJ1:0.073258
+max mJ2:0.031286
+time for matrix collection,F matrix:
+Elapsed time is 3.233298 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.812028 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008413 seconds.
+time for solving linear equation:
+Elapsed time is 4.254129 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:33; normRes:323266.1157; normUpdate:323266.1157; normdV:758.1197
+max mJ0:0.95585
+max mJ1:0.10645
+max mJ2:0.045462
+time for matrix collection,F matrix:
+Elapsed time is 3.228922 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.809470 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009175 seconds.
+time for solving linear equation:
+Elapsed time is 4.218405 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:34; normRes:469746.1773; normUpdate:469746.1773; normdV:1101.6429
+max mJ0:1.3889
+max mJ1:0.15469
+max mJ2:0.066062
+time for matrix collection,F matrix:
+Elapsed time is 3.232806 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.808082 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008494 seconds.
+time for solving linear equation:
+Elapsed time is 4.195207 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:35; normRes:682600.0636; normUpdate:682600.0636; normdV:1600.8252
+max mJ0:2.0183
+max mJ1:0.22478
+max mJ2:0.095996
+time for matrix collection,F matrix:
+Elapsed time is 3.232095 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.751440 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009073 seconds.
+time for solving linear equation:
+Elapsed time is 4.355016 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:36; normRes:991903.435; normUpdate:991903.435; normdV:2326.1996
+max mJ0:2.9329
+max mJ1:0.32664
+max mJ2:0.13949
+time for matrix collection,F matrix:
+Elapsed time is 3.268550 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.090669 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009099 seconds.
+time for solving linear equation:
+Elapsed time is 4.332123 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:37; normRes:1441359.9952; normUpdate:1441359.9952; normdV:3380.2596
+max mJ0:4.2618
+max mJ1:0.47465
+max mJ2:0.2027
+time for matrix collection,F matrix:
+Elapsed time is 3.253957 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.074575 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008554 seconds.
+time for solving linear equation:
+Elapsed time is 4.383807 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:38; normRes:2094476.7026; normUpdate:2094476.7026; normdV:4911.9408
+max mJ0:6.193
+max mJ1:0.68972
+max mJ2:0.29455
+time for matrix collection,F matrix:
+Elapsed time is 3.275944 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.022023 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009106 seconds.
+time for solving linear equation:
+Elapsed time is 4.363498 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:39; normRes:3043537.1262; normUpdate:3043537.1262; normdV:7137.6655
+max mJ0:8.9992
+max mJ1:1.0023
+max mJ2:0.42802
+time for matrix collection,F matrix:
+Elapsed time is 3.321040 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.970174 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008561 seconds.
+time for solving linear equation:
+Elapsed time is 4.257002 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:40; normRes:4422640.8569; normUpdate:4422640.8569; normdV:10371.9225
+max mJ0:13.0769
+max mJ1:1.4564
+max mJ2:0.62197
+time for matrix collection,F matrix:
+Elapsed time is 3.279476 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.014188 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009440 seconds.
+time for solving linear equation:
+Elapsed time is 3.900369 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:41; normRes:6426651.4053; normUpdate:6426651.4053; normdV:15071.7032
+max mJ0:19.0024
+max mJ1:2.1163
+max mJ2:0.9038
+time for matrix collection,F matrix:
+Elapsed time is 3.245815 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.059199 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009195 seconds.
+time for solving linear equation:
+Elapsed time is 3.899161 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:42; normRes:9338729.8724; normUpdate:9338729.8724; normdV:21901.0735
+max mJ0:27.6129
+max mJ1:3.0753
+max mJ2:1.3133
+time for matrix collection,F matrix:
+Elapsed time is 3.269096 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.033243 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009965 seconds.
+time for solving linear equation:
+Elapsed time is 3.895216 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:43; normRes:13570344.8235; normUpdate:13570344.8235; normdV:31825.0044
+max mJ0:40.125
+max mJ1:4.4688
+max mJ2:1.9084
+time for matrix collection,F matrix:
+Elapsed time is 3.308193 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.059896 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009575 seconds.
+time for solving linear equation:
+Elapsed time is 3.900963 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:44; normRes:19719411.6485; normUpdate:19719411.6485; normdV:46245.7197
+max mJ0:58.3067
+max mJ1:6.4937
+max mJ2:2.7732
+time for matrix collection,F matrix:
+Elapsed time is 3.316192 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.072877 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008530 seconds.
+time for solving linear equation:
+Elapsed time is 3.896119 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:45; normRes:28654776.3391; normUpdate:28654776.3391; normdV:67200.8261
+max mJ0:84.727
+max mJ1:9.4361
+max mJ2:4.0298
+time for matrix collection,F matrix:
+Elapsed time is 3.290569 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.057817 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008861 seconds.
+time for solving linear equation:
+Elapsed time is 3.973934 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:46; normRes:41638981.0043; normUpdate:41638981.0043; normdV:97651.2219
+max mJ0:123.1189
+max mJ1:13.7119
+max mJ2:5.8558
+time for matrix collection,F matrix:
+Elapsed time is 3.273986 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.073244 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008726 seconds.
+time for solving linear equation:
+Elapsed time is 3.961683 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:47; normRes:60506657.5483; normUpdate:60506657.5483; normdV:141899.4629
+max mJ0:178.9072
+max mJ1:19.9251
+max mJ2:8.5092
+time for matrix collection,F matrix:
+Elapsed time is 3.269545 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.086442 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009204 seconds.
+time for solving linear equation:
+Elapsed time is 3.957389 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:48; normRes:87923756.0423; normUpdate:87923756.0423; normdV:206197.7023
+max mJ0:259.9745
+max mJ1:28.9537
+max mJ2:12.365
+time for matrix collection,F matrix:
+Elapsed time is 3.275744 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.986505 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008519 seconds.
+time for solving linear equation:
+Elapsed time is 4.075457 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:49; normRes:127764236.0332; normUpdate:127764236.0332; normdV:299631.1019
+max mJ0:377.7755
+max mJ1:42.0733
+max mJ2:17.9678
+time for matrix collection,F matrix:
+Elapsed time is 3.275905 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.106998 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008219 seconds.
+time for solving linear equation:
+Elapsed time is 4.487476 seconds.
+ maxdV: 1.6882
+ maxdH: 1.6882
+  Iter:50; normRes:185657446.2231; normUpdate:185657446.2231; normdV:435401.5405
+max mJ0:548.9552
+max mJ1:61.1378
+max mJ2:26.1095
+reach maxNewtonIt and still not converge
+Elapsed time is 1118.911229 seconds.
+  End TD simulation relaxation2 per step.
+Time step:5
+  Start TD simulation relaxation2 per step:
+time for matrix collection,F matrix:
+Elapsed time is 3.251254 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.065295 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008309 seconds.
+time for solving linear equation:
+Elapsed time is 4.412656 seconds.
+ maxdV: 3.6804
+ maxdH: 4.9521
+  Iter:1; normRes:414094850.3199; normUpdate:414094850.3199; normdV:736067.0996
+max mJ0:2641.9968
+max mJ1:144.937
+max mJ2:61.8574
+time for matrix collection,F matrix:
+Elapsed time is 3.265731 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.033801 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009097 seconds.
+time for solving linear equation:
+Elapsed time is 4.301685 seconds.
+ maxdV: 0.95635
+ maxdH: 1.1185
+  Iter:2; normRes:586914656.3707; normUpdate:586914656.3707; normdV:1260671.8522
+max mJ0:369.7809
+max mJ1:190.4885
+max mJ2:81.3895
+time for matrix collection,F matrix:
+Elapsed time is 3.253772 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.030914 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008633 seconds.
+time for solving linear equation:
+Elapsed time is 3.993101 seconds.
+ maxdV: 3.1779
+ maxdH: 2.5571
+  Iter:3; normRes:848500197.7646; normUpdate:848500197.7646; normdV:1908784.7888
+max mJ0:3957.1797
+max mJ1:291.4106
+max mJ2:124.4104
+time for matrix collection,F matrix:
+Elapsed time is 3.264353 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.022908 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008794 seconds.
+time for solving linear equation:
+Elapsed time is 4.013753 seconds.
+ maxdV: 1.2643
+ maxdH: 1.3622
+  Iter:4; normRes:1230973902.2168; normUpdate:1230973902.2168; normdV:2825903.3135
+max mJ0:2275.9787
+max mJ1:402.7842
+max mJ2:172.0524
+time for matrix collection,F matrix:
+Elapsed time is 3.291057 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.993226 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009075 seconds.
+time for solving linear equation:
+Elapsed time is 4.231285 seconds.
+ maxdV: 2.1647
+ maxdH: 2.016
+  Iter:5; normRes:1787646925.2404; normUpdate:1787646925.2404; normdV:4145940.7134
+max mJ0:6728.4923
+max mJ1:600.0552
+max mJ2:256.2201
+time for matrix collection,F matrix:
+Elapsed time is 3.290592 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.705973 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009030 seconds.
+time for solving linear equation:
+Elapsed time is 4.330981 seconds.
+ maxdV: 1.4615
+ maxdH: 1.5168
+  Iter:6; normRes:2596966093.9891; normUpdate:2596966093.9891; normdV:6054380.973
+max mJ0:6307.2439
+max mJ1:851.7513
+max mJ2:363.7883
+time for matrix collection,F matrix:
+Elapsed time is 3.239834 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.770059 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008968 seconds.
+time for solving linear equation:
+Elapsed time is 4.256759 seconds.
+ maxdV: 1.8847
+ maxdH: 1.8295
+  Iter:7; normRes:3773214685.8496; normUpdate:3773214685.8496; normdV:8820440.3124
+max mJ0:12591.5238
+max mJ1:1253.0284
+max mJ2:535.0789
+time for matrix collection,F matrix:
+Elapsed time is 3.223819 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.774154 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009059 seconds.
+time for solving linear equation:
+Elapsed time is 3.895829 seconds.
+ maxdV: 1.5736
+ maxdH: 1.6026
+  Iter:8; normRes:5482568473.2937; normUpdate:5482568473.2937; normdV:12834735.4507
+max mJ0:14832.0382
+max mJ1:1801.1684
+max mJ2:769.2464
+time for matrix collection,F matrix:
+Elapsed time is 3.240549 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.748877 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009438 seconds.
+time for solving linear equation:
+Elapsed time is 3.882193 seconds.
+ maxdV: 1.776
+ maxdH: 1.7524
+  Iter:9; normRes:7966547017.567; normUpdate:7966547017.567; normdV:18664301.9155
+max mJ0:24983.789
+max mJ1:2633.1706
+max mJ2:1124.4825
+time for matrix collection,F matrix:
+Elapsed time is 3.270051 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.243080 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008932 seconds.
+time for solving linear equation:
+Elapsed time is 4.258574 seconds.
+ maxdV: 1.6321
+ maxdH: 1.6466
+  Iter:10; normRes:11576129151.6413; normUpdate:11576129151.6413; normdV:27132667.8017
+max mJ0:32843.7048
+max mJ1:3807.1504
+max mJ2:1625.9212
+time for matrix collection,F matrix:
+Elapsed time is 3.303658 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.065431 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009416 seconds.
+time for solving linear equation:
+Elapsed time is 4.244537 seconds.
+ maxdV: 1.7287
+ maxdH: 1.718
+  Iter:11; normRes:16821341114.2799; normUpdate:16821341114.2799; normdV:39436213.8948
+max mJ0:51160.6328
+max mJ1:5548.5188
+max mJ2:2369.5111
+time for matrix collection,F matrix:
+Elapsed time is 3.277389 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.067720 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008271 seconds.
+time for solving linear equation:
+Elapsed time is 4.250313 seconds.
+ maxdV: 1.6612
+ maxdH: 1.6682
+  Iter:12; normRes:24443320082.0291; normUpdate:24443320082.0291; normdV:57313226.9173
+max mJ0:70885.1067
+max mJ1:8043.8694
+max mJ2:3435.2545
+time for matrix collection,F matrix:
+Elapsed time is 3.274436 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.073438 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009154 seconds.
+time for solving linear equation:
+Elapsed time is 4.257566 seconds.
+ maxdV: 1.7072
+ maxdH: 1.7022
+  Iter:13; normRes:35519034031.3814; normUpdate:35519034031.3814; normdV:83289521.2987
+max mJ0:106442.3141
+max mJ1:11705.3095
+max mJ2:4998.8303
+time for matrix collection,F matrix:
+Elapsed time is 3.271326 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.060595 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008431 seconds.
+time for solving linear equation:
+Elapsed time is 4.257767 seconds.
+ maxdV: 1.6753
+ maxdH: 1.6787
+  Iter:14; normRes:51613453984.1296; normUpdate:51613453984.1296; normdV:121035333.0785
+max mJ0:151218.7254
+max mJ1:16990.7261
+max mJ2:7256.0992
+time for matrix collection,F matrix:
+Elapsed time is 3.264295 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.071814 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008548 seconds.
+time for solving linear equation:
+Elapsed time is 4.374747 seconds.
+ maxdV: 1.6971
+ maxdH: 1.6948
+  Iter:15; normRes:75000679911.7954; normUpdate:75000679911.7954; normdV:175883914.7721
+max mJ0:223179.2357
+max mJ1:24706.448
+max mJ2:10551.0967
+time for matrix collection,F matrix:
+Elapsed time is 3.270042 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.077414 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008256 seconds.
+time for solving linear equation:
+Elapsed time is 4.262356 seconds.
+ maxdV: 1.6821
+ maxdH: 1.6837
+  Iter:16; normRes:108985264669.3271; normUpdate:108985264669.3271; normdV:255585108.2981
+max mJ0:320853.9545
+max mJ1:35883.2159
+max mJ2:15324.3263
+time for matrix collection,F matrix:
+Elapsed time is 3.266702 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.019151 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009595 seconds.
+time for solving linear equation:
+Elapsed time is 4.240803 seconds.
+ maxdV: 1.6924
+ maxdH: 1.6913
+  Iter:17; normRes:158369138087.1028; normUpdate:158369138087.1028; normdV:371400374.5383
+max mJ0:469682.1113
+max mJ1:52159.7848
+max mJ2:22275.3192
+time for matrix collection,F matrix:
+Elapsed time is 3.263574 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.038162 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008593 seconds.
+time for solving linear equation:
+Elapsed time is 4.382739 seconds.
+ maxdV: 1.6853
+ maxdH: 1.686
+  Iter:18; normRes:230130106271.4375; normUpdate:230130106271.4375; normdV:539694004.6437
+max mJ0:679054.968
+max mJ1:75776.5155
+max mJ2:32361.1596
+time for matrix collection,F matrix:
+Elapsed time is 3.264592 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.984850 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008684 seconds.
+time for solving linear equation:
+Elapsed time is 4.253033 seconds.
+ maxdV: 1.6902
+ maxdH: 1.6896
+  Iter:19; normRes:334407796161.9639; normUpdate:334407796161.9639; normdV:784245347.0639
+max mJ0:990194.3472
+max mJ1:110129.8904
+max mJ2:47032.0336
+time for matrix collection,F matrix:
+Elapsed time is 3.269624 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.975822 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008462 seconds.
+time for solving linear equation:
+Elapsed time is 4.264181 seconds.
+ maxdV: 1.6868
+ maxdH: 1.6872
+  Iter:20; normRes:485936356556.8801; normUpdate:485936356556.8801; normdV:1139608761.6436
+max mJ0:1435425.6138
+max mJ1:160014.4703
+max mJ2:68335.8221
+time for matrix collection,F matrix:
+Elapsed time is 3.307807 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 14.950023 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009085 seconds.
+time for solving linear equation:
+Elapsed time is 4.183154 seconds.
+ maxdV: 1.6891
+ maxdH: 1.6889
+  Iter:21; normRes:706126352262.4694; normUpdate:706126352262.4694; normdV:1655996052.9668
+max mJ0:2089296.6857
+max mJ1:232538.3069
+max mJ2:99307.7742
+time for matrix collection,F matrix:
+Elapsed time is 3.234772 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.012635 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.009177 seconds.
+time for solving linear equation:
+Elapsed time is 4.044534 seconds.
+ maxdV: 1.6875
+ maxdH: 1.6877
+  Iter:22; normRes:1026090017202.356; normUpdate:1026090017202.356; normdV:2406371257.1617
+max mJ0:3032559.9528
+max mJ1:337889.3401
+max mJ2:144299.0673
+time for matrix collection,F matrix:
+Elapsed time is 3.261251 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.017447 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008989 seconds.
+time for solving linear equation:
+Elapsed time is 3.856854 seconds.
+ maxdV: 1.6886
+ maxdH: 1.6885
+  Iter:23; normRes:1491037326312.448; normUpdate:1491037326312.448; normdV:3496760255.7367
+max mJ0:4410133.8231
+max mJ1:491012.872
+max mJ2:209691.9268
+time for matrix collection,F matrix:
+Elapsed time is 3.294199 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.005520 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008918 seconds.
+time for solving linear equation:
+Elapsed time is 3.767762 seconds.
+ maxdV: 1.6879
+ maxdH: 1.6879
+  Iter:24; normRes:2166664038918.886; normUpdate:2166664038918.886; normdV:5081231936.1035
+max mJ0:6405027.8804
+max mJ1:713485.3554
+max mJ2:304701.1086
+time for matrix collection,F matrix:
+Elapsed time is 3.309980 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.067073 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008860 seconds.
+time for solving linear equation:
+Elapsed time is 3.542613 seconds.
+ maxdV: 1.6884
+ maxdH: 1.6883
+  Iter:25; normRes:3148434326311.075; normUpdate:3148434326311.075; normdV:7383667694.9622
+max mJ0:9310752.9794
+max mJ1:1036801.021
+max mJ2:442776.2238
+time for matrix collection,F matrix:
+Elapsed time is 3.307698 seconds.
+time for matrix collection,G matrix:
+Elapsed time is 15.046405 seconds.
+time for matrix reconstruction:
+Elapsed time is 0.008743 seconds.
+time for solving linear equation:
+Elapsed time is 3.731952 seconds.
+ maxdV: 1.688
+ maxdH: 1.6881
+  Iter:26; normRes:4575069592895.4; normUpdate:4575069592895.4; normdV:10729395254.6385
+max mJ0:13526242.2372
+max mJ1:1506583.9984
+max mJ2:643401.8297

@@ -1,0 +1,11 @@
+[VT,nT,pT,AT,HT]=tdvara(nsteps);
+dembv=tdembv(VT);
+[currentT1,currddT1]=tdcurrent([1,6,6],1,nsteps);
+[currentT2,currddT2]=tdcurrent([kx,6,6],1,nsteps);
+[currentT3,currddT3]=tdcurrentf([1,6,6],1,nsteps);
+[currentT4,currddT4]=tdcurrentf([kx,6,6],1,nsteps);
+load 'QMwork/curr.data';
+load 'tdqmcurrd.dat';
+%ansv1=[currentT1,currentT3,currentT2];
+%ansv2=[VT(901,:)',currentT1,currentT2,currentT3];
+ansv3=[scl.Vt*VT(901,:)',scl.Vt*dembv,currentT1*scl.s_Curr*1e9,-currentT2*scl.s_Curr*1e9,currentT3*scl.s_Curr*1e9,-currentT4*scl.s_Curr*1e9,curr(1:nsteps,2),curr(1:nsteps,3),tdqmcurrd(1:nsteps,2)*0.75*0.75*1e-9,-tdqmcurrd(1:nsteps,3)*0.75*0.75*1e-9];

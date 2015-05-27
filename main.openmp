@@ -1,0 +1,63 @@
+#!/bin/bash
+
+#$ -S /bin/bash
+#$ -j y
+#$ -N Ag-sphere-xx
+#     
+# Use currend working directory
+#$ -cwd
+#   
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#  -pe : parallel environment 
+#  orte: openmp/openmpi environment
+#  number: number of threads
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#$ -pe orte 4
+#                                
+# Send mail when finishing, suspending or aborting job
+##$ -m sae
+##$ -M balloon@hku.hk 
+#                                              
+# shell scrip starts here
+#
+# OMP_SCHEDULE might be changed as desired
+export OMP_NUM_THREADS=$NSLOTS
+export MKL_NUM_THREADS=$NSLOTS
+#                                  
+export SGE_O_WORKDIR=$PWD
+#
+#========================================
+# change to TMPDIR
+#cd $TMPDIR 
+#echo $HOSTNAME
+#echo $TMPDIR
+#cp $SGE_O_WORKDIR/* $TMPDIR
+#cd $TMPDIR
+#========================================
+#gunzip *.gz
+echo "Job started on: " `date` "at $HOSTNAME"
+#-------------------------
+source ~/.bashrc
+# Matlab Job
+/share/apps/Matlab_2010/bin/matlab -nodesktop -nosplash -r main  >main.log
+#./ldstar_poteden_omp    <in.gd  >out.gd  2>out.err
+#./ldstar_poteden_omp    <in.td  >out.td  2>out.err
+#./ldstar_emqm_benchmark <in.gd  >out.gd  2>out.err
+#./ldstar_emqm_benchmark <in.pre >out.pre 2>out.err
+#./ldstar_emqm_benchmark <in.td  >out.td  2>out.err
+#./ldstar_nwblsteady <in.pre >out.pre 2>out.err
+#./ldstar_nwblsteady <in.td >out.td 2>out.err
+#
+#./pretddftb <in.td >out.pre
+#./tddftb_omp <in.td >out.td
+#gms $1 01 $NSLOT >& output 
+#-------------------------
+#rm TAPE.grid TAPE.info TAPE.matrix kinmat.data rhogrid.data
+#rm denmatrix.data dipole.data eigenvalues.data hamiloverl.data system.data 
+#gzip *.data *.arc TAPE.*
+#========================================
+#cp -rp * $SGE_O_WORKDIR
+#========================================
+
+echo "Job finished at: " `date`
+
