@@ -58,9 +58,9 @@ toc;
 tic;
 
 %%%%%%%%%% structure definition (in terms of node index) %%%%%%%%%%%%%%%%%%
-x_coor=[0:2.0:40];
-y_coor=[0:2.0:40];
-z_coor=[0:2.0:40];
+x_coor=[0:1.0:40];
+y_coor=[0:1.0:40];
+z_coor=[0:1.0:40];
 
 Origin=[20.0,20.0,20.0];
 [Xcen,Ycen,Zcen]=RealToNodes(Origin,x_coor,y_coor,z_coor);

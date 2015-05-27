@@ -273,8 +273,21 @@ Jacob =sparse2([JF;JG]);
 
 clear JF JG;
 
+%%%0 preconditioned
+%colind=colamd(Jacob);
+%aspas = sparse2(Jacob(:,colind));
+%[Lmatrix,Umatrix] = ilu(aspas,struct('type','ilutp','droptol',1e-4));	%most time consuming
 %%%1. normal lu decomposition
 [JacobLU.L, JacobLU.U, JacobLU.P, JacobLU.Q, JacobLU.R] = lu (Jacob) ;
+%%%%2. klu decomposition from suitsparse
+%[JacobLU,info] = klu (Jacob, struct ('ordering',0, 'scale', 1)) ;
+%%%%3. cholmod from suitsparse
+%[JacobLU,info] = ldlchol (Jacob);  
+%fprintf ('ldlchol info : %d \n',info); 
+%4 Factorize
+%JacobLU = factorize(Jacob);
+%%%5. normal lu decomposition without R or %%%6 LUsubs  
+%[JacobLU.L, JacobLU.U, JacobLU.P, JacobLU.Q] = lu (Jacob) ;
 
 %savefilename='JacobLU.mat';
 %save(savefilename, 'JacobLU','-v7.3');

@@ -33,7 +33,6 @@ linSolveTol = 1e-6;
 maxNewtonIt = 10;
 maxLinIt = 200;
 Eps = [epsilon_mt,epsilon_in];
-prefac=[1,0];
 
 NeqnNodes = length(eqnNodes);
 Nl = length(eqnLinks);
@@ -116,23 +115,44 @@ while itNr < maxNewtonIt && normUpdate > updateTol
             ajvolM_lk = volumeM(ajvol_lk);
 
             dtE1 = -(Y(n2)-Y(n1))/linkL(lk)-sign_n1(i)*Z(lk);		%? how about W
+            for j = 1:length(ajvol_lk)
+               switch ajvolM_lk(j)
+                 case 1
+                  J=  sign_n1(i)*0.0 + epsilon_mt*dtE1;
+                  dJv  = epsilon_mt/linkL(lk);
+                  dJH  =-sign_n1(i)*epsilon_mt;
+                 case 2
+                  J   = epsilon_in*dtE1;
+                  dJv  = epsilon_in/linkL(lk);
+                  dJH  =-sign_n1(i)*epsilon_in;
+                 otherwise
+                  error('undefined material');
+               end
+                rhs_F(n1) = rhs_F(n1)+ajvolS_lk(j)*J;
+
 		ntripletsJFv=ntripletsJFv+1;
 		rowJFv(ntripletsJFv)=n1;
 		colJFv(ntripletsJFv)=n1;
-		valJFv(ntripletsJFv)=valJFv(ntripletsJFv)+sum(Eps(ajvolM_lk).*ajvolS_lk)/linkL(lk);
+		valJFv(ntripletsJFv)=valJFv(ntripletsJFv)+ajvolS_lk(j)*dJv;
 
-		ntripletsJFv=ntripletsJFv+1;
-		rowJFv(ntripletsJFv)=n1;
-		colJFv(ntripletsJFv)=n2;
-		valJFv(ntripletsJFv)=valJFv(ntripletsJFv)-(isBndNodes(n2))*sum(Eps(ajvolM_lk).*ajvolS_lk)/linkL(lk);
 
-		ntripletsJFH=ntripletsJFH+1;
-		rowJFH(ntripletsJFH)=n1;
-		colJFH(ntripletsJFH)=lk;
-		valJFH(ntripletsJFH)=valJFH(ntripletsJFH)+(-sign_n1(i))*sum(Eps(ajvolM_lk).*ajvolS_lk);
-                
-		rhs_F(n1) = rhs_F(n1)+sum(Eps(ajvolM_lk)*dtE1.*ajvolS_lk);
+               if ~isBndNodes(n2) 
+		 ntripletsJFv=ntripletsJFv+1;
+		 rowJFv(ntripletsJFv)=n1;
+		 colJFv(ntripletsJFv)=n2;
+		 valJFv(ntripletsJFv)=valJFv(ntripletsJFv)-0;
+               else
+	 	 ntripletsJFv=ntripletsJFv+1;
+		 rowJFv(ntripletsJFv)=n1;
+		 colJFv(ntripletsJFv)=n2;
+		 valJFv(ntripletsJFv)=valJFv(ntripletsJFv)-ajvolS_lk(j)*dJv;
+               end
 
+	 	 ntripletsJFH=ntripletsJFH+1;
+		 rowJFH(ntripletsJFH)=n1;
+		 colJFH(ntripletsJFH)=lk;
+		 valJFH(ntripletsJFH)=valJFH(ntripletsJFH)+ajvolS_lk(j)*dJH;
+            end
         end
      end
 
@@ -172,25 +192,54 @@ while itNr < maxNewtonIt && normUpdate > updateTol
         rhs_G(l1) = rhs_G(l1)+CC(l1)*A(l1);
 
         %%%%%% source current %%%%%%%%%%%
+        E1 = -(V(n2)-V(n1))/linkL(l1)-H(l1);
         dtE1 = -(Y(n2)-Y(n1))/linkL(l1) - Z(l1);
+        for i = 1:length(ajvol_l1)
+            switch ajvolM_l1(i)
+                case 1
+                    dJ_v = epsilon_mt/linkL(l1);
+                    dJ_H = -epsilon_mt;
+                    J =  0.0 + epsilon_mt*dtE1;
+                case 2
+                    dJ_v = epsilon_in/linkL(l1);
+                    dJ_H = -epsilon_in;
+                    J = epsilon_in*dtE1+Js(l1);
+                otherwise
+                    error('undefined material');
+            end
 
-        ntripletsJGv=ntripletsJGv+1;
-        rowJGv(ntripletsJGv)=l1;
-	colJGv(ntripletsJGv)=n1;
-	valJGv(ntripletsJGv)=valJGv(ntripletsJGv)-(isBndNodes(n1))*scl.K*sum(Eps(ajvolM_l1).*ajvolS_l1)/linkL(l1);
 
-        ntripletsJGv=ntripletsJGv+1;
-        rowJGv(ntripletsJGv)=l1;
-	colJGv(ntripletsJGv)=n2;
-	valJGv(ntripletsJGv)=valJGv(ntripletsJGv)+(isBndNodes(n2))*scl.K*sum(Eps(ajvolM_l1).*ajvolS_l1)/linkL(l1);
+            if ~isBndNodes(n1)
+              ntripletsJGv=ntripletsJGv+1;
+              rowJGv(ntripletsJGv)=l1;
+	      colJGv(ntripletsJGv)=n1;
+	      valJGv(ntripletsJGv)=valJGv(ntripletsJGv)-0;
+            else
+              ntripletsJGv=ntripletsJGv+1;
+              rowJGv(ntripletsJGv)=l1;
+	      colJGv(ntripletsJGv)=n1;
+	      valJGv(ntripletsJGv)=valJGv(ntripletsJGv)-scl.K*ajvolS_l1(i)*dJ_v;
+            end
 
+            if ~isBndNodes(n2)
+	      ntripletsJGv=ntripletsJGv+1;
+	      rowJGv(ntripletsJGv)=l1;
+	      colJGv(ntripletsJGv)=n2;
+	      valJGv(ntripletsJGv)=valJGv(ntripletsJGv)+0;
+            else 
+	      ntripletsJGv=ntripletsJGv+1;
+	      rowJGv(ntripletsJGv)=l1;
+	      colJGv(ntripletsJGv)=n2;
+	      valJGv(ntripletsJGv)=valJGv(ntripletsJGv)+scl.K*ajvolS_l1(i)*dJ_v;
+            end
 
-        ntripletsJGH=ntripletsJGH+1;
- 	rowJGH(ntripletsJGH)=l1;
-	colJGH(ntripletsJGH)=l1;
-	valJGH(ntripletsJGH)=valJGH(ntripletsJGH)-scl.K*sum(-Eps(ajvolM_l1).*ajvolS_l1);
+            ntripletsJGH=ntripletsJGH+1;
+	    rowJGH(ntripletsJGH)=l1;
+	    colJGH(ntripletsJGH)=l1;
+	    valJGH(ntripletsJGH)=valJGH(ntripletsJGH)-scl.K*ajvolS_l1(i)*dJ_H;
 
-        rhs_G(l1) = rhs_G(l1)-scl.K*sum((Eps(ajvolM_l1)*dtE1+prefac(ajvolM_l1)*Js(l1)).*ajvolS_l1);
+            rhs_G(l1) = rhs_G(l1)-scl.K*ajvolS_l1(i)*J;
+        end
      end
 display(['time for matrix collection,G matrix:']);
 toc;

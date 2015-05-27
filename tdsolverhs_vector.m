@@ -143,11 +143,31 @@ tic;
     tic;
 
     clear rhs_F rhs_G;
+%     [L,U] = luinc(Jacob1,droptol);
+%     [dX,flag,relres,iter] = gmres(Jacob1,rhs1,[],linSolveTol,maxLinIt,L,U);
+%     if flag ~= 0, error('No convergence for linear solver'); end
+%     gmresItNr(l) = iter(2);
+%    invJacob = Jacob^(-1);
+%    dX = invJacob*rhs;
+%    dX = Jacob\rhs; newton raphson: x_n+1 = x_n - f(x_n)/f'(x_n)
 
+   % dX = mylusovle(Jacob,rhs,1);
     dX=zeros(size(rhs));
+    %[dX(colind),flag,relres,Itr]=bicgstab(Jacob(:,colind),rhs,1e-4,200,Lmatrix,Umatrix);
+    %display(['flag:',num2str(flag),' relres:',num2str(relres),' Itr:',num2str(Itr)]);
 
     %1. normal lu decomposition
     dX = JacobLU.Q * (JacobLU.U \ (JacobLU.L \ (JacobLU.P * (JacobLU.R \ rhs)))) ;
+    %2. klu decomposition from suitsparse
+    %dX = klu (JacobLU, '\', rhs) ;
+    %3. cholmod from suitsparse
+    %dX= ldlsolve(JacobLU,rhs);
+    %4 factorization
+    %dX = JacobLU\rhs ; 
+    %%%5. normal lu decomposition without R   almost similar to 1
+    %dX = JacobLU.Q * (JacobLU.U \ (JacobLU.L \ (JacobLU.P * rhs))) ;
+    %6 LUsubs,supposed to fasten the \ procedure 
+    %dX = LUsubs(JacobLU.L,JacobLU.U,JacobLU.P,JacobLU.Q,rhs);
 
     display(['time for solving linear equation:']);
     toc;
