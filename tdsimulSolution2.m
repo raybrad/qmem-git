@@ -1,4 +1,4 @@
-function [V,A,H] = tdsimulSolution(dt,nsteps)
+function [V,A,H] = tdsimulSolution2(dt,nsteps)
 
 display(['Start TD dynamic solution']);
 
@@ -37,6 +37,9 @@ Efield_p=zeros(Nlink,1);
 Js=zeros(Nlink,1);
 dtVp = zeros(Nnode,1);
 dtHp = zeros(Nlink,1);
+
+dtVpp= zeros(Nnode,1);
+dtHpp= zeros(Nlink,1);
 
 timec=0;
 
@@ -81,16 +84,19 @@ end
 ntp  = 1; 
 tic;
 
-tdbuildJacob(dt);
+Jacob=tdbuildJacob2(dt);
 while ntp < nsteps + 1
    
  display(['Time step:',num2str(ntp)]);
 
  if nedrelax==1
-   [Vu,Au,Hu,mJ_0u,mJ_1u,mJ_2u,mJ_1uu,mJ_2uu,Efield_uu,dtVu,dtHu,Js]=tdupdatenm(V,A,H,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt,ntp);
+   [Vu,Au,Hu,mJ_0u,mJ_1u,mJ_2u,mJ_1uu,mJ_2uu,Efield_uu,dtVu,dtHu,dtVuu,dtHuu,Js]=tdupdatenm2(V,A,H,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,Jacob,dtVp,dtHp,dtVpp,dtHpp,dt,ntp);
 % elseif nedrelax==2
 %  [Vu,nu,pu,Au,Hu,mJ_0u,dtVu,dtHu,Js] = tdupdatenmc(V,A,H,mJ_0,dtVp,dtHp,dt,ntp);
  end
+
+ dtVpp = dtVuu;
+ dtHpp = dtHuu;
 
  dtVp  = dtVu;
  dtHp  = dtHu;

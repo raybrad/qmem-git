@@ -46,7 +46,8 @@ droptol = 1e-6;
 linSolveTol = 1e-6;
 maxNewtonIt = 10;
 maxLinIt = 200;
-Eps = [epsilon_mt,epsilon_in,epsilon_qm];
+Eps = [epsilon_sd,epsilon_mt,epsilon_in,epsilon_qm];
+Sgm = [0,sigma,0];
 
 %for n1 = eqnSemiNodes.'
 for k=1:NeqnmetalNodes

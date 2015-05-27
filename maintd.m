@@ -1,12 +1,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%Update History%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%Revised version 1
+%Revised version 2
 %0 light source is added as a sheet of current density Js, which create plane wave field 
 %0 Mur absorbing boundary is added to reduce reflection
 %2 plasmonic metal is modelled using Two Lorentz poles and one drude pole.
 %3 tdrelaxstep2.m use (row,col,val) technique to create sparse matrix
 %3 in initGeometry sparse matrix creation is used for linkVolS nodeVolV
+%4 tdbuilJacob.m prebuild,precondition and save  the Jacobian matrix,which is unchanged in time propagation. Semiconductor part is removed.
+%4 tdsolverhs construct the right hand side matrix, and some simple vectorization technique is used. So tdrelaxstep2 is replaced.
 clear global; clear;
 
 %plasmonic metal parameters
@@ -58,9 +60,9 @@ global omega  %Frequency
 global scl; 
 
 global dt;
-dt  = 1.0e-17;
+dt  = 5.0e-17;
 global nsteps;
-nsteps = 1000;
+nsteps = 10000;
 global epdf epdf2;
 epdf = 2.001347574e-15; %600nm epdf =wavelength/299.798
 epdf2= 2.001347574e-15; %600nm

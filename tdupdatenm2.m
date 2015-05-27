@@ -1,4 +1,4 @@
-function [Vn,An,Hn,mJ_0n,mJ_1n,mJ_2n,mJ_1nn,mJ_2nn,Efield_nn,dtVu,dtHu,Js] = tdupdatenm(V,A,H,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt,ntp)
+function [Vn,An,Hn,mJ_0n,mJ_1n,mJ_2n,mJ_1nn,mJ_2nn,Efield_nn,dtVu,dtHu,dtVuu,dtHuu,Js] = tdupdatenm2(V,A,H,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,Jacob,dtVp,dtHp,dtVpp,dtHpp,dt,ntp)
 
 global epdf epdf2;
 global extfelc;
@@ -65,6 +65,8 @@ switch lightsource
 end
 
 
-[Vn,An,Hn,mJ_0n,mJ_1n,mJ_2n,mJ_1nn,mJ_2nn,Efield_nn,dtVu,dtHu] =  tdsolverhs(V,A,H,Js,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtV,dtH,dt);
+[Vn,An,Hn,mJ_0n,mJ_1n,mJ_2n,mJ_1nn,mJ_2nn,Efield_nn,dtVu,dtHu] =  tdsolverhs2(V,A,H,Js,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,Jacob,dtV,dtH,dtVpp,dtHpp,dt);
+dtVuu=dtV;
+dtHuu=dtH;
 
 end
