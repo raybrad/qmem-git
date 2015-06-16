@@ -155,7 +155,7 @@ while ntp < nsteps + 1
 % save(savefilename, 'V','A', 'H','dtVp','dtHp','Js');
 %elseif (ntp<=10)
  savefilename = [savefile,num2str(ntp),'.mat'];
- save(savefilename, 'V','A', 'H','dtVp','dtHp','Js');
+ save(savefilename, 'V','A', 'H','Js');
 %end
     ntp = ntp + 1;
     

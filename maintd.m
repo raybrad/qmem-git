@@ -28,18 +28,32 @@ global epsilon epsilon_mt epsilon_in epsilon_qm; %Dielectric constant
 global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2; %Lorentz pole
 %Silver (From material database fitting with Drude+2 Lorentz model) 
 %suitable over 1.24 - 5 eV
+%PLANCKEV=4.13566733e-15;
+%epsilon_mt=3.189;
+%omega_p=9.183*2.0*pi/PLANCKEV;
+%gamma_p=0.0179*2.0*pi/PLANCKEV;
+%
+%lepsr_1=0.4323;
+%lomega_1=4.668*2.d0*pi/PLANCKEV;
+%lgamma_1=0.207*2.d0*pi/PLANCKEV;
+%
+%lepsr_2=0.2237;
+%lomega_2=4.240*2.d0*pi/PLANCKEV;
+%lgamma_2=0.186*2.d0*pi/PLANCKEV;
+
+%Goldr (From material database fitting with Drude+2 Lorentz model) 
 PLANCKEV=4.13566733e-15;
-epsilon_mt=3.189;
-omega_p=9.183*2.0*pi/PLANCKEV;
-gamma_p=0.0179*2.0*pi/PLANCKEV;
+epsilon_mt=3.559;
+omega_p=8.812*2.0*pi/PLANCKEV;
+gamma_p=0.0752*2.0*pi/PLANCKEV;
 
-lepsr_1=0.4323;
-lomega_1=4.668*2.d0*pi/PLANCKEV;
-lgamma_1=0.207*2.d0*pi/PLANCKEV;
+lepsr_1=2.912;
+lomega_1=4.693*2.d0*pi/PLANCKEV;
+lgamma_1=1.541*2.d0*pi/PLANCKEV;
 
-lepsr_2=0.2237;
-lomega_2=4.240*2.d0*pi/PLANCKEV;
-lgamma_2=0.186*2.d0*pi/PLANCKEV;
+lepsr_2=1.272;
+lomega_2=3.112*2.d0*pi/PLANCKEV;
+lgamma_2=0.525*2.d0*pi/PLANCKEV;
 
 mu = 4*pi*1e-7;
 epsilon = 8.854e-12; %vaccum(absolute)
