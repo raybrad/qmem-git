@@ -32,3 +32,6 @@ Version 1.0
 
 %Revised version 7
 %11 test different lu and linear solver
+
+%Revised version 8
+%12 rm unused files
