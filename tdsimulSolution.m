@@ -19,6 +19,7 @@ global isqmnodes;
 
 global JLinks J_amp;
 global lightsource tlas tzero;
+global outputPosCom outputPlane;
 %global Jacob colind Lmatrix Umatrix;
 %global JacobLU;
 %global Fc11 Fc12 Fc21 Fc22 Fc30 Fn1matrix Fn2matrix Flkmatrix;
@@ -88,9 +89,9 @@ elseif (nedrelax==2)
 [dtVp,dtHp] = tdcalupdatecc(V,A,H,Js,dtVp,dtHp);
 end
 
-savefilename = [savefile,num2str(0),'.mat'];
+%savefilename = [savefile,num2str(0),'.mat'];
 %save(savefilename, 'V', 'A', 'H','mJ_0','mJ_1','mJ_2','mJ_1p','mJ_2p','dtVp','dtHp','Js');
- save(savefilename, 'V','A', 'H','dtVp','dtHp','Js');
+% save(savefilename, 'V','A', 'H','dtVp','dtHp','Js');
 
 if nedrelax==2
   fp = fopen('tdqmcurrd.dat','w');  % clear content of dat & create file
@@ -154,10 +155,12 @@ while ntp < nsteps + 1
 % savefilename = [savefile,num2str(ntp),'.mat'];
 % save(savefilename, 'V','A', 'H','dtVp','dtHp','Js');
 %elseif (ntp<=10)
- savefilename = [savefile,num2str(ntp),'.mat'];
- save(savefilename, 'V','A', 'H','Js');
+% savefilename = [savefile,num2str(ntp),'.mat'];
+% save(savefilename, 'V','A', 'H','Js');
 %end
-    ntp = ntp + 1;
+outputField(ntp,outputPosCom,outputPlane,V,A,H);
+
+ntp = ntp + 1;
     
 end    
 toc;   

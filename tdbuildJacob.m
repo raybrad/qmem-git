@@ -28,7 +28,6 @@ global JacobLU permutation;
 %%%%%%% initial guess  %%%%%%%%%%%%%
 eqnNodes = setdiff((1:Nnode)',dirNodes);%eqnNodes (nodes except from contact ,different from tdcalupdatec.m)   
 					%dirNodes (contact part update by dtVp)
-
 eqnLinks=setdiff((1:Nlink)',EsurfLinks);	%for E boundary condition
 isBsurfLinks=false(Nlink,1);
 isBsurfLinks(BsurfLinks)=true;		        %for B boundary condition
@@ -144,8 +143,8 @@ tic;
         CC = zeros(1,Nlink);
         GD = zeros(1,Nlink);
         bndJG_H = zeros(1,Nlink);
-	ajlk_n1=[];
-	ajlk_n2=[];
+    	ajlk_n1=[];
+    	ajlk_n2=[];
         %%%%%%%%%% curl curl of A %%%%%%%%%%
         ajsf_l1 = linkSurfs{l1}; %the surfLink l1 belong to(at most 4),which is in the form of {(surf index,link);(surf index,link);...}
         for i = 1:size(ajsf_l1,2)	  %num of cell ,i.e. num of surfs the link is on
@@ -161,21 +160,20 @@ tic;
                 error('Incorrect link arrangement');
             end
 
-
             CC(ajlk) = dL/S*(ajlkSign.*ajlkL); %CC(1:3) other 3 link ,those link could be on the boundary,just l1 is not bnd
             CC(l1) = CC(l1)+dL/S*linkL(l1);	% link l1
-	    for m=1:length(ajlk)
-	    ntripletsJGH=ntripletsJGH+1;
-	    rowJGH(ntripletsJGH)=l1;
-	    colJGH(ntripletsJGH)=ajlk(m);
-	    valJGH(ntripletsJGH)=valJGH(ntripletsJGH)+CC(ajlk(m))*dt/2;
+    	    for m=1:length(ajlk)
+	        ntripletsJGH=ntripletsJGH+1;
+	        rowJGH(ntripletsJGH)=l1;
+    	    colJGH(ntripletsJGH)=ajlk(m);
+    	    valJGH(ntripletsJGH)=valJGH(ntripletsJGH)+CC(ajlk(m))*dt/2;
 	    end
         end
 
-	ntripletsJGH=ntripletsJGH+1;
-	rowJGH(ntripletsJGH)=l1;
-	colJGH(ntripletsJGH)=l1;
-	valJGH(ntripletsJGH)=valJGH(ntripletsJGH)+CC(l1)*dt/2;
+		ntripletsJGH=ntripletsJGH+1;
+		rowJGH(ntripletsJGH)=l1;
+		colJGH(ntripletsJGH)=l1;
+		valJGH(ntripletsJGH)=valJGH(ntripletsJGH)+CC(l1)*dt/2;
 %
         ntripletsJGH=ntripletsJGH+1;
         rowJGH(ntripletsJGH)=l1;
@@ -183,6 +181,9 @@ tic;
         valJGH(ntripletsJGH)=valJGH(ntripletsJGH)+ ...
       			    (size(ajsf_l1,2)==3)*(1-isBsurfLinks(l1))*dL*(1/light_speed)+...
          	    	    (size(ajsf_l1,2)==2)*(2-isBsurfLinks(l1))*dL*(1/light_speed);
+         %if(isBsurfLinks(l1))
+         %   fprintf('BsurfLinks:%d %d\n',l1,isBsurfLinks(l1));
+         %end
 
 
 
@@ -203,9 +204,9 @@ tic;
             coefV_n1 = scl.K*(sum(Eps(ajvolM_n1).*ajvolV_n1)/nodeV(n1))*linkS(l1)/linkL(l1);
 	
             ntripletsJGv=ntripletsJGv+1;
-	    rowJGv(ntripletsJGv)=l1;
-	    colJGv(ntripletsJGv)=n1;
-	    valJGv(ntripletsJGv)=valJGv(ntripletsJGv)+coefV_n1/(0.5*dt);
+	        rowJGv(ntripletsJGv)=l1;
+    	    colJGv(ntripletsJGv)=n1;
+    	    valJGv(ntripletsJGv)=valJGv(ntripletsJGv)+coefV_n1/(0.5*dt);
         end
 
         if ~isBndNodes(n2)
@@ -220,14 +221,14 @@ tic;
             coefV_n2 = scl.K*(sum(Eps(ajvolM_n2).*ajvolV_n2)/nodeV(n2))*linkS(l1)/linkL(l1);
 
             ntripletsJGv=ntripletsJGv+1;
-	    rowJGv(ntripletsJGv)=l1;
-	    colJGv(ntripletsJGv)=n2;
-	    valJGv(ntripletsJGv)=valJGv(ntripletsJGv)-coefV_n2/(0.5*dt);
+    	    rowJGv(ntripletsJGv)=l1;
+    	    colJGv(ntripletsJGv)=n2;
+    	    valJGv(ntripletsJGv)=valJGv(ntripletsJGv)-coefV_n2/(0.5*dt);
         end
 							 %so the boundary effect of V come from this term and the following E1,dtE1
 
 	    ajlk_n1n2=union(ajlk_n1,ajlk_n2);
-            for m=1:length(ajlk_n1n2)
+        for m=1:length(ajlk_n1n2)
 	    ntripletsJGH=ntripletsJGH+1;
 	    rowJGH(ntripletsJGH)=l1;
 	    colJGH(ntripletsJGH)=ajlk_n1n2(m);
@@ -235,23 +236,23 @@ tic;
 	    end
 	
         %%%%%% source current %%%%%%%%%%%
-	ntripletsJGv=ntripletsJGv+1;
-	rowJGv(ntripletsJGv)=l1;
-	colJGv(ntripletsJGv)=n1;
-	valJGv(ntripletsJGv)=valJGv(ntripletsJGv)- ...
-	     		     scl.K*sum((prefac(ajvolM_l1).*(CJ02+CJ13+CJ23)+Eps(ajvolM_l1)/(0.5*dt)).*ajvolS_l1)/linkL(l1);
-	ntripletsJGv=ntripletsJGv+1;
-	rowJGv(ntripletsJGv)=l1;
-	colJGv(ntripletsJGv)=n2;
-	valJGv(ntripletsJGv)=valJGv(ntripletsJGv)+ ...
-	     		     scl.K*sum((prefac(ajvolM_l1).*(CJ02+CJ13+CJ23)+Eps(ajvolM_l1)/(0.5*dt)).*ajvolS_l1)/linkL(l1);
-
-	ntripletsJGH=ntripletsJGH+1;
-	rowJGH(ntripletsJGH)=l1;
-	colJGH(ntripletsJGH)=l1;
-	valJGH(ntripletsJGH)=valJGH(ntripletsJGH)- ...
-	     		     scl.K*sum((-prefac(ajvolM_l1).*(CJ02+CJ13+CJ23)-Eps(ajvolM_l1)/(0.5*dt)).*ajvolS_l1);
-     end
+		ntripletsJGv=ntripletsJGv+1;
+		rowJGv(ntripletsJGv)=l1;
+		colJGv(ntripletsJGv)=n1;
+		valJGv(ntripletsJGv)=valJGv(ntripletsJGv)- ...
+		     		     scl.K*sum((prefac(ajvolM_l1).*(CJ02+CJ13+CJ23)+Eps(ajvolM_l1)/(0.5*dt)).*ajvolS_l1)/linkL(l1);
+		ntripletsJGv=ntripletsJGv+1;
+		rowJGv(ntripletsJGv)=l1;
+		colJGv(ntripletsJGv)=n2;
+		valJGv(ntripletsJGv)=valJGv(ntripletsJGv)+ ...
+		     		     scl.K*sum((prefac(ajvolM_l1).*(CJ02+CJ13+CJ23)+Eps(ajvolM_l1)/(0.5*dt)).*ajvolS_l1)/linkL(l1);
+    
+		ntripletsJGH=ntripletsJGH+1;
+		rowJGH(ntripletsJGH)=l1;
+		colJGH(ntripletsJGH)=l1;
+		valJGH(ntripletsJGH)=valJGH(ntripletsJGH)- ...
+		     		     scl.K*sum((-prefac(ajvolM_l1).*(CJ02+CJ13+CJ23)-Eps(ajvolM_l1)/(0.5*dt)).*ajvolS_l1);
+         end
 
 JG_v=sparse2(rowJGv(1:ntripletsJGv),colJGv(1:ntripletsJGv),valJGv(1:ntripletsJGv),Nlink,Nnode);
 JG_H=sparse2(rowJGH(1:ntripletsJGH),colJGH(1:ntripletsJGH),valJGH(1:ntripletsJGH),Nlink,Nlink);

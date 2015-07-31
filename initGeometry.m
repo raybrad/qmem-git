@@ -92,7 +92,7 @@ BsurfLinks=[Backsurf;Frontsurf];	%B
 Botsurf= defBrickLinks([1,1,1],[kx+1,ky+1,1]);
 Topsurf= defBrickLinks([1,1,kz+1],[kx+1,ky+1,kz+1]);
 EsurfLinks=[Botsurf;Topsurf];  %E
-case 'kzEyBx'	
+case {'kzEyBx','specialkzEyBx'}
 Leftsurf= defBrickLinks([1,1,1],[kx+1,1,kz+1]);
 Rightsurf= defBrickLinks([1,ky+1,1],[kx+1,ky+1,kz+1]);
 EsurfLinks=[Leftsurf;Rightsurf];	%E
@@ -100,7 +100,7 @@ EsurfLinks=[Leftsurf;Rightsurf];	%E
 Backsurf=defBrickLinks([1,1,1],[1,ky+1,kz+1]);
 Frontsurf=defBrickLinks([kx+1,1,1],[kx+1,ky+1,kz+1]);
 BsurfLinks=[Backsurf;Frontsurf];	%B
-case 'kzExBy'	
+case {'kzExBy','specialkzExBy'}	
 Leftsurf= defBrickLinks([1,1,1],[kx+1,1,kz+1]);
 Rightsurf= defBrickLinks([1,ky+1,1],[kx+1,ky+1,kz+1]);
 BsurfLinks=[Leftsurf;Rightsurf];	%B
@@ -108,6 +108,9 @@ BsurfLinks=[Leftsurf;Rightsurf];	%B
 Backsurf=defBrickLinks([1,1,1],[1,ky+1,kz+1]);
 Frontsurf=defBrickLinks([kx+1,1,1],[kx+1,ky+1,kz+1]);
 EsurfLinks=[Backsurf;Frontsurf];	%E
+case 'nolight'
+    BsurfLinks=[];
+    EsurfLinks=[];
 end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 display('light source links');

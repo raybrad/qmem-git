@@ -20,40 +20,13 @@
 %   later Jacob rhs construction is very time consuming. So now only reformulate the build up of linkvolumes and nodevolumes.
 
 clear global; clear;
-
 %plasmonic metal parameters
 global sigma0  omega_p gamma_p; %Conductivity and Permeability
 global mu;
+global metal_typ;
 global epsilon epsilon_mt epsilon_in epsilon_qm; %Dielectric constant
 global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2; %Lorentz pole
-%Silver (From material database fitting with Drude+2 Lorentz model) 
-%suitable over 1.24 - 5 eV
-%PLANCKEV=4.13566733e-15;
-%epsilon_mt=3.189;
-%omega_p=9.183*2.0*pi/PLANCKEV;
-%gamma_p=0.0179*2.0*pi/PLANCKEV;
-%
-%lepsr_1=0.4323;
-%lomega_1=4.668*2.d0*pi/PLANCKEV;
-%lgamma_1=0.207*2.d0*pi/PLANCKEV;
-%
-%lepsr_2=0.2237;
-%lomega_2=4.240*2.d0*pi/PLANCKEV;
-%lgamma_2=0.186*2.d0*pi/PLANCKEV;
 
-%Goldr (From material database fitting with Drude+2 Lorentz model) 
-PLANCKEV=4.13566733e-15;
-epsilon_mt=3.559;
-omega_p=8.812*2.0*pi/PLANCKEV;
-gamma_p=0.0752*2.0*pi/PLANCKEV;
-
-lepsr_1=2.912;
-lomega_1=4.693*2.d0*pi/PLANCKEV;
-lgamma_1=1.541*2.d0*pi/PLANCKEV;
-
-lepsr_2=1.272;
-lomega_2=3.112*2.d0*pi/PLANCKEV;
-lgamma_2=0.525*2.d0*pi/PLANCKEV;
 
 mu = 4*pi*1e-7;
 epsilon = 8.854e-12; %vaccum(absolute)
@@ -79,34 +52,23 @@ global omega  %Frequency
 global scl; 
 
 global dt;
-dt  = 5.0e-17;
 global nsteps;
-nsteps = 1000;
 global epdf epdf2;
-epdf = 2.001347574e-15; %600nm epdf =wavelength/299.798
-epdf2= 2.001347574e-15; %600nm
 global lightsource;
-lightsource=2;
 global tlas tzero;
-tzero=3.0e-15;
-tlas=7.0e-16;
-global lightdirection Posz;  %k:the wave vector direction,E,B:polarization  
-lightdirection='specialkzExBy';
-Posz=35;
+global amplitude lightdirection Posz;  %k:the wave vector direction,E,B:polarization  
+global outputPosCom outputPlane;
 
 global extfelc;
-extfelc = 3; %zero voltage
 global nedrelax;
-%R
-nedrelax =1;	%pure EM
-%nedrelax=2;	%QM/EM
 global nLead;
-nLead=0;
+global QMfeedback;
 global irkod;
 irkod  = 2;
 global savefile;
 savefile = 'dump/variables_';
 
+global x_coor y_coor z_coor dimensionL latticeDL;
 global kx ky kz;
 global nodes links contacts;
 global nodeLinks linkSurfs  surfLinks volumeNodes volumeLinks...
@@ -129,16 +91,25 @@ global sQMlinks;
 global currdlink;
 global lqelinks rqelinks bqelinks tqelinks;
 global qmx1 qmx2 qmy1 qmy2 qmz1 qmz2;
+global qmRegionX1 qmRegionX2 qmRegionY1 qmRegionY2 qmRegionZ1 qmRegionZ2;
 global ingvl ingvr ingvt;
 global qxlinks;
 global isqmvolm;
-
+global qkx qky qkz;
+global avoltage avoltageac;
 
 t_all = cputime;
+%%%load Parameters%%%%%%%%%%%%%
+inputParaDefault;
+inputParaUser;
+
+%loadPath='inputPara.m';
+%load(loadPath);
+%%%generate Mesh Grids%%%%%%%%%
+genMeshGrids(x_coor,y_coor,z_coor,plotx,ploty,plotz,plotopt,gendata,meshfilename);
 
 %%%%% Load mesh data %%%%%%%%%%
-loadPath = 'tdmetal.mat';  % path to load the mat file 
-load(loadPath);
+load(meshfilename);
 
 %%%%%%%%% geometry initialization %%%%%%%%
 initGeometry;  
@@ -149,8 +120,16 @@ scaling_static; % scaling
 scaling_dynamic(0);
 
 
-% plotMesh;  % plot the mesh
-
+%%%%%generate mesh for metal sphere%%%%%%%%%%%%%%%%%%
+if (metal_typ== 1) 
+metalNodes=defSphereNodes(Origin,scl.lambda,Radius,nodes);
+elseif (metal_typ==0) 
+metalNodes=[];
+else
+    fprintf('other Metal_typ not defined now \n');
+end
+%savefilename='metalNodes.mat';
+%save(savefilename, 'metalNodes','Nnode','kx','ky','kz','x_coor','y_coor','z_coor');
 %%%%%%%%% solver initialization (define material configuration) %%%%%%%%
 initSolvertd;
 

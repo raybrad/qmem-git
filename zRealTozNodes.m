@@ -1,4 +1,4 @@
-function Nodez = zRealTozNodes(realz,z_coor)
+function Nodez= zRealTozNodes(realz,z_coor)
 
 %%Tranform a real position into a node position	
 %%RealCoor: the Real coordinate

@@ -4,10 +4,6 @@ global epsilon q scl;
 global T;
 global nodes nodeV linkL linkS dlinkL linkVolumes nodeVolumes;
 
-%%% three independent scaling parameters (lambda is changeable),default 1e-9
-scl = struct('T',300,'Vt',2.5852,'lambda',1e-9,'ni',[],'s_D',[],'s_mu',[],...
-    's_J',[],'tao',[],'s_E',[],'omega',[],'s_sigma',[],'s_Curr',[],...
-    's_v',[],'s_A',[],'K',[]);
 
 scl.ni = epsilon*scl.Vt/q/scl.lambda^2; % C/V/m * V / C / m^2  ~ 1/m^3 
 scl.s_E = scl.Vt/scl.lambda;

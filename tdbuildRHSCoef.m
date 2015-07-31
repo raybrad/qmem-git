@@ -67,11 +67,11 @@ tic;
         sign_n1 = sign(ajnd_n1-n1);
 
           for i = 1:length(ajlk_n1)
-                    n2 = ajnd_n1(i);
-                    lk = ajlk_n1(i);
-                    ajvol_lk = linkVolumes{lk}(1,:);
-                    ajvolS_lk = linkVolumes{lk}(2,:);
-                    ajvolM_lk = volumeM(ajvol_lk);
+            n2 = ajnd_n1(i);
+            lk = ajlk_n1(i);
+            ajvol_lk = linkVolumes{lk}(1,:);
+            ajvolS_lk = linkVolumes{lk}(2,:);
+            ajvolM_lk = volumeM(ajvol_lk);
 		    
 		    Fc11(n1,i)=sum(Eps(ajvolM_lk).*ajvolS_lk*(-1/linkL(lk))*(any(ajvolM_n1==1)));
 		    Fc12(n1,i)=sum(Eps(ajvolM_lk).*ajvolS_lk*(-sign_n1(i))*(any(ajvolM_n1==1)));
@@ -83,7 +83,7 @@ tic;
 		    Flkmatrix(n1,i)=lk;
 		   
           end
-     end
+  end
 
 display(['time for rhs_F coefficient matrix collection:']);
 toc;
@@ -125,14 +125,14 @@ Gc54=zeros(Nlink,1);
         ajvolM_l1 = volumeM(ajvol_l1);
         CC = zeros(1,Nlink);
 	
-	ajlk_n1=[];
-	ajlk_n2=[];
+    	ajlk_n1=[];
+	    ajlk_n2=[];
 	
-	Gn1matrix(l1)=n1;
-	Gn2matrix(l1)=n2;
+    	Gn1matrix(l1)=n1;
+    	Gn2matrix(l1)=n2;
         %%%%%%%%%% curl curl of A %%%%%%%%%%
         ajsf_l1 = linkSurfs{l1}; %the surfLink l1 belong to(at most 4),which is in the form of {(surf index,link);(surf index,link);...}
-	tmpcounter=0;
+    	tmpcounter=0;
         for i = 1:size(ajsf_l1,2)	  %num of cell ,i.e. num of surfs the link is on
             ajlk = ajsf_l1(2:4,i);	  % the other 3 link on that surface i
             S = linkL(l1)*linkL(ajlk(1)); %surface area the link l1 is on, linkL ~link length  
@@ -144,9 +144,9 @@ Gc54=zeros(Nlink,1);
             CC(ajlk) = dL/S*(ajlkSign.*ajlkL); %CC(1:3) other 3 link ,those link could be on the boundary,just l1 is not bnd
             CC(l1) = CC(l1)+dL/S*linkL(l1);	% link l1
 
-	    Gajlkmatrix11(l1,tmpcounter+1:tmpcounter+3)=ajlk;
-	    Gc11(l1,tmpcounter+1:tmpcounter+3)=CC(ajlk);
-	    tmpcounter=tmpcounter+3;
+    	    Gajlkmatrix11(l1,tmpcounter+1:tmpcounter+3)=ajlk;
+	        Gc11(l1,tmpcounter+1:tmpcounter+3)=CC(ajlk);
+    	    tmpcounter=tmpcounter+3;
         end 
 	    Gc12(l1)=CC(l1);
 		
@@ -168,9 +168,9 @@ Gc54=zeros(Nlink,1);
             ajvolM_n1 = volumeM(ajvol_n1);
             coefV_n1 = scl.K*(sum(Eps(ajvolM_n1).*ajvolV_n1)/nodeV(n1))*linkS(l1)/linkL(l1);
 	
-	    Gc31(l1,1:length(ajlk_n1))=-(-sign_n1.*coef_n1');
-	    Gajlk_n1matrix(l1,1:length(ajlk_n1))=ajlk_n1;
-	    Gc32(l1)=coefV_n1;
+    	    Gc31(l1,1:length(ajlk_n1))=-(-sign_n1.*coef_n1');
+	        Gajlk_n1matrix(l1,1:length(ajlk_n1))=ajlk_n1;
+	        Gc32(l1)=coefV_n1;
         end
 
         if ~isBndNodes(n2)
@@ -183,17 +183,17 @@ Gc54=zeros(Nlink,1);
             ajvolM_n2 = volumeM(ajvol_n2);
             coefV_n2 = scl.K*(sum(Eps(ajvolM_n2).*ajvolV_n2)/nodeV(n2))*linkS(l1)/linkL(l1);
 
-	    Gc41(l1,1:length(ajlk_n2))=-(sign_n2.*coef_n2');
-	    Gajlk_n2matrix(l1,1:length(ajlk_n2))=ajlk_n2;
-	    Gc42(l1)= -coefV_n2;
+    	    Gc41(l1,1:length(ajlk_n2))=-(sign_n2.*coef_n2');
+    	    Gajlk_n2matrix(l1,1:length(ajlk_n2))=ajlk_n2;
+    	    Gc42(l1)= -coefV_n2;
         end
 							 %so the boundary effect of V come from this term and the following E1,dtE1
 
         %%%%%% source current %%%%%%%%%%%
        	Gc51(l1)=-scl.K*sum(Eps(ajvolM_l1).*ajvolS_l1*(-1/linkL(l1)));
        	Gc52(l1)=-scl.K*sum(Eps(ajvolM_l1).*ajvolS_l1*(-1));
-	Gc53(l1)=-scl.K*sum(prefac(ajvolM_l1).*ajvolS_l1);	%mJ
-	Gc54(l1)=-scl.K*sum(ajvolS_l1);				%Js
+    	Gc53(l1)=-scl.K*sum(prefac(ajvolM_l1).*ajvolS_l1);	%mJ
+    	Gc54(l1)=-scl.K*sum(ajvolS_l1);				%Js
      end
 
 display(['time for rhs_G coefficient matrix collection:']);

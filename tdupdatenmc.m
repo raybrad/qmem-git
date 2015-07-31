@@ -37,7 +37,7 @@ currdlink(qxlinks,4)=(currdl+currdr)/(2*scl.s_J);
 
 
 fp = fopen('tdqmcurrd.dat','a');
-fprintf(fp,'%f %.15f %.15f  %.15f %.15f\n',currtime,currdl,currdr,currdt,(currdl+currdr)/2);
+fprintf(fp,'%f %.15f %.15f  %.15f %.15f\n',currtime,currdl/scl.s_J,currdr/scl.s_J,currdt/scl.s_J,(currdl+currdr)/2/scl.s_J);
 fclose(fp);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -25,13 +25,15 @@ global sQMlinks;
 global isqmnodes;
 global currdlink;
 global qmx1 qmx2 qmy1 qmy2 qmz1 qmz2;
+global qmRegionX1 qmRegionX2 qmRegionY1 qmRegionY2 qmRegionZ1 qmRegionZ2;
 global isqmvolm;
 global metalNodes metalLinks;
 
 %%%
-global qkx qky qkz;
+global x_coor y_coor z_coor;
+global avoltage avoltageac;
 global dirxLinks diryLinks dirzLinks;
-global JLinks J_amp;
+global JLinks J_amp amplitude;
 global lightdirection Posz;
 global nedrelax;
 global omega_p gamma_p;
@@ -46,9 +48,9 @@ isBndNodes(bndNodes) = true;
 edgeNodes = zeros(Nnode,1);
 tmpcounter=0;
 for i = bndNodes'
-    ajnd = nodeLinks{i}(2,:); %connecting nodes to bndNodes
+        ajnd = nodeLinks{i}(2,:); %connecting nodes to bndNodes
     if all(isBndNodes(ajnd))
-	tmpcounter=tmpcounter+1;
+    	tmpcounter=tmpcounter+1;
         edgeNodes(tmpcounter) = i; %edge nodes on the 12 edge lines
     end
 end
@@ -58,36 +60,7 @@ toc;
 tic;
 
 %%%%%%%%%% structure definition (in terms of node index) %%%%%%%%%%%%%%%%%%
-x_coor=[0:1.0:40];
-y_coor=[0:1.0:40];
-z_coor=[0:1.0:40];
 
-Origin=[20.0,20.0,20.0];
-[Xcen,Ycen,Zcen]=RealToNodes(Origin,x_coor,y_coor,z_coor);
-
-% graphene is layed on x direction 
-[X1,Y1,Z1]=RealToNodes([10.0,10.0,10.0],x_coor,y_coor,z_coor);
-[X2,Y2,Z2]=RealToNodes([30.0,30.0,30.0],x_coor,y_coor,z_coor);
-
-%[MX11,MY11,MZ11]=RealToNodes([22.0,26.0,26.0],x_coor,y_coor,z_coor);
-%[MX12,MY12,MZ12]=RealToNodes([24.0,27.0,27.0],x_coor,y_coor,z_coor);
-
-%[MX21,MY21,MZ21]=RealToNodes([29.0,26.0,26.0],x_coor,y_coor,z_coor);
-%[MX22,MY22,MZ22]=RealToNodes([31.0,27.0,27.0],x_coor,y_coor,z_coor);
-
-%display([' MX11 :',num2str(MX11),' MY11: ',num2str(MY11),' MZ11: ',num2str(MZ11)]);
-%display([' MX12 :',num2str(MX12),' MY12: ',num2str(MY12),' MZ12: ',num2str(MZ12)]);
-%display([' MX21 :',num2str(MX21),' MY21: ',num2str(MY21),' MZ21: ',num2str(MZ21)]);
-%display([' MX22 :',num2str(MX22),' MY22: ',num2str(MY22),' MZ22: ',num2str(MZ22)]);
-% x2-x1 = dev2ce x, y2-y1 = device y
-[qmx1,qmy1,qmz1]=RealToNodes([30.0,18.0,18.0],x_coor,y_coor,z_coor);
-[qmx2,qmy2,qmz2]=RealToNodes([34.0,22.0,22.0],x_coor,y_coor,z_coor);
-%QM grid from lodestar
-qkx =17 ; qky = 17; qkz = 5;
-%qmx1 = 18; qmx2 = 25; qmy1 = 8; qmy2 = 22; qmz1 = 8; qmz2 = 22;
-%R: set the boundary voltage to 0 now, for light
-avoltage   = 0.0;
-avoltageac = 0.0;
 contacts{1,1} = defContacts([1,1,1],[1,ky+1,kz+1],avoltage/scl.Vt, avoltageac/scl.Vt);
 contacts{2,1} = defContacts([kx+1,1,1],[kx+1,ky+1,kz+1],0,0); 
 contacts{3,1} = defContacts([1,1,1],[kx+1,ky+1,1],0,0); 
@@ -128,21 +101,17 @@ case 'nolight'
 	JLinks=[];
 case 'specialkzExBy'
 	tmpz=zRealTozNodes(Posz,z_coor);
+    fprintf('Position of light %d \n',tmpz);
 	veclayer= defBrickLinks([1,1,tmpz],[kx+1,ky+1,tmpz]);
 	JLinks=intersect(veclayer,dirxLinks);
 case 'specialkzEyBx'	
 	tmpz=zRealTozNodes(Posz,z_coor);
+    fprintf('Position of light %d \n',tmpz);
 	veclayer= defBrickLinks([1,1,tmpz],[kx+1,ky+1,tmpz]);
 	JLinks=intersect(veclayer,diryLinks);
 end
-J_amp=6.0*1e6/(40*1e-9)*ones(length(JLinks),1)/scl.s_J;
+J_amp=ones(length(JLinks),1)/scl.s_J*amplitude;
 
-%%%%%%%
-Radius=10.0;
-metalNodes=defSphereNodes([20.0,20.0,20.0],scl.lambda,Radius,nodes);
-%%%%%%%
-savefilename='metalNodes.mat';
-save(savefilename, 'metalNodes','Nnode','kx','ky','kz','x_coor','y_coor','z_coor');
 
 %constant coefficient for plasmonic metal
 CJ01=(2-gamma_p*dt)/(2+gamma_p*dt);
@@ -196,19 +165,19 @@ for ilk =1:Nlink
      sQMlinks = [sQMlinks;ilk];
       QMlinks = [QMlinks;ilk];
      if n3==1
-        if nx < ( X1 + X2 ) /2
+        if nx < ( qmRegionX1 + qmRegionX2 ) /2
          isSQMlinks(ilk)  = 1;
         else
          isSQMlinks(ilk)  = 2;
         end
      elseif n3==2 
-        if ny < ( Y1 + Y2 )/2
+        if ny < ( qmRegionY1 + qmRegionY2 )/2
          isSQMlinks(ilk)  = 3;        
         else
          isSQMlinks(ilk)  = 4;
         end
      elseif n3==3 
-        if nz < ( Z1 + Z2 ) /2
+        if nz < ( qmRegionZ1 + qmRegionZ2 ) /2
          isSQMlinks(ilk)  = 5;         
         else 
          isSQMlinks(ilk)  = 6;

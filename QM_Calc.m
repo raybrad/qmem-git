@@ -1,5 +1,5 @@
 function [currdl,currdr,currdt]=QM_Calc(V,effcd,currtime,dt)
-global nLead;
+global nLead QMfeedback;
 display(['  Start TD QM per step:']);
 tic;
 
@@ -13,12 +13,19 @@ if (nLead>=1)
 load 'qmbound';
 end
 
-%currdl= qmbound(1);
-%currdr=-qmbound(2);
-%currdt= qmbound(3);
+if (QMfeedback==0)
 currdl=0.0;
 currdr=0.0;
 currdt=0.0;
+display(['  in QMfeedback=0.']);
+elseif(QMfeedback==1)
+currdl= qmbound(1);
+%currdr=-qmbound(2);
+%currdt= qmbound(3);
+currdr=0.0;
+currdt=0.0;
+display(['  in QMfeedback=1.']);
+end
 %aqmbound=(qmbound(1)-qmbound(2))/2;  %A/m^2
 
 

@@ -11,7 +11,7 @@ ix = qmx2-qmx1+1; iy = qmy2-qmy1+1; iz = qmz2-qmz1+1;
 
 
 %qmx = 4; qmy = 1; qmz=1;
-qmx = qmx2-qmx1; qmy = qmy2-qmy1; qmz = qmz2-qmz1;
+  qmx = qmx2-qmx1; qmy = qmy2-qmy1; qmz = qmz2-qmz1;
 
   input_vs=reshape(V,kx+1,ky+1,kz+1);
   qm_vs = input_vs(qmx1:qmx2,qmy1:qmy2,qmz1:qmz2);
@@ -24,10 +24,13 @@ qmx = qmx2-qmx1; qmy = qmy2-qmy1; qmz = qmz2-qmz1;
   topnodes =defBrickNodes([qmx1,qmy1,qmz2],[qmx2,qmy2,qmz2]);
 
   ltv=mean(V(leftnodes));
+  lteff=mean(effcd(leftnodes));
 
   rtv=mean(V(rghtnodes));
+  rteff=mean(effcd(rghtnodes));
 
   ttv=mean(V(topnodes));
+  tteff=mean(effcd(topnodes));
 
   if currtime > 0
    ingvl = ingvl + ltv * dt;
@@ -69,8 +72,8 @@ qmx = qmx2-qmx1; qmy = qmy2-qmy1; qmz = qmz2-qmz1;
   else
   display('nLead>3 is not ready now');
   end
-
   fclose(fp);
+
 
   fp = fopen('embound1','w');
   fprintf(fp,'%d %d %d\n',qkx,qky,qkz);
@@ -81,5 +84,9 @@ qmx = qmx2-qmx1; qmy = qmy2-qmy1; qmz = qmz2-qmz1;
 
   fp=fopen('voltage.dat','a+');
   fprintf(fp,'%f %20.8e %20.8e %20.8e \n',currtime,ltv,rtv,ttv);
+  fclose(fp);
+
+  fp=fopen('effcharge.dat','a+');
+  fprintf(fp,'%f %20.8e %20.8e %20.8e \n',currtime,lteff,rteff,tteff);
   fclose(fp);
 
