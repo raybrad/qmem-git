@@ -106,7 +106,7 @@ end
 for i=1:length(outputPosCom)
     
     filename=outputPosCom{i,3};
-    fprintf('filename:%s \n',filename);
+    %fprintf('filename:%s \n',filename);
     fpID=fopen(filename,'a');
     idx=outputPosCom{i,1}(1);
     idy=outputPosCom{i,1}(2);
@@ -127,7 +127,7 @@ for i=1:length(outputPosCom)
     otherwise
         display('error,component not fould');
     end
-        fprintf('E %12.5e %12.5e \n',dt*scl.tao*step/1e-15,out_point);
+        %fprintf('E %12.5e %12.5e \n',dt*scl.tao*step/1e-15,out_point);
         fprintf(fpID,'%12.5e %12.5e \n',dt*scl.tao*step/1e-15,out_point);
         fclose(fpID);
 end

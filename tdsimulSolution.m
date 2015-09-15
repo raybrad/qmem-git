@@ -111,7 +111,6 @@ if taskOpt==2
 end
 
 ntp  = 1; 
-tic;
 if (taskOpt == 1)
     if(updateScheme==1)
         tdbuildJacob(dt);
@@ -131,7 +130,7 @@ end
 while ntp < nsteps + 1
    
  display(['Time step:',num2str(ntp)]);
-
+ tic;
  if taskOpt==1
    if(updateScheme==1)
     [Vu,Au,Hu,mJ_0u,mJ_1u,mJ_2u,mJ_1uu,mJ_2uu,Efield_uu,dtVu,dtHu,Js]=tdupdatenm(V,A,H,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt,ntp);
@@ -180,8 +179,9 @@ if(updateScheme==1)
 outputField(ntp,outputPosCom,outputPlane,V,A,H);
 
 ntp = ntp + 1;
-    
+
+fprintf('Time cost in each time propagation:'\n');
+toc;    
 end    
-toc;   
 
 display(['End TD dynamic solution']);
