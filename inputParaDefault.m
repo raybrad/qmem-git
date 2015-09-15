@@ -94,18 +94,29 @@ scl = struct('T',300,'Vt',2.5852,'lambda',1e-9,'ni',[],'s_D',[],'s_mu',[],...
 Origin=[20.0,20.0,20.0];
 Radius=10.0;
 %%%%%%%parameter for output E Field%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-cPosx=cell(5,1);
-cPosy=cell(5,1);
-for i=1:5
+outPutN=3;
+cPosx=cell(outPutN,1);
+cPosy=cell(outPutN,1);
+cPosz=cell(outPutN+1,1);
+for i=1:outPutN
     cPosx{i}=zeros(1,3);
     cPosy{i}=zeros(1,3);
+    cPosz{i}=zeros(1,3);
    [cPosx{i}(1,1),cPosx{i}(1,2),cPosx{i}(1,3)]=RealToNodes([30+i,20,20],x_coor,y_coor,z_coor);
    [cPosy{i}(1,1),cPosy{i}(1,2),cPosy{i}(1,3)]=RealToNodes([20,30+i,20],x_coor,y_coor,z_coor);
+   [cPosz{i}(1,1),cPosz{i}(1,2),cPosz{i}(1,3)]=RealToNodes([20,20,5*i],x_coor,y_coor,z_coor);
 end
-tmpz=zRealTozNodes(20,z_coor);
+   [cPosz{outPutN+1}(1,1),cPosz{outPutN+1}(1,2),cPosz{outPutN+1}(1,3)]=RealToNodes([20,20,Posz],x_coor,y_coor,z_coor);
+                                           
 
-outputPosCom={cPosx{1},'Ex','11_Ex.dat' ;cPosx{2},'Ex','12_Ex.dat' ;cPosx{3},'Ex','13_Ex.dat' ;cPosx{4},'Ex','14_Ex.dat' ;cPosx{5},'Ex','15_Ex.dat';...
-              cPosy{1},'Ex','11_yEx.dat';cPosy{2},'Ex','12_yEx.dat';cPosy{3},'Ex','13_yEx.dat';cPosy{4},'Ex','14_yEx.dat';cPosy{5},'Ex','15_yEx.dat'};
+outputPosCom={cPosx{1},'Ex','11_xEx.dat';cPosx{2},'Ex','12_xEx.dat';cPosx{3},'Ex','13_xEx.dat';...
+              cPosx{1},'By','11_xBy.dat';cPosx{2},'By','12_xBy.dat';cPosx{3},'By','13_xBy.dat';...
+              cPosy{1},'Ex','11_yEx.dat';cPosy{2},'Ex','12_yEx.dat';cPosy{3},'Ex','13_yEx.dat';...
+              cPosy{1},'By','11_yBy.dat';cPosy{2},'By','12_yBy.dat';cPosy{3},'By','13_yBy.dat';...
+              cPosz{1},'Ex','5_zEx.dat' ;cPosz{2},'Ex','10_zEx.dat';cPosz{3},'Ex','15_zEx.dat';...
+              cPosz{1},'By','5_zBy.dat' ;cPosz{2},'By','10_zBy.dat';cPosz{3},'By','15_zBy.dat';...
+              cPosz{outPutN},'Ex','inc_Ex.dat';cPosz{outPutN},'By','inc_By.dat'};
+tmpz=zRealTozNodes(20,z_coor);
 outputPlane={'z',tmpz,'xyE2.dat'};
 %%%%%%%%%%%%%%%%%%%Parameter for qm region%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 [qmRegionX1,qmRegionY1,qmRegionZ1]=RealToNodes([30.0,18.0,18.0],x_coor,y_coor,z_coor);

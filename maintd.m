@@ -18,6 +18,8 @@
 %7 unused subroutines is removed for clearance and there is no use to calculate main.m first,we could use V A H =0 as starting point.
 %8 actually the linkVolumes nodeVolumes nodeLinks construction should be reserved as cells, since the use of find for sparse2 matrix in
 %   later Jacob rhs construction is very time consuming. So now only reformulate the build up of linkvolumes and nodevolumes.
+%9 fix a bug related to EsurfLinks and BsurfLinks,which is not allocated in specialkz case
+%  plane wave generation is tested in no metal case,perfect planewave 
 
 clear global; clear;
 %plasmonic metal parameters

@@ -133,24 +133,26 @@ for i=1:length(outputPosCom)
 end
 
 %output plane
-%out_plane(1:no_of_nodes_x,1:no_of_nodes_y) =0.0;
-%filename=strcat(num2str(step),outputPlane{1,3});
-%fpID=fopen(filename,'w');
-%    idp=outputPlane{1,2};
-%switch outputPlane{1,1}
-%case 'z'
-%    out_plane=sqrt(Ex(:,:,idp}).^2+Ey(:,:,idp).^2);
-%case 'y'
-%    out_plane=sqrt(Ex(:,idp,:).^2+Ez(:,idp,:).^2);
-%case 'x'
-%    out_plane=sqrt(Ey(idp,:,:).^2+Ez(idp,:,:).^2);
-%end
+if (mod(step,100)==0) 
+out_plane(1:no_of_nodes_x,1:no_of_nodes_y) =0.0;
+filename=strcat(num2str(step),outputPlane{1,3});
+fpID=fopen(filename,'w');
+idp=outputPlane{1,2};
+switch outputPlane{1,1}
+case 'z'
+    out_plane=sqrt(Ex(:,:,idp).^2+Ey(:,:,idp).^2);
+case 'y'
+    out_plane=sqrt(Ex(:,idp,:).^2+Ez(:,idp,:).^2);
+case 'x'
+    out_plane=sqrt(Ey(idp,:,:).^2+Ez(idp,:,:).^2);
+end
 
-%for i=1:no_of_nodes_x
-%for j=1:no_of_nodes_y
-%fprintf(fpID,'%12.5e', out_plane(i,j));
-%end
-%fprintf(fpID,'\n');
-%end
-%fclose(fpID);
+for i=1:no_of_nodes_x
+for j=1:no_of_nodes_y
+fprintf(fpID,'%12.5e', out_plane(i,j));
+end
+fprintf(fpID,'\n');
+end
+fclose(fpID);
+end
 

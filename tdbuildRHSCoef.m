@@ -77,7 +77,7 @@ tic;
 		    Fc12(n1,i)=sum(Eps(ajvolM_lk).*ajvolS_lk*(-sign_n1(i))*(any(ajvolM_n1==1)));
 		    Fc21(n1,i)=sum(Eps(ajvolM_lk).*ajvolS_lk*(-1/linkL(lk))*(all(ajvolM_n1~=1)));
 		    Fc22(n1,i)=sum(Eps(ajvolM_lk).*ajvolS_lk*(-sign_n1(i))*(all(ajvolM_n1~=1)));
-		    Fc30(n1,i)=sum(prefac(ajvolM_lk).*ajvolS_lk*sign_n1(i));			%mJ
+		    Fc30(n1,i)=sum(prefac(ajvolM_lk).*ajvolS_lk*sign_n1(i)*(any(ajvolM_n1==1)));			%mJ
 		    Fn1matrix(n1,i)=n1;
 		    Fn2matrix(n1,i)=n2;
 		    Flkmatrix(n1,i)=lk;
