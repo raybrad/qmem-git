@@ -1,9 +1,9 @@
-function initSolver_CNT()
+function initSolvertd()
 display('--------------------------------------------------------------------');
 display('Start solver initialization');
 tStart=tic;
 tic;
-
+%%%%%%%%%%%%%%%%%%Global var%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 global kx ky kz scl;
 global dt;
 global nodes links contacts;
@@ -29,19 +29,18 @@ global qmRegionX1 qmRegionX2 qmRegionY1 qmRegionY2 qmRegionZ1 qmRegionZ2;
 global isqmvolm;
 global metalNodes metalLinks;
 
-%%%
 global x_coor y_coor z_coor;
 global avoltage avoltageac;
 global dirxLinks diryLinks dirzLinks;
 global JLinks J_amp amplitude;
 global lightdirection Posz;
-global nedrelax;
+global taskOpt;
 global omega_p gamma_p;
 global lepsr_1 lomega_1 lgamma_1 lepsr_2 lomega_2 lgamma_2;
 global CJ01 CJ02 CJ11 CJ12 CJ13 CJ21 CJ22 CJ23;
-%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%%%%%%%% define boundary and edge nodes %%%%%%%%%%%
+%%%%%%%%%%%%%% define boundary and edge nodes %%%%%%%%%%%%%%%%%%%%%
 [bndNodes,intNodes] = defBoundaryNodes(kx+1,ky+1,kz+1);	%bndNodes on 6 faces of the whole cube
 isBndNodes = false(Nnode,1);
 isBndNodes(bndNodes) = true;
@@ -126,7 +125,7 @@ CJ22=(lgamma_2*dt-1)/(1+lgamma_2*dt);
 CJ23=(lepsr_2*lomega_2*lomega_2*dt*dt)/(1+lgamma_2*dt)/(2.0*dt);
 %%%%%
 
-if(nedrelax==1)
+if(taskOpt==1)
 QMnodes = [];
 sQMnodes = [];
 else
@@ -242,7 +241,7 @@ for i = 1:Nvolume
    if all(idMetalNodes(vNodes))
       volumeM(i) = 1; 
    end
-   if (nedrelax==2 && all(istqmnodes(vNodes)))
+   if (taskOpt==2 && all(istqmnodes(vNodes)))
       volumeM(i) = 3; 
    end
 end

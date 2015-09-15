@@ -68,10 +68,10 @@ Posz=35.0;
 
 global extfelc;
 extfelc = 3; %zero voltage
-global nedrelax;
+global taskOpt;
 %R
-nedrelax =1;	%pure EM
-%nedrelax=2;	%QM/EM
+taskOpt =1;	%pure EM
+%taskOpt=2;	%QM/EM
 global irkod;
 irkod  = 2;
 global savefile;

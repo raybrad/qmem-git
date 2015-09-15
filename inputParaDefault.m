@@ -79,8 +79,10 @@ lightdirection='specialkzExBy';
 Posz=35.0;
 extfelc = 3; %zero voltage
 %R
-nedrelax =1;	%pure EM
-%nedrelax=2;	%QM/EM
+taskOpt =1;	%pure EM
+%taskOpt=2;	%QM/EM
+updateScheme=1; %implicit;
+%updateScheme=2; %explicit;
 
 nLead=0;
 QMfeedback=0;

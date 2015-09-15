@@ -62,7 +62,8 @@ global amplitude lightdirection Posz;  %k:the wave vector direction,E,B:polariza
 global outputPosCom outputPlane;
 
 global extfelc;
-global nedrelax;
+global taskOpt;
+global updateScheme;
 global nLead;
 global QMfeedback;
 global irkod;
@@ -105,8 +106,6 @@ t_all = cputime;
 inputParaDefault;
 inputParaUser;
 
-%loadPath='inputPara.m';
-%load(loadPath);
 %%%generate Mesh Grids%%%%%%%%%
 genMeshGrids(x_coor,y_coor,z_coor,plotx,ploty,plotz,plotopt,gendata,meshfilename);
 
@@ -117,8 +116,7 @@ load(meshfilename);
 initGeometry;  
 
 %%%%%%%%% scaling %%%%%%%%%%%%%%%
-%scaling_const;
-scaling_static; % scaling
+scaling_static; 
 scaling_dynamic(0);
 
 

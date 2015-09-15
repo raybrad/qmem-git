@@ -2,7 +2,8 @@ function [V,A,H] = tdsimulSolution(dt,nsteps)
 
 display(['Start TD dynamic solution']);
 
-global nedrelax;
+global taskOpt;
+global updateScheme;
 global irkod;
 global savefile;
 global Nlink;
@@ -20,18 +21,15 @@ global isqmnodes;
 global JLinks J_amp;
 global lightsource tlas tzero;
 global outputPosCom outputPlane;
-%global Jacob colind Lmatrix Umatrix;
-%global JacobLU;
-%global Fc11 Fc12 Fc21 Fc22 Fc30 Fn1matrix Fn2matrix Flkmatrix;
-%global Gc11 Gajlkmatrix11 Gc12 Gc20 Gn1matrix Gc31 Gajlk_n1matrix Gc32;
-%global Gn2matrix Gc41 Gajlk_n2matrix Gc42 Gc51 Gc52 Gc53 Gc54;
 %%%%%%% initial guess  %%%%%%%%%%%%%
-%initials = 'tdinis.mat';
 
-%load(initials);
 V=zeros(Nnode,1);
 H=zeros(Nlink,1);
 A=zeros(Nlink,1);
+if (updateScheme==2)
+V_p=zeros(Nnode,1);
+H_p=zeros(Nlink,1);
+end
 
 interval=10;
 
@@ -83,72 +81,79 @@ end
 %tdcalupdatec.m updates dtV,dtH,dtn,dtp 
 %(more specificly,Newton's method to get dtV dtH.. dtn dtp are calculated directly usiing continuity equation)
 %tdrelaxstep2.m and others update  V n p A H (dV,dn ,dp,dA,dH are in Newton)(dtV,dtH,dtn,dtp are calculated by  numerical differentiation)
-if (nedrelax==1)
-[dtVp,dtHp] = tdcalupdatec(V,A,H,Js,dtVp,dtHp);
-elseif (nedrelax==2)
-[dtVp,dtHp] = tdcalupdatecc(V,A,H,Js,dtVp,dtHp);
+if (taskOpt==1)
+    if(updateScheme==1)
+     [dtVp,dtHp] = tdcalupdatec(V,A,H,Js,dtVp,dtHp);
+    end
+elseif (taskOpt==2)
+    if(updateScheme==1)
+     [dtVp,dtHp] = tdcalupdatecc(V,A,H,Js,dtVp,dtHp);
+    end
 end
 
-%savefilename = [savefile,num2str(0),'.mat'];
-%save(savefilename, 'V', 'A', 'H','mJ_0','mJ_1','mJ_2','mJ_1p','mJ_2p','dtVp','dtHp','Js');
-% save(savefilename, 'V','A', 'H','dtVp','dtHp','Js');
-
-if nedrelax==2
+if taskOpt==2
   fp = fopen('tdqmcurrd.dat','w');  % clear content of dat & create file
   fclose(fp);
 end
 
 ntp  = 1; 
 tic;
-%if  (exist('JacobMatrix.mat') == 0 )
-%tdbuildJacob(dt);
-%else
-%display('JacobMatrix.mat already exist');
-%end
-%load 'JacobMatrix.mat';
-if (nedrelax == 1)
-%if  (exist('JacobLU.mat') == 0 )
-tdbuildJacob(dt);
-%else
-%display('JacobLU.mat already exist');
-%end
-
-%load 'JacobLU.mat';
-
-%if  (exist('rhsFCoefMatrix.mat') == 0 || exist('rhsGCoefMatrix.mat') == 0 )
-tdbuildRHSCoef(dt);
-%else
-%display('rhsF/GCoefMatrix.mat already exist');
-%end
-elseif (nedrelax==2)
-tdbuildJacobc(dt);
-tdbuildRHSCoefc(dt);
+if (taskOpt == 1)
+    if(updateScheme==1)
+        tdbuildJacob(dt);
+        tdbuildRHSCoef(dt);
+    elseif(updateScheme==2)
+        tdbuildcalupdateCoef(dt);
+    end
+elseif (taskOpt==2)
+    if(updateScheme==1)
+        tdbuildJacobc(dt);
+        tdbuildRHSCoefc(dt);
+    elseif(updateScheme==2)
+        %tdbuildcalupdateCoefc(dt);
+    end
 end
-%load 'rhsFCoefMatrix.mat';
-%load 'rhsGCoefMatrix.mat';
 
 while ntp < nsteps + 1
    
  display(['Time step:',num2str(ntp)]);
 
- if nedrelax==1
-   [Vu,Au,Hu,mJ_0u,mJ_1u,mJ_2u,mJ_1uu,mJ_2uu,Efield_uu,dtVu,dtHu,Js]=tdupdatenm(V,A,H,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt,ntp);
- elseif nedrelax==2
-   [Vu,Au,Hu,mJ_0u,mJ_1u,mJ_2u,mJ_1uu,mJ_2uu,Efield_uu,dtVu,dtHu,Js]=tdupdatenmc(V,A,H,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt,ntp);
+ if taskOpt==1
+   if(updateScheme==1)
+    [Vu,Au,Hu,mJ_0u,mJ_1u,mJ_2u,mJ_1uu,mJ_2uu,Efield_uu,dtVu,dtHu,Js]=tdupdatenm(V,A,H,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt,ntp);
+   elseif(updateScheme==2)
+    [Vu,Au,Hu,mJ_0u,mJ_1u,mJ_2u,Efield_uu,dtVu,dtHu,Js]=tdupdaterk_vector(V,V_p,A,H,H_p,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt,ntp);
+   end
+ elseif taskOpt==2
+   if(updateScheme==1)
+    [Vu,Au,Hu,mJ_0u,mJ_1u,mJ_2u,mJ_1uu,mJ_2uu,Efield_uu,dtVu,dtHu,Js]=tdupdatenmc(V,A,H,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt,ntp);
+   elseif(updateScheme==2)
+    %[Vu,Au,Hu,mJ_0u,mJ_1u,mJ_2u,Efield_uu,dtVu,dtHu,Js]=tdupdaterk_vectorc(V,V_p,A,H,H_p,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt,ntp);
+   end    
  end
 
  dtVp  = dtVu;
  dtHp  = dtHu;
  
+if(updateScheme==2)
+ V_p=V;
+ H_p=H;
+ end
  V = Vu;
  A = Au;
  H = Hu;
 
+if(updateScheme==2)
+ mJ_1p = mJ_1; 
+ mJ_2p = mJ_2;
+ end
  mJ_0= mJ_0u;	%J_n+1 = J_n
  mJ_1= mJ_1u;
  mJ_2= mJ_2u;
+if(updateScheme==1)
  mJ_1p = mJ_1uu; %J_n = J_n-1
  mJ_2p = mJ_2uu;
+ end
  Efield_p=Efield_uu;
 
 %if (ntp>10 &&  mod(ntp,interval) == 0 )
