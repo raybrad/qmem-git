@@ -10,6 +10,7 @@ global linkL;
 global dirNodes;
 global metalLinks;
 global EsurfLinks;
+global sQMlinks;
 global currdlink;
 %global Jacob colind Lmatrix Umatrix;
 %global Fc11 Fc12 Fc21 Fc22 Fc30 Fn1matrix Fn2matrix Flkmatrix;
@@ -142,7 +143,7 @@ GdtVmatrix32(eqnLinks)=dtV(Gn1matrix(eqnLinks));
 GAmatrix41(eqnLinks,:)=(Gajlk_n2matrix(eqnLinks,:)~=0).*A(Gajlk_n2matrix(eqnLinks,:)+(Gajlk_n2matrix(eqnLinks,:)==0));
 GdtVmatrix42(eqnLinks)=dtV(Gn2matrix(eqnLinks));
 GdtVmatrix51(eqnLinks)=dtV(Gn2matrix(eqnLinks))-dtV(Gn1matrix(eqnLinks));
-for i=1:eqnLinks
+for i=sQMlinks.'
 	Gqmcurrdlink(i,Gn3matrix(i)+3)= currdlink(i,Gn3matrix(i)+3);	%
 end
 

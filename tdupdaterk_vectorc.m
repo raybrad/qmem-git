@@ -57,7 +57,7 @@ switch lightsource
 end
 
 %[dtV4,dtH4] = tdsolveupdatec(Ve,Ae,He,Js,dtVp,dtHp,dt);
-[mJ_0n,mJ_1n,mJ_2n,Efield_nn,dtVn,dtHn] = tdsolveupdate(V,V_p,A,H,H_p,Js,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt);
+[mJ_0n,mJ_1n,mJ_2n,Efield_nn,dtVn,dtHn] = tdsolveupdatec(V,V_p,A,H,H_p,Js,mJ_0,mJ_1,mJ_2,mJ_1p,mJ_2p,Efield_p,dtVp,dtHp,dt);
 
 Vn = V + dt* dtVn;
 Hn = H + dt* dtHn;

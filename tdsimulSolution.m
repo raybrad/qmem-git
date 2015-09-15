@@ -21,6 +21,20 @@ global isqmnodes;
 global JLinks J_amp;
 global lightsource tlas tzero;
 global outputPosCom outputPlane;
+
+%%%some discription%%%
+if (taskOpt == 1) 
+    fprintf('The task is: pure EM calculation \n');
+elseif (taskOpt == 2) 
+    fprintf('The task is: QMEM calculation \n');
+end    
+
+if (updateScheme == 1) 
+    fprintf('The time update Scheme is: implicit runge kutta \n');
+elseif (updateScheme == 2) 
+    fprintf('The time update Scheme is:  explicit and direct self update \n');
+end
+
 %%%%%%% initial guess  %%%%%%%%%%%%%
 
 V=zeros(Nnode,1);

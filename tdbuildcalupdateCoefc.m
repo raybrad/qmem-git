@@ -1,4 +1,4 @@
-function tdbuildcalupdateCoef(dt)
+function tdbuildcalupdateCoefc(dt)
 
 global sigma epsilon_in;
 global epsilon_mt;
@@ -32,8 +32,8 @@ isBsurfLinks=false(Nlink,1);
 isBsurfLinks(BsurfLinks)=true;		        %for B boundary condition
 
 %%%%%%%% start Newton's iteration %%%%%%%%
-Eps = [epsilon_mt,epsilon_in];
-prefac=[1,0];
+Eps = [epsilon_mt,epsilon_in,epsilon_qm];
+prefac=[1,0,0];
 
 NeqnNodes = length(eqnNodes);
 Nl = length(eqnLinks);
@@ -143,11 +143,14 @@ Gc51=zeros(Nlink,1);
 %Gc52=zeros(Nlink,1);
 Gc53=zeros(Nlink,1);
 Gc54=zeros(Nlink,1);
+Gn3matrix=zeros(Nlink,1);
+Gc60=zeros(Nlink,6);
 % -K*parH/part= cur curl A - K*{J_f+par E/par t} =0 (for link A,PI)   
  for k=1:Nl
     l1 = eqnLinks(k);
     n1 = links(l1,1);
     n2 = links(l1,2);
+    n3 = links(l1,3);
     ajvol_l1 = linkVolumes{l1}(1,:);%volumeid
     ajvolS_l1 = linkVolumes{l1}(2,:);%associate surf area,not dual area, but only its own 1/4
     ajvolM_l1 = volumeM(ajvol_l1);
@@ -158,9 +161,11 @@ Gc54=zeros(Nlink,1);
    
     Gn1matrix(l1)=n1;
     Gn2matrix(l1)=n2;
+	Gn3matrix(l1)=n3;
     %%%%%%%%%% curl curl of A %%%%%%%%%%
     ajsf_l1 = linkSurfs{l1};
-    Gc52_tmp=-scl.K*sum(Eps(ajvolM_l1).*ajvolS_l1*(-1));
+    Gc52_tmp=(isSQMlinks(l1)==0)*(-scl.K)*sum(Eps(ajvolM_l1).*ajvolS_l1*(-1))+...
+	         (isSQMlinks(l1)~=0)*(-scl.K)*epsilon_qm*linkS(l1)*(-1);
     tmpcounter=0;
     for i = 1:size(ajsf_l1,2)
         ajlk = ajsf_l1(2:4,i);
@@ -230,15 +235,17 @@ Gc54=zeros(Nlink,1);
           epslink = sum(Eps(ajvolM_l1).*ajvolS_l1);
           %dtH(l1) =-(rhs_G(l1)-scl.K*sum(Eps(ajvolM_l1).*ajvolS_l1*(-1/linkL(l1)))*(dtVp(n2)-dtVp(n1))-scl.K*sum(ajvolS_l1)*Js(l1))/(-scl.K*sum(Eps(ajvolM_l1).*ajvolS_l1*(-1)));
        	  
-       	  Gc51(l1)=-scl.K*sum(Eps(ajvolM_l1).*ajvolS_l1*(-1/linkL(l1)))/(Gc52_tmp+(Gc52_tmp==0))*(Gc52_tmp~=0);
+       	  Gc51(l1)=-scl.K*((isSQMlinks(l1)==0)*sum(Eps(ajvolM_l1).*ajvolS_l1*(-1/linkL(l1)))+...
+                           (isSQMlinks(l1)~=0)*epsilon_qm*linkS(l1)*(-1/linkL(l1)))/(Gc52_tmp+(Gc52_tmp==0))*(Gc52_tmp~=0);
        	  %Gc52(l1)= Gc52_tmp+(Gc52_tmp==0);
-    	  Gc53(l1)=-scl.K*sum(prefac(ajvolM_l1).*ajvolS_l1)/(Gc52_tmp+(Gc52_tmp==0))*(Gc52_tmp~=0);	%mJ
-    	  Gc54(l1)=-scl.K*sum(ajvolS_l1)/(Gc52_tmp+(Gc52_tmp==0))*(Gc52_tmp~=0);				%Js
+    	  Gc53(l1)=-scl.K*(isSQMlinks(l1)==0)*sum(prefac(ajvolM_l1).*ajvolS_l1)/(Gc52_tmp+(Gc52_tmp==0))*(Gc52_tmp~=0);	%mJ
+    	  Gc54(l1)=-scl.K*(isSQMlinks(l1)==0)*sum(ajvolS_l1)/(Gc52_tmp+(Gc52_tmp==0))*(Gc52_tmp~=0);				%Js
+	      Gc60(l1,n3+3)=(isSQMlinks(l1)~=0)*(-scl.K)*linkS(l1);				%currdlink
           %Gc Gc51*(dtVp(n2)-dtVp(n1))+Gc54*Js)/Gc52;
           %dtH =-sum(Gc11.*GAmatrix11+Gc12.*A+Gc20.*H+sum(Gc31.*GAmatrix31,2)+Gc32.*GdtVmatrix32+sum(Gc41.*GAmatrix41,2)+Gc42.*GdtVmatrix42+Gc51.*GdtVmatrix51+Gc53.*(mJ_0+mJ_1+mJ_2)+Gc54.*Js,2)/Gc52;  
  end
 
-Gc=[Gc11,Gc12,Gc20,Gc31,Gc32,Gc41,Gc42,Gc51,Gc53,Gc54];
+Gc=[Gc11,Gc12,Gc20,Gc31,Gc32,Gc41,Gc42,Gc51,Gc53,Gc54,Gc60];
 display(['time for matrix collection,G matrix:']);
 toc;
 
