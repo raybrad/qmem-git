@@ -180,7 +180,7 @@ outputField(ntp,outputPosCom,outputPlane,V,A,H);
 
 ntp = ntp + 1;
 
-fprintf('Time cost in each time propagation:'\n');
+fprintf('Time cost in each time propagation:\n');
 toc;    
 end    
 

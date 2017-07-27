@@ -1,6 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%Update History%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %0 light source is added as a sheet of current density Js, which create plane wave field 
 %0 Mur absorbing boundary is added to reduce reflection
 %2 plasmonic metal is modelled using Two Lorentz poles and one drude pole.
@@ -17,7 +16,7 @@
 %7 redundant global variables are removed(link(:,3) change also in initSolvertd
 %7 unused subroutines is removed for clearance and there is no use to calculate main.m first,we could use V A H =0 as starting point.
 %8 actually the linkVolumes nodeVolumes nodeLinks construction should be reserved as cells, since the use of find for sparse2 matrix in
-%   later Jacob rhs construction is very time consuming. So now only reformulate the build up of linkvolumes and nodevolumes.
+%  later Jacob rhs construction is very time consuming. So now only reformulate the build up of linkvolumes and nodevolumes.
 %9 fix a bug related to EsurfLinks and BsurfLinks,which is not allocated in specialkz case
 %  plane wave generation is tested in no metal case,perfect planewave 
 
